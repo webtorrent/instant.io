@@ -17,7 +17,8 @@
     "ws": "^0.4.31"
   },
   "devDependencies": {
-    "browserify": "^4.1.11"
+    "browserify": "^4.1.11",
+    "nodemon": "^1.2.1"
   },
   "homepage": "http://feross.org",
   "keywords": [
