@@ -35,7 +35,6 @@
   },
   "scripts": {
     "build": "browserify public/js/index.js > public/js/bundle.js",
-    "install": "npm run build",
     "start": "node app.js",
     "watch": "watchify public/js/index.js -o public/js/bundle.js -dv & nodemon app.js"
   }
