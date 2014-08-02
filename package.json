@@ -1,0 +1,41 @@
+{
+  "private": true,
+  "name": "instant.io",
+  "description": "",
+  "version": "1.0.0",
+  "author": "Feross Aboukhadijeh <feross@feross.org> (http://feross.org/)",
+  "bugs": {
+    "url": "https://github.com/feross/instant.io/issues"
+  },
+  "dependencies": {
+    "custom-error": "^0.1.1",
+    "hat": "0.0.3",
+    "inherits": "^2.0.1",
+    "node-static": "^0.7.3",
+    "once": "^1.3.0",
+    "simple-peer": "^1.0.0",
+    "ws": "^0.4.31"
+  },
+  "devDependencies": {
+    "browserify": "^4.1.11"
+  },
+  "homepage": "http://feross.org",
+  "keywords": [
+    "p2p",
+    "webrtc",
+    "data channel",
+    "file transfer"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/feross/instant.io.git"
+  },
+  "scripts": {
+    "build": "browserify public/js/index.js > public/js/bundle.js",
+    "install": "npm run build",
+    "start": "node app.js",
+    "watch": "watchify public/js/index.js -o public/js/bundle.js -dv & nodemon app.js"
+  }
+}
