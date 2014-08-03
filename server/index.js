@@ -1,6 +1,7 @@
 var compress = require('compression')
 var debug = require('debug')('webtorrent:web')
 var express = require('express')
+var fs = require('fs')
 var http = require('http')
 var https = require('https')
 var jade = require('jade')
@@ -13,7 +14,10 @@ var HTTPS_PORT = process.argv[3] || 443
 
 var app = express()
 var httpServer = http.createServer(app)
-var httpsServer = https.createServer(app)
+var httpsServer = https.createServer({
+  key: fs.readFileSync(__dirname + '/../secret/instant.io.key'),
+  cert: fs.readFileSync(__dirname + '/../secret/instant.io.chained.crt')
+}, app)
 
 // Templating
 app.set('views', __dirname + '/views')

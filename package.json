@@ -1,6 +1,6 @@
 {
   "name": "instant.io",
-  "description": "Secure, anonymous, instant file transfer",
+  "description": "Secure, anonymous, streaming file transfer",
   "version": "1.0.0",
   "author": "Feross Aboukhadijeh <feross@feross.org> (http://feross.org/)",
   "bugs": {
