@@ -10,7 +10,8 @@ var url = require('url')
 var util = require('./util')
 
 var HTTP_PORT = process.argv[2] || 9100
-var HTTPS_PORT = process.argv[3] || 443
+var HTTPS_PORT = process.argv[3] ||
+  (process.env.NODE_ENV === 'production') ? 443 : 9101
 
 var app = express()
 var httpServer = http.createServer(app)
@@ -69,10 +70,8 @@ httpServer.listen(HTTP_PORT, function (err) {
   util.downgradeUid()
 })
 
-if (process.env === 'production') {
-  httpsServer.listen(HTTPS_PORT, function (err) {
-    if (err) throw err
-    debug('https listening on port ' + HTTPS_PORT)
-    util.downgradeUid()
-  })
-}
+httpsServer.listen(HTTPS_PORT, function (err) {
+  if (err) throw err
+  debug('https listening on port ' + HTTPS_PORT)
+  util.downgradeUid()
+})
