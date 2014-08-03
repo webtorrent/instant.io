@@ -1,6 +1,7 @@
 var createTorrent = require('create-torrent')
 var dragDrop = require('drag-drop')
 var parseTorrent = require('parse-torrent')
+var Tracker = require('webtorrent-tracker')
 
 dragDrop('body', newTorrent)
 
@@ -18,8 +19,13 @@ function newTorrent (files) {
     a.href = url
     a.textContent = 'download .torrent'
     document.body.appendChild(a)
+
+    var peerId = new Buffer('01234567890123456789')
+    // new Tracker(peerId, parsedTorrent)
   })
 }
+
+
 
 // var Peer = require('simple-peer')
 

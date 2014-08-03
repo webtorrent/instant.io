@@ -18,7 +18,8 @@
     "once": "^1.3.0",
     "parse-torrent": "^1.7.0",
     "posix": "^1.0.3",
-    "simple-peer": "^1.0.0"
+    "simple-peer": "^1.0.0",
+    "webtorrent-tracker": "^0.1.0"
   },
   "devDependencies": {
     "browserify": "^4.1.11",
