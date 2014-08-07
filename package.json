@@ -47,7 +47,7 @@
     "build-css": "stylus -u nib css/main.styl -o static/ -c",
     "build-js": "browserify client > static/bundle.js",
     "start": "node server",
-    "watch": "npm run watch-css & npm run watch-js & DEBUG=webtorrent:* nodemon server -e js,jade -i node_modules/ -i static/ -q -d 1",
+    "watch": "npm run watch-css & npm run watch-js & DEBUG=webtorrent:* nodemon server -e js,jade -d 1",
     "watch-css": "stylus -u nib css/main.styl -o static/ -w",
     "watch-js": "watchify client -o static/bundle.js -dv"
   }

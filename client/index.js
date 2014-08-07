@@ -1,13 +1,19 @@
 var createTorrent = require('create-torrent')
+var debug = require('debug')('instant.io')
 var dragDrop = require('drag-drop')
 var parseTorrent = require('parse-torrent')
-var Tracker = require('webtorrent-tracker')
+var Tracker = require('webtorrent-tracker/client')
+
+// Force-add webtorrent tracker
+createTorrent.announceList.push(['ws://tracker.webtorrent.io:9002'])
 
 dragDrop('body', newTorrent)
 
 function newTorrent (files) {
   window.files = files
-  createTorrent(files, function (err, torrent) {
+  createTorrent(files, {
+    createdBy: 'instant.io'
+  }, function (err, torrent) {
     if (err) alert('error creating torrent: ' + err.message)
     var parsedTorrent = parseTorrent(torrent)
     window.torrent = torrent
@@ -21,7 +27,17 @@ function newTorrent (files) {
     document.body.appendChild(a)
 
     var peerId = new Buffer('01234567890123456789')
-    // new Tracker(peerId, parsedTorrent)
+    var tracker = new Tracker(peerId, parsedTorrent)
+
+    tracker.on('warning', function (err) {
+      console.log('tracker warning', err)
+    })
+
+    tracker.on('error', function (err) {
+      console.log('tracker error', err)
+    })
+
+    tracker.start()
   })
 }
 
