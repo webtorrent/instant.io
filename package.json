@@ -12,6 +12,7 @@
     "debug": "^1.0.4",
     "drag-drop": "^1.0.2",
     "express": "^4.7.2",
+    "hat": "0.0.3",
     "inherits": "^2.0.1",
     "jade": "^1.5.0",
     "node-static": "^0.7.3",
@@ -19,6 +20,7 @@
     "parse-torrent": "^1.7.0",
     "posix": "^1.0.3",
     "simple-peer": "^1.0.0",
+    "webtorrent-swarm": "^0.1.1",
     "webtorrent-tracker": "^0.1.0"
   },
   "devDependencies": {

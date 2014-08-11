@@ -1,8 +1,9 @@
 var createTorrent = require('create-torrent')
 var debug = require('debug')('instant.io')
 var dragDrop = require('drag-drop')
+var hat = require('hat')
 var parseTorrent = require('parse-torrent')
-var Tracker = require('webtorrent-tracker/client')
+var Swarm = require('webtorrent-swarm')
 
 // Force-add webtorrent tracker
 createTorrent.announceList.push(['ws://tracker.webtorrent.io:9002'])
@@ -26,18 +27,14 @@ function newTorrent (files) {
     a.textContent = 'download .torrent'
     document.body.appendChild(a)
 
-    var peerId = new Buffer('01234567890123456789')
-    var tracker = new Tracker(peerId, parsedTorrent)
+    var peerId = window.peerId = new Buffer(hat(160), 'hex')
+    debug('peer id %s', peerId.toString('hex'))
 
-    tracker.on('warning', function (err) {
-      console.log('tracker warning', err)
+    var swarm = new Swarm(parsedTorrent, peerId)
+    swarm.on('wire', function (wire) {
+      debug('got wire')
+      window.wire = wire
     })
-
-    tracker.on('error', function (err) {
-      console.log('tracker error', err)
-    })
-
-    tracker.start()
   })
 }
 
