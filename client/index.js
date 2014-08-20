@@ -1,12 +1,14 @@
+var BlockStream = require('block-stream')
+var Client = require('bittorrent-client')
 var createTorrent = require('create-torrent')
+var concat = require('concat-stream')
 var debug = require('debug')('instant.io')
-var dragDrop = require('drag-drop')
-var hat = require('hat')
+var dragDrop = require('drag-drop/buffer')
+var stream = require('stream')
 var parseTorrent = require('parse-torrent')
-var Swarm = require('webtorrent-swarm')
 
-// Force-add webtorrent tracker
-createTorrent.announceList.push(['ws://tracker.webtorrent.io:9002'])
+// Add webtorrent tracker to all created torrents
+createTorrent.announceList.push([ 'ws://tracker.webtorrent.io:9002' ])
 
 dragDrop('body', newTorrent)
 
@@ -14,58 +16,75 @@ function newTorrent (files) {
   window.files = files
   createTorrent(files, {
     createdBy: 'instant.io'
-  }, function (err, torrent) {
+  }, function (err, torrentBuf) {
     if (err) alert('error creating torrent: ' + err.message)
-    var parsedTorrent = parseTorrent(torrent)
-    window.torrent = torrent
+    var parsedTorrent = parseTorrent(torrentBuf)
+    window.torrentBuf = torrentBuf
     window.parsedTorrent = parsedTorrent
 
-    var url = URL.createObjectURL(new Blob([ torrent ]))
-    var a = document.createElement('a')
-    a.download = 'file.torrent'
-    a.href = url
-    a.textContent = 'download .torrent'
-    document.body.appendChild(a)
+    addDownloadLink(torrentBuf, 'file.torrent')
 
-    var peerId = window.peerId = new Buffer(hat(160), 'hex')
-    debug('peer id %s', peerId.toString('hex'))
+    var client = new Client()
+    client.add(torrentBuf, function (torrent) {
 
-    var swarm = new Swarm(parsedTorrent, peerId)
-    swarm.on('wire', function (wire) {
-      debug('got wire')
-      window.wire = wire
+      var downloader = window.location.search.match(/download/)
+      debug('we are a %s', downloader ? 'downloader' : 'seeder')
+      if (!downloader) {
+        debug('write to storage')
+        writeToStorage(torrent.storage, files[0].buffer, parsedTorrent.pieceLength, function (err) {
+          debug('wrote to storage')
+        })
+      }
+
+      var file = torrent.files[0]
+      debug('file name %s', file.name)
+      file.createReadStream()
+        .pipe(concat(function (buf) {
+          addDownloadLink(buf, file.name)
+        }))
     })
+
   })
 }
 
+function addDownloadLink (buf, name) {
+  var url = URL.createObjectURL(new Blob([ buf ]))
+  var a = document.createElement('a')
+  a.download = name
+  a.href = url
+  a.textContent = 'download ' + name
+  document.body.appendChild(a)
+}
 
+var BLOCK_LENGTH = 16 * 1024
+function writeToStorage (storage, buf, pieceLength, cb) {
+  var pieceIndex = 0
+  var bufStream = new stream.Readable()
+  bufStream._read = function () {}
+  bufStream
+    .pipe(new BlockStream(pieceLength, { nopad: true }))
+    .on('data', function (piece) {
+      var index = pieceIndex
+      pieceIndex += 1
 
-// var Peer = require('simple-peer')
+      var blockIndex = 0
+      var s = new BlockStream(BLOCK_LENGTH, { nopad: true })
+      s.on('data', function (block) {
+        var offset = blockIndex * BLOCK_LENGTH
+        blockIndex += 1
 
-// peer = new Peer({
-//   initiator: !!data.initiator,
-// })
+        storage.writeBlock(index, offset, block)
+      })
+      s.write(piece)
+      s.end()
+    })
+    .on('end', function () {
+      cb(null)
+    })
+    .on('error', function (err) {
+      cb(err)
+    })
 
-  // peer.on('error', function (err) {
-  //   console.error('peer error', err.stack || err.message || err)
-  // })
-
-  // peer.on('ready', function () {
-  //   clearChat()
-  //   addChat('Connected, say hello!', 'status')
-  //   enableUI()
-  // })
-
-  // peer.on('signal', function (data) {
-  //   socket.send({ type: 'signal', data: data })
-  // })
-
-  // peer.on('message', function (data) {
-  //   addChat(data, 'remote')
-  // })
-
-  // // Takes ~3 seconds before this event fires when peerconnection is dead (timeout)
-  // peer.on('close', next)
-
-// peer.signal(data)
-// peer.send({ type: 'chat', data: text })
+  bufStream.push(buf)
+  bufStream.push(null)
+}

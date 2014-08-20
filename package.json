@@ -7,24 +7,21 @@
     "url": "https://github.com/feross/instant.io/issues"
   },
   "dependencies": {
+    "bittorrent-client": "^0.7.3",
+    "block-stream": "0.0.7",
     "compression": "^1.0.9",
+    "concat-stream": "^1.4.6",
     "create-torrent": "^2.3.0",
     "debug": "^1.0.4",
     "drag-drop": "^1.0.2",
     "express": "^4.7.2",
-    "hat": "0.0.3",
-    "inherits": "^2.0.1",
     "jade": "^1.5.0",
-    "node-static": "^0.7.3",
-    "once": "^1.3.0",
-    "parse-torrent": "^1.7.0",
+    "parse-torrent": "^2.1.0",
     "posix": "^1.0.3",
-    "simple-peer": "^1.0.0",
-    "webtorrent-swarm": "^0.1.1",
-    "webtorrent-tracker": "^0.1.0"
+    "stylus": "^0.47.3"
   },
   "devDependencies": {
-    "browserify": "^4.1.11",
+    "browserify": "^5.10.0",
     "nib": "^1.0.3",
     "nodemon": "^1.2.1",
     "stylus": "^0.47.3",
