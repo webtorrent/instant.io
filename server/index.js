@@ -18,6 +18,8 @@ var httpsServer = https.createServer({
   cert: fs.readFileSync(__dirname + '/../secret/instant.io.chained.crt')
 }, app)
 
+util.upgradeLimits()
+
 // Templating
 app.set('views', __dirname + '/views')
 app.set('view engine', 'jade')
