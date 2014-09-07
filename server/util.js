@@ -1,4 +1,4 @@
-var debug = require('debug')('util')
+var debug = require('debug')('instant:util')
 var posix = require('posix')
 
 var MAX_SOCKETS = 10000

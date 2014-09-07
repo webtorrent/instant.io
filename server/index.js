@@ -1,6 +1,6 @@
 var compress = require('compression')
 var config = require('../config')
-var debug = require('debug')('webtorrent:web')
+var debug = require('debug')('instant')
 var express = require('express')
 var fs = require('fs')
 var http = require('http')
