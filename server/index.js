@@ -1,17 +1,15 @@
 var compress = require('compression')
+var config = require('../config')
 var debug = require('debug')('webtorrent:web')
 var express = require('express')
 var fs = require('fs')
 var http = require('http')
 var https = require('https')
 var jade = require('jade')
+var parallel = require('run-parallel')
 var path = require('path')
 var url = require('url')
 var util = require('./util')
-
-var HTTP_PORT = process.argv[2] || 9100
-var HTTPS_PORT = process.argv[3] ||
-  (process.env.NODE_ENV === 'production') ? 443 : 9101
 
 var app = express()
 var httpServer = http.createServer(app)
@@ -64,14 +62,15 @@ app.get('*', function (req, res) {
   res.render('error')
 })
 
-httpServer.listen(HTTP_PORT, function (err) {
+parallel([
+  function (cb) {
+    httpServer.listen(config.ports.http, config.host, cb)
+  },
+  function (cb) {
+    httpsServer.listen(config.ports.https, config.host, cb)
+  }
+], function (err) {
   if (err) throw err
-  debug('http listening on port ' + HTTP_PORT)
-  util.downgradeUid()
-})
-
-httpsServer.listen(HTTPS_PORT, function (err) {
-  if (err) throw err
-  debug('https listening on port ' + HTTPS_PORT)
+  debug('listening on port %s', JSON.stringify(config.ports))
   util.downgradeUid()
 })
