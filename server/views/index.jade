@@ -1,8 +1,11 @@
 extends layout
 
 block body
-  .drag-layer
   h1 instant.io
-  .infoHash
+  h3 Drag-and-drop a file to begin seeding
   form
-    input
+    label(for='infoHash') Download a file by info hash
+    input(name='infoHash')
+    button(type='submit') Download
+  h3 Log
+  .log

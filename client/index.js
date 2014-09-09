@@ -1,50 +1,35 @@
 var $ = require('jquery')
-var Client = require('bittorrent-client')
 var concat = require('concat-stream')
-var debug = require('debug')('instant')
 var dragDrop = require('drag-drop/buffer')
+var WebTorrent = require('bittorrent-client')
 
-var client = new Client()
+var client = new WebTorrent()
 
-dragDrop('body', newTorrent)
-
-function newTorrent (files) {
-  client.seed(files, {
-    createdBy: 'instant.io',
-    announceList: [[ 'wss://tracker.webtorrent.io' ]]
-  }, function (torrent) {
-    debug('we are a seeder')
-    $('.infoHash').text(torrent.infoHash)
-    showFileLink(torrent)
-  })
-}
+dragDrop('body', function (files) {
+  client.seed(files, onTorrent)
+})
 
 $('form').on('submit', function (e) {
   e.preventDefault()
-  debug('add %s', $('form input').val())
   client.add({
     infoHash: $('form input').val(),
     announce: [ 'wss://tracker.webtorrent.io' ]
-  }, function (torrent) {
-    debug('we are a downloader')
-    showFileLink(torrent)
-  })
+  }, onTorrent)
 })
 
-function addDownloadLink (buf, name) {
-  var url = URL.createObjectURL(new Blob([ buf ]))
-  var a = document.createElement('a')
-  a.download = name
-  a.href = url
-  a.textContent = 'download ' + name
-  document.body.appendChild(a)
-}
+function onTorrent (torrent) {
+  var log = document.querySelector('.log')
 
-function showFileLink (torrent) {
-  var file = torrent.files[0]
-  debug('file name %s', file.name)
-  file.createReadStream()
-    .pipe(concat(function (buf) {
-      addDownloadLink(buf, file.name)
+  log.innerHTML += 'Torrent info hash: ' + torrent.infoHash + '<br>'
+  log.innerHTML += 'Downloading from ' + torrent.swarm.wires.length + ' peers<br>'
+
+  torrent.files.forEach(function (file) {
+    file.createReadStream().pipe(concat(function (buf) {
+      var a = document.createElement('a')
+      a.download = file.name
+      a.href = URL.createObjectURL(new Blob([ buf ]))
+      a.textContent = 'download ' + file.name
+      log.appendChild(a)
     }))
+  })
 }
