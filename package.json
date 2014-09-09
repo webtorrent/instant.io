@@ -14,7 +14,6 @@
     "drag-drop": "^1.0.2",
     "express": "^4.8.5",
     "jade": "^1.5.0",
-    "jquery": "^2.1.1",
     "posix": "^1.0.3",
     "run-parallel": "^1.0.0",
     "stylus": "^0.47.3"

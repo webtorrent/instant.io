@@ -1,4 +1,3 @@
-var $ = require('jquery')
 var concat = require('concat-stream')
 var dragDrop = require('drag-drop/buffer')
 var WebTorrent = require('bittorrent-client')
@@ -9,10 +8,10 @@ dragDrop('body', function (files) {
   client.seed(files, onTorrent)
 })
 
-$('form').on('submit', function (e) {
+document.querySelector('form').addEventListener('submit', function (e) {
   e.preventDefault()
   client.add({
-    infoHash: $('form input').val(),
+    infoHash: document.querySelector('form input').value,
     announce: [ 'wss://tracker.webtorrent.io' ]
   }, onTorrent)
 })
