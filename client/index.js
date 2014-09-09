@@ -11,7 +11,7 @@ dragDrop('body', newTorrent)
 function newTorrent (files) {
   client.seed(files, {
     createdBy: 'instant.io',
-    announceList: [[ 'ws://tracker.webtorrent.io:9003' ]]
+    announceList: [[ 'wss://tracker.webtorrent.io' ]]
   }, function (torrent) {
     debug('we are a seeder')
     $('.infoHash').text(torrent.infoHash)
@@ -24,7 +24,7 @@ $('form').on('submit', function (e) {
   debug('add %s', $('form input').val())
   client.add({
     infoHash: $('form input').val(),
-    announce: [ 'ws://tracker.webtorrent.io:9003' ]
+    announce: [ 'wss://tracker.webtorrent.io' ]
   }, function (torrent) {
     debug('we are a downloader')
     showFileLink(torrent)
