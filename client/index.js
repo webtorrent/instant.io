@@ -19,7 +19,6 @@ $('form').on('submit', function (e) {
 
 function onTorrent (torrent) {
   var log = document.querySelector('.log')
-
   log.innerHTML += 'Torrent info hash: ' + torrent.infoHash + '<br>'
   log.innerHTML += 'Downloading from ' + torrent.swarm.wires.length + ' peers<br>'
 
@@ -29,7 +28,7 @@ function onTorrent (torrent) {
       a.download = file.name
       a.href = URL.createObjectURL(new Blob([ buf ]))
       a.textContent = 'download ' + file.name
-      log.appendChild(a)
+      log.innerHTML += a.outerHTML + '<br>'
     }))
   })
 }
