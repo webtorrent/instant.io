@@ -3,6 +3,7 @@ var dragDrop = require('drag-drop/buffer')
 var WebTorrent = require('bittorrent-client')
 
 var client = new WebTorrent()
+var hash = window.location.hash.replace('#', '')
 
 dragDrop('body', function (files) {
   client.seed(files, onTorrent)
@@ -10,15 +11,23 @@ dragDrop('body', function (files) {
 
 document.querySelector('form').addEventListener('submit', function (e) {
   e.preventDefault()
+  download(document.querySelector('form input').value)
+})
+
+if (/^[a-f0-9]+$/i.test(hash)) {
+  download(hash)
+}
+
+function download(infoHash) {
   client.add({
-    infoHash: document.querySelector('form input').value,
+    infoHash: infoHash,
     announce: [ 'wss://tracker.webtorrent.io' ]
   }, onTorrent)
-})
+}
 
 function onTorrent (torrent) {
   var log = document.querySelector('.log')
-  log.innerHTML += 'Torrent info hash: ' + torrent.infoHash + '<br>'
+  log.innerHTML += 'Torrent info hash: ' + torrent.infoHash + ' <a href="/#'+torrent.infoHash+'">(link)</a><br>'
   log.innerHTML += 'Downloading from ' + torrent.swarm.wires.length + ' peers<br>'
 
   torrent.files.forEach(function (file) {
