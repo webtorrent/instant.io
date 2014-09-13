@@ -7,7 +7,6 @@
     "url": "https://github.com/feross/instant.io/issues"
   },
   "dependencies": {
-    "bittorrent-client": "0.x",
     "compression": "^1.0.9",
     "concat-stream": "^1.4.6",
     "debug": "^1.0.4",
@@ -16,7 +15,8 @@
     "jade": "^1.5.0",
     "posix": "^1.0.3",
     "run-parallel": "^1.0.0",
-    "stylus": "^0.47.3"
+    "stylus": "^0.47.3",
+    "webtorrent": "0.x"
   },
   "devDependencies": {
     "browserify": "^5.10.0",

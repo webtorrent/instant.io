@@ -1,6 +1,6 @@
 var concat = require('concat-stream')
 var dragDrop = require('drag-drop/buffer')
-var WebTorrent = require('bittorrent-client')
+var WebTorrent = require('webtorrent')
 
 var client = new WebTorrent()
 var hash = window.location.hash.replace('#', '')
