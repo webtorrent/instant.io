@@ -30,6 +30,11 @@ function onTorrent (torrent) {
   log.innerHTML += 'Torrent info hash: ' + torrent.infoHash + ' <a href="/#'+torrent.infoHash+'">(link)</a><br>'
   log.innerHTML += 'Downloading from ' + torrent.swarm.wires.length + ' peers<br>'
 
+  torrent.swarm.on('download', function () {
+    var progress = (100 * torrent.downloaded / torrent.parsedTorrent.length).toFixed(1)
+    log.innerHTML += 'progress: ' + progress + '%' + '<br>'
+  })
+
   torrent.files.forEach(function (file) {
     file.createReadStream().pipe(concat(function (buf) {
       var a = document.createElement('a')
