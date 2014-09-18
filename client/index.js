@@ -28,13 +28,13 @@ function download(infoHash) {
 }
 
 function onTorrent (torrent) {
-  var log = document.querySelector('.log')
-  log.innerHTML += 'Torrent info hash: ' + torrent.infoHash + ' <a href="/#'+torrent.infoHash+'">(link)</a><br>'
-  log.innerHTML += 'Downloading from ' + torrent.swarm.wires.length + ' peers<br>'
+  logAppend('Torrent info hash: ' + torrent.infoHash + ' <a href="/#'+torrent.infoHash+'">(link)</a><br>');
+  logAppend('Downloading from ' + torrent.swarm.wires.length + ' peers<br>');
+  logAppend('progress: starting...');
 
   torrent.swarm.on('download', function () {
     var progress = (100 * torrent.downloaded / torrent.parsedTorrent.length).toFixed(1)
-    log.innerHTML += 'progress: ' + progress + '%' + '<br>'
+    logReplace('progress: ' + progress + '%' + '<br>');
   })
 
   torrent.files.forEach(function (file) {
@@ -46,4 +46,19 @@ function onTorrent (torrent) {
       log.innerHTML += a.outerHTML + '<br>'
     }))
   })
+}
+
+
+var log = document.querySelector('.log');
+
+// append a P to the log
+function logAppend(str){
+  var p = document.createElement('p');
+  p.innerHTML = str;
+  log.appendChild(p);
+}
+
+// replace the last P in the log
+function logReplace(str){
+  log.lastChild.innerHTML = str;
 }
