@@ -1,13 +1,13 @@
-localStorage.debug = '*'
-
 var concat = require('concat-stream')
 var dragDrop = require('drag-drop/buffer')
+var prettysize = require('prettysize')
 var WebTorrent = require('webtorrent')
 
 var client = new WebTorrent()
 var hash = window.location.hash.replace('#', '')
 
 dragDrop('body', function (files) {
+  logAppend('Creating .torrent file...<br>')
   client.seed(files, onTorrent)
 })
 
@@ -28,13 +28,15 @@ function download(infoHash) {
 }
 
 function onTorrent (torrent) {
-  logAppend('Torrent info hash: ' + torrent.infoHash + ' <a href="/#'+torrent.infoHash+'">(link)</a><br>');
-  logAppend('Downloading from ' + torrent.swarm.wires.length + ' peers<br>');
-  logAppend('progress: starting...');
+  logAppend('Torrent info hash: ' + torrent.infoHash + ' <a href="/#'+torrent.infoHash+'">(link)</a><br>')
+  logAppend('Downloading from ' + torrent.swarm.wires.length + ' peers<br>')
+  logAppend('progress: starting...')
 
   torrent.swarm.on('download', function () {
     var progress = (100 * torrent.downloaded / torrent.parsedTorrent.length).toFixed(1)
-    logReplace('progress: ' + progress + '%' + '<br>');
+    logReplace('progress: ' + progress + '% -- download speed: ' + prettysize(torrent.swarm.downloadSpeed()) + '/s<br>')
+  })
+
   })
 
   torrent.files.forEach(function (file) {
@@ -49,16 +51,16 @@ function onTorrent (torrent) {
 }
 
 
-var log = document.querySelector('.log');
+var log = document.querySelector('.log')
 
 // append a P to the log
 function logAppend(str){
-  var p = document.createElement('p');
-  p.innerHTML = str;
-  log.appendChild(p);
+  var p = document.createElement('p')
+  p.innerHTML = str
+  log.appendChild(p)
 }
 
 // replace the last P in the log
 function logReplace(str){
-  log.lastChild.innerHTML = str;
+  log.lastChild.innerHTML = str
 }

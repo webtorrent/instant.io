@@ -14,6 +14,7 @@
     "express": "^4.8.5",
     "jade": "^1.5.0",
     "posix": "^1.0.3",
+    "prettysize": "0.0.3",
     "run-parallel": "^1.0.0",
     "stylus": "^0.48.1",
     "webtorrent": "0.x"
