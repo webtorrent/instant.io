@@ -37,6 +37,8 @@ function onTorrent (torrent) {
     logReplace('progress: ' + progress + '% -- download speed: ' + prettysize(torrent.swarm.downloadSpeed()) + '/s<br>')
   })
 
+  torrent.swarm.on('upload', function () {
+    logReplace('upload speed:' + prettysize(client.uploadSpeed()) + '/s<br>')
   })
 
   torrent.files.forEach(function (file) {
