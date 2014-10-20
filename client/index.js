@@ -1,5 +1,6 @@
 var concat = require('concat-stream')
 var dragDrop = require('drag-drop/buffer')
+var path = require('path')
 var prettysize = require('prettysize')
 var WebTorrent = require('webtorrent')
 
@@ -42,18 +43,26 @@ function onTorrent (torrent) {
   })
 
   torrent.files.forEach(function (file) {
-    file.createReadStream().pipe(concat(function (buf) {
-      var a = document.createElement('a')
-      a.download = file.name
-      a.href = URL.createObjectURL(new Blob([ buf ]))
-      a.textContent = 'download ' + file.name
-      log.innerHTML += a.outerHTML + '<br>'
-    }))
+    var extname = path.extname(file.name)
+    if (extname === '.mp4' || extname === '.webm') {
+      var video = document.createElement('video')
+      video.controls = true
+      videos.appendChild(video)
+      file.createReadStream().pipe(video)
+    } else {
+      file.createReadStream().pipe(concat(function (buf) {
+        var a = document.createElement('a')
+        a.download = file.name
+        a.href = URL.createObjectURL(new Blob([ buf ]))
+        a.textContent = 'download ' + file.name
+        log.innerHTML += a.outerHTML + '<br>'
+      }))
+    }
   })
 }
 
-
 var log = document.querySelector('.log')
+var videos = document.querySelector('.videos')
 
 // append a P to the log
 function logAppend(str){
