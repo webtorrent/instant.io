@@ -1,11 +1,23 @@
 var concat = require('concat-stream')
 var dragDrop = require('drag-drop/buffer')
+var upload = require('upload-element')
 var path = require('path')
 var prettysize = require('prettysize')
 var WebTorrent = require('webtorrent')
 
 var client = new WebTorrent()
 var hash = window.location.hash.replace('#', '')
+
+upload(document.querySelector('input[name=upload'), { type: 'array' }, onfile);
+
+function onfile (err, results) {
+  var files = results.map(function (r) {
+    r.file.buffer = new Buffer(new Uint8Array(r.target.result))
+    return r.file
+  })
+  logAppend('Creating .torrent file...<br>')
+  client.seed(files, onTorrent)
+}
 
 dragDrop('body', function (files) {
   logAppend('Creating .torrent file...<br>')
@@ -14,7 +26,7 @@ dragDrop('body', function (files) {
 
 document.querySelector('form').addEventListener('submit', function (e) {
   e.preventDefault()
-  download(document.querySelector('form input').value)
+  download(document.querySelector('form input[name=infoHash]').value)
 })
 
 if (/^[a-f0-9]+$/i.test(hash)) {

@@ -17,6 +17,7 @@
     "prettysize": "0.0.3",
     "run-parallel": "^1.0.0",
     "stylus": "^0.48.1",
+    "upload-element": "^1.0.1",
     "webtorrent": "0.x"
   },
   "devDependencies": {
