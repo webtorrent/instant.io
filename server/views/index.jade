@@ -3,8 +3,13 @@ extends layout
 block body
   h1 instant.io
   h3 Drag-and-drop a file (or files) to begin seeding
+
+  p
+    | or choose files to upload: 
+    input(type='file', name='upload', multiple)
+ 
   form
-    label(for='infoHash') Download a file by info hash
+    label(for='infoHash') Download a file by info hash 
     input(name='infoHash')
     button(type='submit') Download
   .videos
