@@ -8,13 +8,15 @@ var WebTorrent = require('webtorrent')
 var client = window.client = new WebTorrent()
 var hash = window.location.hash.replace('#', '')
 
-upload(document.querySelector('input[name=upload]'), { type: 'array' }, onfile)
+upload(document.querySelector('input[name=upload]'), { type: 'array' }, onFile)
 
-function onfile (err, results) {
+function onFile (err, results) {
   var files = results.map(function (r) {
     var buf = toBuffer(new Uint8Array(r.target.result))
     buf.name = r.file.name
     buf.size = r.file.size
+    buf.lastModifiedDate = r.file.lastModifiedDate
+    buf.type = r.file.type
     return buf
   })
   logAppend('Creating .torrent file...<br>')
