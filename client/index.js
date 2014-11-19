@@ -4,7 +4,7 @@ var path = require('path')
 var prettysize = require('prettysize')
 var WebTorrent = require('webtorrent')
 
-var client = new WebTorrent()
+var client = window.client = new WebTorrent()
 var hash = window.location.hash.replace('#', '')
 
 dragDrop('body', function (files) {
