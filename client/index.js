@@ -7,7 +7,7 @@ var WebTorrent = require('webtorrent')
 var client = window.client = new WebTorrent()
 var hash = window.location.hash.replace('#', '')
 
-upload(document.querySelector('input[name=upload'), { type: 'array' }, onfile)
+upload(document.querySelector('input[name=upload]'), { type: 'array' }, onfile)
 
 function onfile (err, results) {
   var files = results.map(function (r) {
