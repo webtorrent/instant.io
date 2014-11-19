@@ -2,6 +2,7 @@ var dragDrop = require('drag-drop/buffer')
 var upload = require('upload-element')
 var path = require('path')
 var prettysize = require('prettysize')
+var toBuffer = require('typedarray-to-buffer')
 var WebTorrent = require('webtorrent')
 
 var client = window.client = new WebTorrent()
@@ -11,8 +12,10 @@ upload(document.querySelector('input[name=upload]'), { type: 'array' }, onfile)
 
 function onfile (err, results) {
   var files = results.map(function (r) {
-    r.file.buffer = new Buffer(new Uint8Array(r.target.result))
-    return r.file
+    var buf = toBuffer(new Uint8Array(r.target.result))
+    buf.name = r.file.name
+    buf.size = r.file.size
+    return buf
   })
   logAppend('Creating .torrent file...<br>')
   client.seed(files, onTorrent)

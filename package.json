@@ -16,6 +16,7 @@
     "posix": "^1.0.3",
     "prettysize": "0.0.3",
     "run-parallel": "^1.0.0",
+    "typedarray-to-buffer": "^3.0.0",
     "upload-element": "^1.0.1",
     "webtorrent": "0.x"
   },
