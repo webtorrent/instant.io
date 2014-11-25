@@ -27,11 +27,17 @@ app.engine('jade', jade.renderFile)
 
 app.use(compress())
 
-// Add headers
 app.use(function (req, res, next) {
-  var extname = path.extname(url.parse(req.url).pathname)
+  // Force SSL
+  if (config.isProd && req.protocol !== 'https')
+    return res.redirect('https://instant.io' + req.url)
+
+  // Strict transport security (to prevent MITM attacks on the site)
+  if (config.isProd)
+    res.header('Strict-Transport-Security', 'max-age=31536000')
 
   // Add cross-domain header for fonts, required by spec, Firefox, and IE.
+  var extname = path.extname(url.parse(req.url).pathname)
   if (['.eot', '.ttf', '.otf', '.woff'].indexOf(extname) >= 0) {
     res.header('Access-Control-Allow-Origin', '*')
   }
