@@ -8,11 +8,14 @@ var WebTorrent = require('webtorrent')
 var client = window.client = new WebTorrent()
 var hash = window.location.hash.replace('#', '')
 
+var log = document.querySelector('.log')
+var videos = document.querySelector('.videos')
+
 upload(document.querySelector('input[name=upload]'), { type: 'array' }, onFile)
 
 function onFile (err, results) {
   var files = results.map(function (r) {
-    var buf = toBuffer(new Uint8Array(r.target.result))
+    var buf = toBuffer(r.target.result)
     buf.name = r.file.name
     buf.size = r.file.size
     buf.lastModifiedDate = r.file.lastModifiedDate
@@ -66,25 +69,17 @@ function onTorrent (torrent) {
       videos.appendChild(video)
       file.createReadStream().pipe(video)
     } else {
-      var chunks = []
-      file.createReadStream()
-        .on('data', function (chunk) {
-          chunks.push(chunk)
-        })
-        .on('end', function () {
-          var buf = Buffer.concat(chunks)
-          var a = document.createElement('a')
-          a.download = file.name
-          a.href = URL.createObjectURL(new Blob([ buf ]))
-          a.textContent = 'download ' + file.name
-          log.innerHTML += a.outerHTML + '<br>'
-        })
+      file.getBlobURL(function (err, url) {
+        if (err) throw err
+        var a = document.createElement('a')
+        a.download = file.name
+        a.href = url
+        a.textContent = 'Download ' + file.name
+        log.innerHTML += a.outerHTML + '<br>'
+      })
     }
   })
 }
-
-var log = document.querySelector('.log')
-var videos = document.querySelector('.videos')
 
 // append a P to the log
 function logAppend(str){
