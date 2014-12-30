@@ -21,7 +21,7 @@
     "webtorrent": "0.x"
   },
   "devDependencies": {
-    "browserify": "^6.1.0",
+    "browserify": "^8.0.2",
     "nib": "^1.0.3",
     "nodemon": "^1.2.1",
     "stylus": "^0.49.3",
