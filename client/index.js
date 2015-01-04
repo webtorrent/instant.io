@@ -1,15 +1,54 @@
 var dragDrop = require('drag-drop/buffer')
-var upload = require('upload-element')
+var magnet = require('magnet-uri')
 var path = require('path')
 var prettysize = require('prettysize')
+var thunky = require('thunky')
 var toBuffer = require('typedarray-to-buffer')
+var upload = require('upload-element')
 var WebTorrent = require('webtorrent')
+var xhr = require('xhr')
 
-var client = window.client = new WebTorrent()
 var hash = window.location.hash.replace('#', '')
 
 var log = document.querySelector('.log')
 var videos = document.querySelector('.videos')
+
+var getClient = thunky(function (cb) {
+  xhr('/rtcConfig', function (err, res) {
+    if (err) return cb(err)
+    var rtcConfig
+    try {
+      rtcConfig = JSON.parse(res.body)
+    } catch (err) {
+      return cb(new Error('Expected JSON response from /rtcConfig: ' + res.body))
+    }
+    cb(null, new WebTorrent({ rtcConfig: rtcConfig }))
+  })
+})
+
+getClient(function (err, client) {
+  if (err) return error(err)
+  window.client = client
+})
+
+function download (infoHash) {
+  getClient(function (err, client) {
+    if (err) return error(err)
+    var magnetUri = magnet.encode({
+      infoHash: infoHash,
+      announce: [ 'wss://tracker.webtorrent.io' ]
+    })
+    logAppend('using magnet uri: ' + magnetUri)
+    client.add(magnetUri, onTorrent)
+  })
+}
+
+function seed (files) {
+  getClient(function (err, client) {
+    if (err) return error(err)
+    client.seed(files, onTorrent)
+  })
+}
 
 upload(document.querySelector('input[name=upload]'), { type: 'array' }, onFile)
 
@@ -23,12 +62,12 @@ function onFile (err, results) {
     return buf
   })
   logAppend('Creating .torrent file...<br>')
-  client.seed(files, onTorrent)
+  seed(files)
 }
 
 dragDrop('body', function (files) {
   logAppend('Creating .torrent file...<br>')
-  client.seed(files, onTorrent)
+  seed(files)
 })
 
 document.querySelector('form').addEventListener('submit', function (e) {
@@ -38,13 +77,6 @@ document.querySelector('form').addEventListener('submit', function (e) {
 
 if (/^[a-f0-9]+$/i.test(hash)) {
   download(hash)
-}
-
-function download(infoHash) {
-  client.add({
-    infoHash: infoHash,
-    announce: [ 'wss://tracker.webtorrent.io' ]
-  }, onTorrent)
 }
 
 function onTorrent (torrent) {
@@ -58,7 +90,7 @@ function onTorrent (torrent) {
   })
 
   torrent.swarm.on('upload', function () {
-    logReplace('upload speed:' + prettysize(client.uploadSpeed()) + '/s<br>')
+    logReplace('upload speed:' + prettysize(torrent.swarm.uploadSpeed()) + '/s<br>')
   })
 
   torrent.files.forEach(function (file) {
@@ -82,13 +114,18 @@ function onTorrent (torrent) {
 }
 
 // append a P to the log
-function logAppend(str){
+function logAppend (str) {
   var p = document.createElement('p')
   p.innerHTML = str
   log.appendChild(p)
 }
 
 // replace the last P in the log
-function logReplace(str){
+function logReplace (str) {
   log.lastChild.innerHTML = str
+}
+
+function error (err) {
+  console.error(err)
+  alert(err.message || err)
 }

@@ -12,12 +12,16 @@
     "drag-drop": "^2.0.0",
     "express": "^4.8.5",
     "jade": "^1.5.0",
+    "magnet-uri": "^4.1.0",
     "posix": "^1.0.3",
     "prettysize": "0.0.3",
     "run-parallel": "^1.0.0",
+    "thunky": "^0.1.0",
+    "twilio": "^1.10.0",
     "typedarray-to-buffer": "^3.0.0",
     "upload-element": "^1.0.1",
-    "webtorrent": "0.x"
+    "webtorrent": "0.x",
+    "xhr": "^2.0.0"
   },
   "devDependencies": {
     "browserify": "^8.0.2",

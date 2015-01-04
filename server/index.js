@@ -1,5 +1,4 @@
 var compress = require('compression')
-var config = require('../config')
 var debug = require('debug')('instant')
 var express = require('express')
 var fs = require('fs')
@@ -9,6 +8,10 @@ var jade = require('jade')
 var parallel = require('run-parallel')
 var path = require('path')
 var url = require('url')
+var twilio = require('twilio')
+
+var config = require('../config')
+var secret = require('../secret')
 var util = require('./util')
 
 var app = express()
@@ -66,8 +69,41 @@ app.get('/', function (req, res) {
   res.render('index')
 })
 
+// Fetch new ice_servers from twilio token regularly
+var iceServers
+var twilioClient = twilio(secret.twilio.accountSid, secret.twilio.authToken)
+
+function updateIceServers () {
+  twilioClient.tokens.create({}, function (err, token) {
+    if (err) {
+      return console.error(err.stack || err.message || err)
+    }
+    if (!token.ice_servers) {
+      return console.error('twilio response ' + token + ' missing ice_servers')
+    }
+    iceServers = token.ice_servers
+      .filter(function (server) {
+        return server && server.url && !/^stun:/.test(server.url)
+      })
+    iceServers.unshift({ url: 'stun:23.21.150.121' })
+  })
+}
+
+setInterval(updateIceServers, 60 * 60 * 4 * 1000).unref()
+updateIceServers()
+
+app.get('/rtcConfig', function (req, res) {
+  if (!iceServers) res.status(404).send({ iceServers: [] })
+  else res.send({ iceServers: iceServers })
+})
+
 app.get('*', function (req, res) {
-  res.render('error')
+  res.status(404).render('error', { message: '404 Not Found' })
+})
+
+app.use(function (req, res, next, err) {
+  console.error(err.stack)
+  res.status(500).render('error', { message: err.message || err })
 })
 
 parallel([
