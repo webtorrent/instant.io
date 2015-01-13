@@ -1,22 +1,22 @@
 extends layout
 
 block body
-  h1 instant.io
-  h3 Drag-and-drop a file (or files) to begin seeding
+  h1 instant.io - Secure, anonymous, streaming file transfer
+  h2 Start seeding
 
   p
-    | or choose files to upload: 
+    | Drag-and-drop a file (or files) to begin sharing. Or choose a file:
     input(type='file', name='upload', multiple)
- 
+
+  h2 Start downloading
   form
-    label(for='infoHash') Download a file by info hash 
+    label(for='infoHash') Download a file by info hash
     input(name='infoHash')
     button(type='submit') Download
   .videos
-  h3 Log
+  h2 Log
   .log
 
   footer
-    p Run <code>localStorage.debug = '*'</code> in the console to get detailed log output.
-    p Powered by <a href="http://webtorrent.io">WebTorrent</a>. Code available on <a href="https://github.com/feross/instant.io">GitHub</a>. MIT License.
-
+    p Code available on <a href="https://github.com/feross/instant.io">GitHub</a>. Powered by <a href="http://webtorrent.io">WebTorrent</a>. MIT License.
+    p: small Run <code>localStorage.debug = '*'</code>in the console and refresh to get detailed log output.
