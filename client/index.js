@@ -2,6 +2,7 @@ var dragDrop = require('drag-drop/buffer')
 var magnet = require('magnet-uri')
 var path = require('path')
 var prettysize = require('prettysize')
+var querystring = require('querystring')
 var thunky = require('thunky')
 var toBuffer = require('typedarray-to-buffer')
 var upload = require('upload-element')
@@ -44,6 +45,22 @@ function download (infoHash) {
 }
 
 function seed (files) {
+  // Store files for 24 hours (if user requests it)
+  files.forEach(function (file) {
+    xhr({
+      url: '/upload?' + querystring.stringify({ name: file.name }),
+      method: 'POST',
+      headers: {
+        'Content-Type': file.type
+      },
+      body: file
+    }, function (err) {
+      if (err) return error(err)
+      // TODO: add message that file was stored
+    })
+  })
+
+  // Seed from WebTorrent
   getClient(function (err, client) {
     if (err) return error(err)
     client.seed(files, onTorrent)
