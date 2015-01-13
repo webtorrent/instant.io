@@ -112,7 +112,8 @@ app.get('*', function (req, res) {
   res.status(404).render('error', { message: '404 Not Found' })
 })
 
-app.use(function (req, res, next, err) {
+// error handling middleware
+app.use(function (err, req, res, next) {
   console.error(err.stack)
   res.status(500).render('error', { message: err.message || err })
 })
