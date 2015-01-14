@@ -11,6 +11,7 @@
     "debug": "^2.0.0",
     "drag-drop": "^2.0.0",
     "express": "^4.8.5",
+    "finalhandler": "^0.3.3",
     "jade": "^1.5.0",
     "magnet-uri": "^4.1.0",
     "posix": "^1.0.3",

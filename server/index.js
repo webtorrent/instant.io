@@ -1,6 +1,7 @@
 var compress = require('compression')
 var debug = require('debug')('instant')
 var express = require('express')
+var finalhandler = require('finalhandler')
 var fs = require('fs')
 var http = require('http')
 var https = require('https')
@@ -64,7 +65,19 @@ app.use(function (req, res, next) {
   next()
 })
 
-app.use(express.static(__dirname + '/../static'))
+var serveUpload = express.static(path.join(__dirname, '../upload'), {
+  index: false,
+  setHeaders: function (res) {
+    res.header('Content-Disposition', 'attachment') // force file download
+    res.header('Content-Type', 'application/octet-stream') // generic, safe mime type
+  }
+})
+app.use(function (req, res, next) {
+  if (req.subdomains[req.subdomains.length - 1] !== 'useruploads') return next()
+  serveUpload(req, res, finalhandler(req, res, { onerror: error }))
+})
+
+app.use(express.static(path.join(__dirname, '../static')))
 
 app.get('/', function (req, res) {
   res.render('index')
@@ -76,12 +89,11 @@ var twilioClient = twilio(secret.twilio.accountSid, secret.twilio.authToken)
 
 function updateIceServers () {
   twilioClient.tokens.create({}, function (err, token) {
-    if (err) {
-      return console.error(err.stack || err.message || err)
-    }
-    if (!token.ice_servers) {
-      return console.error('twilio response ' + token + ' missing ice_servers')
-    }
+    if (err)
+      return error(err)
+    if (!token.ice_servers)
+      return error(new Error('twilio response ' + token + ' missing ice_servers'))
+
     iceServers = token.ice_servers
       .filter(function (server) {
         return server && server.url && !/^stun:/.test(server.url)
@@ -115,7 +127,7 @@ app.get('*', function (req, res) {
 
 // error handling middleware
 app.use(function (err, req, res, next) {
-  console.error(err.stack)
+  error(err)
   res.status(500).render('error', { message: err.message || err })
 })
 
@@ -131,3 +143,7 @@ parallel([
   debug('listening on port %s', JSON.stringify(config.ports))
   util.downgradeUid()
 })
+
+function error (err) {
+  console.error(err.stack || err.message || err)
+}
