@@ -26,6 +26,7 @@ util.upgradeLimits()
 // Templating
 app.set('views', __dirname + '/views')
 app.set('view engine', 'jade')
+app.set('x-powered-by', false)
 app.engine('jade', jade.renderFile)
 
 app.use(compress())
