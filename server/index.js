@@ -1,3 +1,4 @@
+var cors = require('cors')
 var compress = require('compression')
 var debug = require('debug')('instant')
 var express = require('express')
@@ -76,8 +77,16 @@ var serveUpload = express.static(path.join(__dirname, '../upload'), {
   }
 })
 app.use(function (req, res, next) {
-  if (req.subdomains[req.subdomains.length - 1] !== 'useruploads') return next()
-  serveUpload(req, res, finalhandler(req, res, { onerror: error }))
+  if (req.subdomains[req.subdomains.length - 1] !== 'useruploads')
+    return next()
+  var done = finalhandler(req, res, { onerror: error })
+  if (req.method === 'GET' || req.method === 'OPTIONS') {
+    cors()(req, res, function (err) {
+      if (err) return done(err)
+      if (req.method === 'GET') serveUpload(req, res, done)
+      else done()
+    })
+  } else done()
 })
 
 app.use(express.static(path.join(__dirname, '../static')))
