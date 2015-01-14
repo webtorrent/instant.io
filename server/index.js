@@ -100,7 +100,7 @@ app.get('/rtcConfig', function (req, res) {
 app.post('/upload', function (req, res, next) {
   var saveTo = path.join(__dirname, '../upload', path.basename(req.query.name))
   req.pipe(fs.createWriteStream(saveTo))
-    .on('end', function () {
+    .on('finish', function () {
       res.status(200).send({ status: 'ok' })
     })
     .on('error', function (err) {
