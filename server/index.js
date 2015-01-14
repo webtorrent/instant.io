@@ -34,8 +34,10 @@ app.use(compress())
 
 app.use(function (req, res, next) {
   // Force SSL
-  if (config.isProd && req.protocol !== 'https')
-    return res.redirect('https://instant.io' + req.url)
+  if (config.isProd && req.protocol !== 'https') {
+    var host = (req.headers && req.headers.host) || 'instant.io'
+    return res.redirect('https://' + host + req.url)
+  }
 
   // Strict transport security (to prevent MITM attacks on the site)
   if (config.isProd)
