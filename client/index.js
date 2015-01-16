@@ -12,7 +12,7 @@ var xhr = require('xhr')
 var hash = window.location.hash.replace('#', '')
 
 var log = document.querySelector('.log')
-var videos = document.querySelector('.videos')
+var media = document.querySelector('.media')
 
 var getClient = thunky(function (cb) {
   xhr('/rtcConfig', function (err, res) {
@@ -115,8 +115,13 @@ function onTorrent (torrent) {
     if (extname === '.mp4' || extname === '.webm') {
       var video = document.createElement('video')
       video.controls = true
-      videos.appendChild(video)
+      media.appendChild(video)
       file.createReadStream().pipe(video)
+    } else if (extname === '.mp3') {
+      var audio = document.createElement('audio')
+      audio.controls = true
+      media.appendChild(audio)
+      file.createReadStream().pipe(audio)
     } else {
       file.getBlobURL(function (err, url) {
         if (err) throw err
