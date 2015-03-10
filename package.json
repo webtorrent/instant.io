@@ -15,7 +15,7 @@
     "finalhandler": "^0.3.3",
     "jade": "^1.5.0",
     "magnet-uri": "^4.1.0",
-    "posix": "^1.0.3",
+    "posix": "^2.0.0",
     "prettysize": "0.0.3",
     "run-parallel": "^1.0.0",
     "thunky": "^0.1.0",
