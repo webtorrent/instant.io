@@ -35,21 +35,25 @@ app.use(compress())
 
 app.use(function (req, res, next) {
   // Force SSL
-  if (config.isProd && req.protocol !== 'https')
+  if (config.isProd && req.protocol !== 'https') {
     return res.redirect('https://' + (req.hostname || 'instant.io') + req.url)
+  }
 
   // Redirect www to non-www
-  if (config.isProd && req.hostname === 'www.instant.io')
+  if (config.isProd && req.hostname === 'www.instant.io') {
     return res.redirect('https://instant.io' + req.url)
+  }
 
   // Strict transport security (to prevent MITM attacks on the site)
-  if (config.isProd)
+  if (config.isProd) {
     res.header('Strict-Transport-Security', 'max-age=31536000')
+  }
 
   // Add cross-domain header for fonts, required by spec, Firefox, and IE.
   var extname = path.extname(url.parse(req.url).pathname)
-  if (['.eot', '.ttf', '.otf', '.woff'].indexOf(extname) >= 0)
+  if (['.eot', '.ttf', '.otf', '.woff', '.woff2'].indexOf(extname) >= 0) {
     res.header('Access-Control-Allow-Origin', '*')
+  }
 
   // Prevents IE and Chrome from MIME-sniffing a response. Reduces exposure to
   // drive-by download attacks on sites serving user uploaded content.
