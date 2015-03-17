@@ -2,7 +2,11 @@
   "name": "instant.io",
   "description": "Secure, anonymous, streaming file transfer",
   "version": "1.0.0",
-  "author": "Feross Aboukhadijeh <feross@feross.org> (http://feross.org/)",
+  "author": {
+    "name": "Feross Aboukhadijeh",
+    "email": "feross@feross.org",
+    "url": "http://feross.org/"
+  },
   "bugs": {
     "url": "https://github.com/feross/instant.io/issues"
   },
