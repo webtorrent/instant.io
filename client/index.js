@@ -70,6 +70,7 @@ function seed (files) {
 upload(document.querySelector('input[name=upload]'), { type: 'array' }, onFile)
 
 function onFile (err, results) {
+  if (err) return error(err)
   var files = results.map(function (r) {
     var buf = toBuffer(r.target.result)
     buf.name = r.file.name
@@ -97,7 +98,7 @@ if (/^[a-f0-9]+$/i.test(hash)) {
 }
 
 function onTorrent (torrent) {
-  logAppend('Torrent info hash: ' + torrent.infoHash + ' <a href="/#'+torrent.infoHash+'">(link)</a><br>')
+  logAppend('Torrent info hash: ' + torrent.infoHash + ' <a href="/#' + torrent.infoHash + '">(link)</a><br>')
   logAppend('Downloading from ' + torrent.swarm.wires.length + ' peers<br>')
   logAppend('progress: starting...')
 
@@ -148,6 +149,6 @@ function logReplace (str) {
 }
 
 function error (err) {
-  console.error(err)
-  alert(err.message || err)
+  console.error(err.stack || err.message || err)
+  window.alert(err.message || err)
 }
