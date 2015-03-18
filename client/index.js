@@ -113,12 +113,12 @@ function onTorrent (torrent) {
 
   torrent.files.forEach(function (file) {
     var extname = path.extname(file.name)
-    if (extname === '.mp4' || extname === '.webm') {
+    if (window.MediaSource && extname === '.mp4' || extname === '.webm') {
       var video = document.createElement('video')
       video.controls = true
       media.appendChild(video)
       file.createReadStream().pipe(video)
-    } else if (extname === '.mp3') {
+    } else if (window.MediaSource && extname === '.mp3') {
       var audio = document.createElement('audio')
       audio.controls = true
       media.appendChild(audio)
@@ -150,5 +150,5 @@ function logReplace (str) {
 
 function error (err) {
   console.error(err.stack || err.message || err)
-  window.alert(err.message || err)
+  window.alert(err.message || err) //eslint-disable-line
 }
