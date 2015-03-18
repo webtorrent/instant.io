@@ -81,8 +81,8 @@ var serveUpload = express.static(path.join(__dirname, '../upload'), {
   }
 })
 app.use(function (req, res, next) {
-  if (req.subdomains[req.subdomains.length - 1] !== 'useruploads')
-    return next()
+  if (req.subdomains[req.subdomains.length - 1] !== 'useruploads') return next()
+
   var done = finalhandler(req, res, { onerror: error })
   if (req.method === 'GET' || req.method === 'OPTIONS') {
     cors()(req, res, function (err) {
@@ -105,10 +105,10 @@ var twilioClient = twilio(secret.twilio.accountSid, secret.twilio.authToken)
 
 function updateIceServers () {
   twilioClient.tokens.create({}, function (err, token) {
-    if (err)
-      return error(err)
-    if (!token.ice_servers)
+    if (err) return error(err)
+    if (!token.ice_servers) {
       return error(new Error('twilio response ' + token + ' missing ice_servers'))
+    }
 
     iceServers = token.ice_servers
       .filter(function (server) {
