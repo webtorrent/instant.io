@@ -1,5 +1,7 @@
+secret/*
+!secret/index-sample.js
+
 main.css
 node_modules
-secret
 static
 upload

@@ -1,0 +1,4 @@
+exports.twilio = {
+  accountSid: '',
+  authToken: ''
+}
