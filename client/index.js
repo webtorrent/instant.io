@@ -6,7 +6,7 @@ var querystring = require('querystring')
 var thunky = require('thunky')
 var toBuffer = require('typedarray-to-buffer')
 var upload = require('upload-element')
-var videostream = require('videostream');
+var videostream = require('videostream')
 var WebTorrent = require('webtorrent')
 var xhr = require('xhr')
 
