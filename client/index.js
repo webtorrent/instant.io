@@ -6,6 +6,7 @@ var querystring = require('querystring')
 var thunky = require('thunky')
 var toBuffer = require('typedarray-to-buffer')
 var upload = require('upload-element')
+var videostream = require('videostream');
 var WebTorrent = require('webtorrent')
 var xhr = require('xhr')
 
@@ -117,7 +118,11 @@ function onTorrent (torrent) {
       var video = document.createElement('video')
       video.controls = true
       media.appendChild(video)
-      file.createReadStream().pipe(video)
+      if (extname === '.mp4') {
+        videostream(file, video)
+      } else {
+        file.createReadStream().pipe(video)
+      }
     } else if (window.MediaSource && extname === '.mp3') {
       var audio = document.createElement('audio')
       audio.controls = true
