@@ -10,6 +10,8 @@ var videostream = require('videostream')
 var WebTorrent = require('webtorrent')
 var xhr = require('xhr')
 
+var TRACKER_URL = 'wss://tracker.webtorrent.io'
+
 var hash = window.location.hash.replace('#', '')
 
 var log = document.querySelector('.log')
@@ -38,7 +40,7 @@ function download (infoHash) {
     if (err) return error(err)
     var magnetUri = magnet.encode({
       infoHash: infoHash,
-      announce: [ 'wss://tracker.webtorrent.io' ]
+      announce: [ TRACKER_URL ]
     })
     logAppend('using magnet uri: ' + magnetUri)
     client.add(magnetUri, onTorrent)
@@ -64,7 +66,7 @@ function seed (files) {
   // Seed from WebTorrent
   getClient(function (err, client) {
     if (err) return error(err)
-    client.seed(files, onTorrent)
+    client.seed(files, { announce: [ TRACKER_URL ] }, onTorrent)
   })
 }
 
