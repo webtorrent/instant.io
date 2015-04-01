@@ -26,7 +26,10 @@ var getClient = thunky(function (cb) {
     } catch (err) {
       return cb(new Error('Expected JSON response from /rtcConfig: ' + res.body))
     }
-    cb(null, new WebTorrent({ rtcConfig: rtcConfig }))
+    var client = new WebTorrent({ rtcConfig: rtcConfig })
+    client.on('warning', warning)
+    client.on('error', warning)
+    cb(null, client)
   })
 })
 
@@ -66,7 +69,7 @@ function seed (files) {
   // Seed from WebTorrent
   getClient(function (err, client) {
     if (err) return error(err)
-    client.seed(files, { announce: [ TRACKER_URL ] }, onTorrent)
+    client.seed(files, { announceList: [ [ TRACKER_URL ] ] }, onTorrent)
   })
 }
 
@@ -153,6 +156,10 @@ function logAppend (str) {
 // replace the last P in the log
 function logReplace (str) {
   log.lastChild.innerHTML = str
+}
+
+function warning (err) {
+  console.error(err.stack || err.message || err)
 }
 
 function error (err) {
