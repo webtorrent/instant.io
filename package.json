@@ -26,7 +26,7 @@
     "twilio": "^1.10.0",
     "typedarray-to-buffer": "^3.0.0",
     "upload-element": "^1.0.1",
-    "videostream": "^0.0.1",
+    "videostream": "0.0.2",
     "webtorrent": "0.x",
     "xhr": "^2.0.0"
   },
