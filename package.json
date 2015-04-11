@@ -37,7 +37,7 @@
     "standard": "^3.1.1",
     "stylus": "^0.50.0",
     "uglify-js": "^2.4.16",
-    "watchify": "^2.1.1"
+    "watchify": "^3.1.0"
   },
   "homepage": "http://feross.org",
   "keywords": [
