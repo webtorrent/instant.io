@@ -122,6 +122,7 @@ function onTorrent (torrent) {
     if (window.MediaSource && extname === '.mp4' || extname === '.webm') {
       var video = document.createElement('video')
       video.controls = true
+      video.autoplay = true
       media.appendChild(video)
       if (extname === '.mp4') {
         videostream(file, video)
@@ -131,6 +132,7 @@ function onTorrent (torrent) {
     } else if (window.MediaSource && extname === '.mp3') {
       var audio = document.createElement('audio')
       audio.controls = true
+      audio.autoplay = true
       media.appendChild(audio)
       file.createReadStream().pipe(audio)
     } else {
