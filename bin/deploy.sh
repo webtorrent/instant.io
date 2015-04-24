@@ -1,6 +1,7 @@
 #!/bin/sh
 # Update code and restart server (run from app server)
-set -e
+trap 'exit' ERR
+
 sudo supervisorctl reload
 sleep 3
 sudo supervisorctl stop instant
