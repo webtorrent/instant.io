@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Trigger a deploy (run from CI server)
 trap 'exit' ERR
 

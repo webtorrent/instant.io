@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Update code and restart server (run from app server)
 trap 'exit' ERR
 
