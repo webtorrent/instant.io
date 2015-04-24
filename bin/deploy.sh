@@ -2,8 +2,6 @@
 # Update code and restart server (run from app server)
 trap 'exit' ERR
 
-sudo supervisorctl reload
-sleep 3
 sudo supervisorctl stop instant
 cd /home/feross/www/instant.io && git pull
 cd /home/feross/www/instant.io && rm -rf node_modules
