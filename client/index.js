@@ -135,16 +135,15 @@ function onTorrent (torrent) {
       audio.autoplay = true
       media.appendChild(audio)
       file.createReadStream().pipe(audio)
-    } else {
-      file.getBlobURL(function (err, url) {
-        if (err) throw err
-        var a = document.createElement('a')
-        a.download = file.name
-        a.href = url
-        a.textContent = 'Download ' + file.name
-        log.innerHTML += a.outerHTML + '<br>'
-      })
     }
+    file.getBlobURL(function (err, url) {
+      if (err) return error(err)
+      var a = document.createElement('a')
+      a.download = file.name
+      a.href = url
+      a.textContent = 'Download ' + file.name
+      log.innerHTML += a.outerHTML + '<br>'
+    })
   })
 }
 
