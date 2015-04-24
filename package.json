@@ -35,7 +35,7 @@
     "nib": "^1.0.3",
     "nodemon": "^1.2.1",
     "standard": "^3.1.1",
-    "stylus": "^0.50.0",
+    "stylus": "^0.51.0",
     "uglify-js": "^2.4.16",
     "watchify": "^3.1.0"
   },
