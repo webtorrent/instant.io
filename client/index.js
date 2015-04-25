@@ -15,9 +15,6 @@ var TRACKER_URL = 'wss://tracker.webtorrent.io'
 
 var hash = window.location.hash.replace('#', '')
 
-var log = document.querySelector('.log')
-var media = document.querySelector('.media')
-
 var getClient = thunky(function (cb) {
   xhr('/rtcConfig', function (err, res) {
     if (err) return cb(err)
@@ -129,54 +126,68 @@ function seed (files) {
 }
 
 function onTorrent (torrent) {
-  logAppend('Torrent info hash: ' + torrent.infoHash + ' <a href="/#' + torrent.infoHash + '">(link)</a><br>')
-  logAppend('Downloading from ' + torrent.swarm.wires.length + ' peers<br>')
+  logAppend('Torrent info hash: ' + torrent.infoHash + ' <a href="/#' + torrent.infoHash + '">(link)</a>')
+  logAppend('Downloading from ' + torrent.swarm.wires.length + ' peers')
   logAppend('progress: starting...')
 
   torrent.swarm.on('download', function () {
     var progress = (100 * torrent.downloaded / torrent.parsedTorrent.length).toFixed(1)
-    logReplace('progress: ' + progress + '% -- download speed: ' + prettysize(torrent.swarm.downloadSpeed()) + '/s<br>')
+    logReplace('progress: ' + progress + '% -- download speed: ' + prettysize(torrent.swarm.downloadSpeed()) + '/s')
   })
 
   torrent.swarm.on('upload', function () {
-    logReplace('upload speed:' + prettysize(torrent.swarm.uploadSpeed()) + '/s<br>')
+    logReplace('upload speed:' + prettysize(torrent.swarm.uploadSpeed()) + '/s')
   })
 
   torrent.files.forEach(function (file) {
     var extname = path.extname(file.name)
-    if (window.MediaSource && extname === '.mp4' || extname === '.webm') {
+    if ((extname === '.mp4' || extname === '.webm') && window.MediaSource) {
       var video = document.createElement('video')
       video.controls = true
       video.autoplay = true
-      media.appendChild(video)
+      logAppend(video)
       if (extname === '.mp4') {
         videostream(file, video)
       } else {
         file.createReadStream().pipe(video)
       }
-    } else if (window.MediaSource && extname === '.mp3') {
+    } else if (extname === '.mp3' && window.MediaSource) {
       var audio = document.createElement('audio')
       audio.controls = true
       audio.autoplay = true
-      media.appendChild(audio)
+      logAppend(audio)
       file.createReadStream().pipe(audio)
     }
+
     file.getBlobURL(function (err, url) {
       if (err) return error(err)
+
+      if (extname === '.jpg' || extname === '.png') {
+        var img = document.createElement('img')
+        img.src = url
+        img.alt = file.name
+        logAppend(img)
+      }
+
       var a = document.createElement('a')
       a.download = file.name
       a.href = url
       a.textContent = 'Download ' + file.name
-      log.innerHTML += a.outerHTML + '<br>'
+      logAppend(a)
     })
   })
 }
 
-// append a P to the log
-function logAppend (str) {
-  var p = document.createElement('p')
-  p.innerHTML = str
-  log.appendChild(p)
+var log = document.querySelector('.log')
+function logAppend (item) {
+  if (typeof item === 'string') {
+    var p = document.createElement('p')
+    p.innerHTML = item
+    log.appendChild(p)
+  } else {
+    log.appendChild(item)
+    log.appendChild(document.createElement('br'))
+  }
 }
 
 // replace the last P in the log
