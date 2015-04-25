@@ -1,12 +1,15 @@
 extends layout
 
 block body
-  h1 instant.io - Secure, anonymous, streaming file transfer
+  h1 Instant - Secure, anonymous, streaming file transfer
   p Download/upload files using the <a href="http://webtorrent.io">WebTorrent</a> protocol (BitTorrent over WebRTC). This is a beta.
+  h2#logHeading(style='display: none') Log
+  .log
 
   h2 Start seeding
   p
     | Drag-and-drop a file (or files) to begin sharing. Or choose a file:
+    | #{ ' ' }
     input(type='file', name='upload', multiple)
 
   h2 Start downloading
@@ -14,9 +17,6 @@ block body
     label(for='infoHash') Download a file by info hash
     input(name='infoHash')
     button(type='submit') Download
-  h2 Log
-  .log
 
   footer
-    p Code available on <a href="https://github.com/feross/instant.io">GitHub</a>. Powered by <a href="http://webtorrent.io">WebTorrent</a>. MIT License.
-    p: small Run <code>localStorage.debug = '*'</code>in the console and refresh to get detailed log output.
+    p: small Powered by <a href="http://webtorrent.io">WebTorrent</a>. MIT License. Code available on <a href="https://github.com/feross/instant.io">GitHub</a>. Run <code>localStorage.debug = '*'</code>in the console and refresh to get detailed log output.
