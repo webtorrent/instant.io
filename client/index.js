@@ -1,5 +1,6 @@
 var dragDrop = require('drag-drop/buffer')
 var magnet = require('magnet-uri')
+var parseTorrent = require('parse-torrent')
 var path = require('path')
 var prettysize = require('prettysize')
 var querystring = require('querystring')
@@ -38,7 +39,48 @@ getClient(function (err, client) {
   window.client = client
 })
 
-function download (infoHash) {
+upload(document.querySelector('input[name=upload]'), function (err, results) {
+  if (err) return error(err)
+  var files = results.map(function (r) {
+    var buf = toBuffer(r.target.result)
+    buf.name = r.file.name
+    buf.size = r.file.size
+    buf.lastModifiedDate = r.file.lastModifiedDate
+    buf.type = r.file.type
+    return buf
+  })
+  onFiles(files)
+})
+
+dragDrop('body', onFiles)
+
+function onFiles (files) {
+  // .torrent file = start downloading the torrent
+  files.filter(isTorrent).forEach(downloadTorrent)
+
+  // everything else = seed these files
+  seed(files.filter(isNotTorrent))
+}
+
+function isTorrent (file) {
+  var extname = path.extname(file.name)
+  return extname === '.torrent'
+}
+
+function isNotTorrent (file) {
+  return !isTorrent(file)
+}
+
+document.querySelector('form').addEventListener('submit', function (e) {
+  e.preventDefault()
+  downloadInfoHash(document.querySelector('form input[name=infoHash]').value)
+})
+
+if (/^[a-f0-9]+$/i.test(hash)) {
+  downloadInfoHash(hash)
+}
+
+function downloadInfoHash (infoHash) {
   getClient(function (err, client) {
     if (err) return error(err)
     var magnetUri = magnet.encode({
@@ -50,7 +92,20 @@ function download (infoHash) {
   })
 }
 
+function downloadTorrent (file) {
+  getClient(function (err, client) {
+    if (err) return error(err)
+    logAppend('downloading from .torrent file: ' + file.name)
+    var parsedTorrent = parseTorrent(file)
+    parsedTorrent.announce = [ TRACKER_URL ]
+    parsedTorrent.announceList = [ [ TRACKER_URL ] ]
+    client.add(parsedTorrent, onTorrent)
+  })
+}
+
 function seed (files) {
+  if (files.length === 0) return
+
   // Store files for 24 hours (if user requests it)
   files.forEach(function (file) {
     xhr({
@@ -71,36 +126,6 @@ function seed (files) {
     if (err) return error(err)
     client.seed(files, { announceList: [ [ TRACKER_URL ] ] }, onTorrent)
   })
-}
-
-upload(document.querySelector('input[name=upload]'), { type: 'array' }, onFile)
-
-function onFile (err, results) {
-  if (err) return error(err)
-  var files = results.map(function (r) {
-    var buf = toBuffer(r.target.result)
-    buf.name = r.file.name
-    buf.size = r.file.size
-    buf.lastModifiedDate = r.file.lastModifiedDate
-    buf.type = r.file.type
-    return buf
-  })
-  logAppend('Creating .torrent file...<br>')
-  seed(files)
-}
-
-dragDrop('body', function (files) {
-  logAppend('Creating .torrent file...<br>')
-  seed(files)
-})
-
-document.querySelector('form').addEventListener('submit', function (e) {
-  e.preventDefault()
-  download(document.querySelector('form input[name=infoHash]').value)
-})
-
-if (/^[a-f0-9]+$/i.test(hash)) {
-  download(hash)
 }
 
 function onTorrent (torrent) {
