@@ -134,11 +134,11 @@ function onTorrent (torrent) {
 
   torrent.swarm.on('download', function () {
     var progress = (100 * torrent.downloaded / torrent.parsedTorrent.length).toFixed(1)
-    util.logReplace('Progress: ' + progress + '% -- download speed: ' + prettysize(torrent.swarm.downloadSpeed()) + '/s')
+    util.logReplace('Progress: ' + progress + '% -- Download speed: ' + prettysize(torrent.swarm.downloadSpeed()) + '/s')
   })
 
   torrent.swarm.on('upload', function () {
-    util.logReplace('upload speed:' + prettysize(torrent.swarm.uploadSpeed()) + '/s')
+    util.logReplace('Upload speed: ' + prettysize(client.uploadSpeed()) + '/s')
   })
 
   torrent.files.forEach(function (file) {
