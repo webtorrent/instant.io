@@ -138,7 +138,7 @@ function onTorrent (torrent) {
   })
 
   torrent.swarm.on('upload', function () {
-    util.logReplace('Upload speed: ' + prettysize(client.uploadSpeed()) + '/s')
+    util.logReplace('Upload speed: ' + prettysize(window.client.uploadSpeed()) + '/s')
   })
 
   torrent.files.forEach(function (file) {
