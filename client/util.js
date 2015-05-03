@@ -1,4 +1,5 @@
 var log = document.querySelector('.log')
+var speed = document.querySelector('.speed')
 var logHeading = document.querySelector('#logHeading')
 
 exports.logAppend = function logAppend (item) {
@@ -14,8 +15,8 @@ exports.logAppend = function logAppend (item) {
 }
 
 // replace the last P in the log
-exports.logReplace = function logReplace (str) {
-  log.lastChild.innerHTML = str
+exports.updateSpeed = function updateSpeed (str) {
+  speed.innerHTML = str
 }
 
 exports.warning = function warning (err) {
