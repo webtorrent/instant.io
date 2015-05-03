@@ -2,16 +2,11 @@ var log = document.querySelector('.log')
 var speed = document.querySelector('.speed')
 var logHeading = document.querySelector('#logHeading')
 
-exports.logAppend = function logAppend (item) {
+exports.logAppend = function logAppend (str) {
   logHeading.style.display = 'block'
-  if (typeof item === 'string') {
-    var p = document.createElement('p')
-    p.innerHTML = item
-    log.appendChild(p)
-  } else {
-    log.appendChild(item)
-    log.appendChild(document.createElement('br'))
-  }
+  var p = document.createElement('p')
+  p.innerHTML = str
+  log.appendChild(p)
 }
 
 // replace the last P in the log
