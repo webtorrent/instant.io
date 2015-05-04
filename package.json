@@ -24,7 +24,7 @@
     "prettysize": "0.0.3",
     "run-parallel": "^1.0.0",
     "thunky": "^0.1.0",
-    "twilio": "^1.10.0",
+    "twilio": "^2.1.0",
     "typedarray-to-buffer": "^3.0.0",
     "upload-element": "^1.0.1",
     "videostream": "0.0.2",
