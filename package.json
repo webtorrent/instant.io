@@ -32,7 +32,7 @@
     "xhr": "^2.0.0"
   },
   "devDependencies": {
-    "browserify": "^9.0.3",
+    "browserify": "^10.0.0",
     "nib": "^1.0.3",
     "nodemon": "^1.2.1",
     "standard": "^3.1.1",
