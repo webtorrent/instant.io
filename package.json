@@ -39,7 +39,6 @@
     "nodemon": "^1.2.1",
     "standard": "^3.1.1",
     "stylus": "^0.51.0",
-    "uglify-js": "^2.4.16",
     "watchify": "^3.1.0"
   },
   "homepage": "http://feross.org",
@@ -59,7 +58,7 @@
   "scripts": {
     "build": "mkdir -p static && mkdir -p upload && chmod 777 upload && npm run build-css && npm run build-js",
     "build-css": "stylus -u nib css/main.styl -o static/ -c",
-    "build-js": "browserify client | uglifyjs -m > static/bundle.js",
+    "build-js": "browserify client > static/bundle.js",
     "secret-download": "rsync -a -O -v --delete -e \"ssh -p 44444\" feross@instant.io:\"/home/feross/www/instant.io/secret/\" secret/",
     "secret-upload": "rsync -a -O -v --delete -e \"ssh -p 44444\" secret/ feross@instant.io:/home/feross/www/instant.io/secret/",
     "start": "node server",
