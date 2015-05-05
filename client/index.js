@@ -1,4 +1,5 @@
 var dragDrop = require('drag-drop/buffer')
+var listify = require('listify')
 var magnet = require('magnet-uri')
 var parseTorrent = require('parse-torrent')
 var path = require('path')
@@ -182,4 +183,19 @@ function onTorrent (torrent) {
       util.logAppend(a)
     })
   })
+}
+
+window.onbeforeunload = function (e) {
+  e = e || window.event
+  if (!window.client || window.client.torrents.length === 0) return
+
+  var names = window.client.torrents.map(function (torrent) {
+    return '"' + torrent.name + '"'
+  })
+  listify(names)
+
+  var message = 'Want to stop sharing ' + listify(names) + '? If you close this page, you will stop seeding ' + (window.client.torrents.length >= 2 ? 'these torrents' : 'this torrent') + '.'
+
+  if (e) e.returnValue = message // IE, Firefox
+  return message // Safari, Chrome
 }
