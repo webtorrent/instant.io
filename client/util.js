@@ -21,9 +21,11 @@ exports.updateSpeed = function updateSpeed (str) {
 
 exports.warning = function warning (err) {
   console.error(err.stack || err.message || err)
+  exports.logAppend(err.message || err)
 }
 
 exports.error = function error (err) {
   console.error(err.stack || err.message || err)
-  window.alert(err.message || err) //eslint-disable-line
+  exports.logAppend(err.message || err)
+  window.alert(err.message || err)
 }

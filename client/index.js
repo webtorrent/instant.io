@@ -2,6 +2,7 @@ var dragDrop = require('drag-drop/buffer')
 var magnet = require('magnet-uri')
 var parseTorrent = require('parse-torrent')
 var path = require('path')
+var Peer = require('simple-peer')
 var prettysize = require('prettysize')
 var querystring = require('querystring')
 var thunky = require('thunky')
@@ -15,7 +16,9 @@ var util = require('./util')
 
 var TRACKER_URL = 'wss://tracker.webtorrent.io'
 
-var hash = window.location.hash.replace('#', '')
+if (!Peer.WEBRTC_SUPPORT) {
+  util.error('This browser is unsupported. Please use a browser with WebRTC support.')
+}
 
 var getClient = thunky(function (cb) {
   xhr('/rtcConfig', function (err, res) {
@@ -75,6 +78,7 @@ document.querySelector('form').addEventListener('submit', function (e) {
   downloadInfoHash(document.querySelector('form input[name=infoHash]').value)
 })
 
+var hash = window.location.hash.replace('#', '')
 if (/^[a-f0-9]+$/i.test(hash)) {
   downloadInfoHash(hash)
 }
