@@ -12,11 +12,9 @@
   },
   "dependencies": {
     "compression": "^1.0.9",
-    "cors": "^2.5.2",
     "debug": "^2.0.0",
     "drag-drop": "^2.0.0",
     "express": "^4.8.5",
-    "finalhandler": "^0.3.3",
     "jade": "^1.5.0",
     "listify": "^1.0.0",
     "magnet-uri": "^4.1.0",
