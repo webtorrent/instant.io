@@ -8,9 +8,11 @@ exports.logAppend = function logAppend (item) {
     var p = document.createElement('p')
     p.innerHTML = item
     log.appendChild(p)
+    return p
   } else {
     log.appendChild(item)
     log.appendChild(document.createElement('br'))
+    return item
   }
 }
 
@@ -26,6 +28,7 @@ exports.warning = function warning (err) {
 
 exports.error = function error (err) {
   console.error(err.stack || err.message || err)
-  exports.logAppend(err.message || err)
-  window.alert(err.message || err)
+  var p = exports.logAppend(err.message || err, 'red')
+  p.style.color = 'red'
+  p.style.fontWeight = 'bold'
 }

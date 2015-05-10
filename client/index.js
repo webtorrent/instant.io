@@ -32,7 +32,7 @@ var getClient = thunky(function (cb) {
     }
     var client = new WebTorrent({ rtcConfig: rtcConfig })
     client.on('warning', util.warning)
-    client.on('error', util.warning)
+    client.on('error', util.error)
     cb(null, client)
   })
 })
