@@ -73,26 +73,6 @@ app.use(function (req, res, next) {
   next()
 })
 
-var serveUpload = express.static(path.join(__dirname, '../upload'), {
-  index: false,
-  setHeaders: function (res) {
-    res.header('Content-Disposition', 'attachment') // force file download
-    res.header('Content-Type', 'application/octet-stream') // generic, safe mime type
-  }
-})
-app.use(function (req, res, next) {
-  if (req.subdomains[req.subdomains.length - 1] !== 'useruploads') return next()
-
-  var done = finalhandler(req, res, { onerror: error })
-  if (req.method === 'GET' || req.method === 'OPTIONS') {
-    cors()(req, res, function (err) {
-      if (err) return done(err)
-      if (req.method === 'GET') serveUpload(req, res, done)
-      else done()
-    })
-  } else done()
-})
-
 app.use(express.static(path.join(__dirname, '../static')))
 
 app.get('/', function (req, res) {
@@ -131,17 +111,6 @@ updateIceServers()
 app.get('/rtcConfig', function (req, res) {
   if (!iceServers) res.status(404).send({ iceServers: [] })
   else res.send({ iceServers: iceServers })
-})
-
-app.post('/upload', function (req, res, next) {
-  var saveTo = path.join(__dirname, '../upload', path.basename(req.query.name))
-  req.pipe(fs.createWriteStream(saveTo))
-    .on('finish', function () {
-      res.status(200).send({ status: 'ok' })
-    })
-    .on('error', function (err) {
-      next(err)
-    })
 })
 
 app.get('*', function (req, res) {

@@ -110,21 +110,6 @@ function downloadTorrent (file) {
 function seed (files) {
   if (files.length === 0) return
 
-  // Store files for 24 hours (if user requests it)
-  files.forEach(function (file) {
-    xhr({
-      url: '/upload?' + querystring.stringify({ name: file.name }),
-      method: 'POST',
-      headers: {
-        'Content-Type': file.type
-      },
-      body: file
-    }, function (err) {
-      if (err) return util.error(err)
-      // TODO: add message that file was stored
-    })
-  })
-
   // Seed from WebTorrent
   getClient(function (err, client) {
     if (err) return util.error(err)
