@@ -1,3 +1,4 @@
+var debug = require('debug')('instant.io')
 var dragDrop = require('drag-drop/buffer')
 var listify = require('listify')
 var magnet = require('magnet-uri')
@@ -30,6 +31,7 @@ var getClient = thunky(function (cb) {
     } catch (err) {
       return cb(new Error('Expected JSON response from /rtcConfig: ' + res.body))
     }
+    debug('got rtc config: %o', rtcConfig)
     var client = new WebTorrent({ rtcConfig: rtcConfig })
     client.on('warning', util.warning)
     client.on('error', util.error)
