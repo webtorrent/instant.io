@@ -35,6 +35,7 @@
     "browserify": "^10.0.0",
     "nib": "^1.0.3",
     "nodemon": "^1.2.1",
+    "pre-commit": "^1.0.7",
     "standard": "^3.1.1",
     "stylus": "^0.51.0",
     "watchify": "^3.1.0"
