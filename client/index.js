@@ -192,9 +192,8 @@ window.onbeforeunload = function (e) {
   var names = window.client.torrents.map(function (torrent) {
     return '"' + torrent.name + '"'
   })
-  listify(names)
 
-  var message = 'Want to stop sharing ' + listify(names) + '? If you close this page, you will stop seeding ' + (window.client.torrents.length >= 2 ? 'these torrents' : 'this torrent') + '.'
+  var message = 'If you close this page, you will stop sharing ' + listify(names) + '. Consider leaving this page open to seed ' (window.client.torrents.length >= 2 ? 'these torrents' : 'this torrent') + '.'
 
   if (e) e.returnValue = message // IE, Firefox
   return message // Safari, Chrome
