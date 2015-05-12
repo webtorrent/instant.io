@@ -98,6 +98,7 @@ function downloadInfoHash (infoHash) {
 }
 
 function downloadTorrent (file) {
+  debug('downloadTorrent %s', file.name || file)
   getClient(function (err, client) {
     if (err) return util.error(err)
     util.logAppend('Downloading torrent from <strong>file</strong>' + file.name)
