@@ -106,6 +106,9 @@ function seed (files) {
 }
 
 function onTorrent (torrent) {
+  // reset upload element
+  upload.value = upload.defaultValue
+
   util.logAppend('Torrent info hash: ' + torrent.infoHash + ' <a href="/#' + torrent.infoHash + '">(link)</a>')
   util.logAppend('Downloading from ' + torrent.swarm.wires.length + ' peers')
   util.logAppend('Progress: starting...')
