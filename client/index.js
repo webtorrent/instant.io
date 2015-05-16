@@ -1,5 +1,5 @@
 var debug = require('debug')('instant.io')
-var dragDrop = require('drag-drop/buffer')
+var dragDrop = require('drag-drop')
 var listify = require('listify')
 var magnet = require('magnet-uri')
 var parseTorrent = require('parse-torrent')
