@@ -1,7 +1,6 @@
 var debug = require('debug')('instant.io')
 var dragDrop = require('drag-drop')
 var listify = require('listify')
-var magnet = require('magnet-uri')
 var parseTorrent = require('parse-torrent')
 var path = require('path')
 var Peer = require('simple-peer')
@@ -15,7 +14,7 @@ var xhr = require('xhr')
 
 var util = require('./util')
 
-var TRACKER_URL = 'wss://tracker.webtorrent.io'
+global.WEBTORRENT_ANNOUNCE = [ 'wss://tracker.webtorrent.io' ]
 
 if (!Peer.WEBRTC_SUPPORT) {
   util.error('This browser is unsupported. Please use a browser with WebRTC support.')
@@ -89,11 +88,7 @@ function downloadInfoHash (infoHash) {
   util.logAppend('Downloading torrent from <strong>infohash</strong> ' + infoHash)
   getClient(function (err, client) {
     if (err) return util.error(err)
-    var magnetUri = magnet.encode({
-      infoHash: infoHash,
-      announce: [ TRACKER_URL ]
-    })
-    client.add(magnetUri, onTorrent)
+    client.add(infoHash, onTorrent)
   })
 }
 
@@ -103,8 +98,6 @@ function downloadTorrent (file) {
     if (err) return util.error(err)
     util.logAppend('Downloading torrent from <strong>file</strong>' + file.name)
     var parsedTorrent = parseTorrent(file)
-    parsedTorrent.announce = [ TRACKER_URL ]
-    parsedTorrent.announceList = [ [ TRACKER_URL ] ]
     client.add(parsedTorrent, onTorrent)
   })
 }
@@ -115,7 +108,7 @@ function seed (files) {
   // Seed from WebTorrent
   getClient(function (err, client) {
     if (err) return util.error(err)
-    client.seed(files, { announceList: [ [ TRACKER_URL ] ] }, onTorrent)
+    client.seed(files, { announceList: [[ 'wss://tracker.webtorrent.io' ]] }, onTorrent)
   })
 }
 
