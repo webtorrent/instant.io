@@ -6,8 +6,7 @@ var path = require('path')
 var Peer = require('simple-peer')
 var prettysize = require('prettysize')
 var thunky = require('thunky')
-var toBuffer = require('typedarray-to-buffer')
-var upload = require('upload-element')
+var uploadElement = require('upload-element')
 var videostream = require('videostream')
 var WebTorrent = require('webtorrent')
 var xhr = require('xhr')
@@ -42,16 +41,10 @@ getClient(function (err, client) {
   window.client = client
 })
 
-upload(document.querySelector('input[name=upload]'), function (err, results) {
+var upload = document.querySelector('input[name=upload]')
+uploadElement(upload, function (err, files) {
   if (err) return util.error(err)
-  var files = results.map(function (r) {
-    var buf = toBuffer(r.target.result)
-    buf.name = r.file.name
-    buf.size = r.file.size
-    buf.lastModifiedDate = r.file.lastModifiedDate
-    buf.type = r.file.type
-    return buf
-  })
+  files = files.map(function (file) { return file.file })
   onFiles(files)
 })
 
