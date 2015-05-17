@@ -123,13 +123,14 @@ function onTorrent (torrent) {
   })
 
   torrent.files.forEach(function (file) {
-    var extname = path.extname(file.name)
-    if ((extname === '.mp4' || extname === '.webm') && window.MediaSource) {
+    var extname = path.extname(file.name).toLowerCase()
+    if ((extname === '.mp4' || extname === '.m4v' || extname === '.webm') &&
+        window.MediaSource) {
       var video = document.createElement('video')
       video.controls = true
       video.autoplay = true
       util.logAppend(video)
-      if (extname === '.mp4') {
+      if (extname === '.mp4' || extname === '.m4v') {
         videostream(file, video)
       } else {
         file.createReadStream().pipe(video)
