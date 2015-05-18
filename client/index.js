@@ -107,8 +107,7 @@ function seed (files) {
 }
 
 function onTorrent (torrent) {
-  // reset upload element
-  upload.value = upload.defaultValue
+  upload.value = upload.defaultValue // reset upload element
 
   util.logAppend('Torrent info hash: ' + torrent.infoHash + ' <a href="/#' + torrent.infoHash + '">(Share link)</a>')
 
