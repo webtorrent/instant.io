@@ -4,7 +4,7 @@ var listify = require('listify')
 var parseTorrent = require('parse-torrent')
 var path = require('path')
 var Peer = require('simple-peer')
-var prettysize = require('prettysize')
+var prettyBytes = require('pretty-bytes')
 var thunky = require('thunky')
 var uploadElement = require('upload-element')
 var videostream = require('videostream')
@@ -97,6 +97,7 @@ function downloadTorrent (file) {
 
 function seed (files) {
   if (files.length === 0) return
+  util.logAppend('Seeding ' + files.length + ' files')
 
   // Seed from WebTorrent
   getClient(function (err, client) {
@@ -109,18 +110,21 @@ function onTorrent (torrent) {
   // reset upload element
   upload.value = upload.defaultValue
 
-  util.logAppend('Torrent info hash: ' + torrent.infoHash + ' <a href="/#' + torrent.infoHash + '">(link)</a>')
-  util.logAppend('Downloading from ' + torrent.swarm.wires.length + ' peers')
-  util.logAppend('Progress: starting...')
+  util.logAppend('Torrent info hash: ' + torrent.infoHash + ' <a href="/#' + torrent.infoHash + '">(Share link)</a>')
 
-  torrent.swarm.on('download', function () {
+  function updateSpeed () {
     var progress = (100 * torrent.downloaded / torrent.parsedTorrent.length).toFixed(1)
-    util.updateSpeed('Progress: ' + progress + '% -- Download speed: ' + prettysize(torrent.swarm.downloadSpeed()) + '/s')
-  })
+    util.updateSpeed(
+      '<b>Peers:</b> ' + torrent.swarm.wires.length + ' ' +
+      '<b>Progress:</b> ' + progress + '% ' +
+      '<b>Download speed:</b> ' + prettyBytes(window.client.downloadSpeed()) + '/s ' +
+      '<b>Upload speed:</b> ' + prettyBytes(window.client.uploadSpeed()) + '/s'
+    )
+  }
 
-  torrent.swarm.on('upload', function () {
-    util.updateSpeed('Upload speed: ' + prettysize(window.client.uploadSpeed()) + '/s')
-  })
+  torrent.swarm.on('download', updateSpeed)
+  torrent.swarm.on('upload', updateSpeed)
+  setInterval(updateSpeed, 5000)
 
   torrent.files.forEach(function (file) {
     var extname = path.extname(file.name).toLowerCase()
@@ -167,7 +171,7 @@ window.onbeforeunload = function (e) {
   if (!window.client || window.client.torrents.length === 0) return
 
   var names = listify(window.client.torrents.map(function (torrent) {
-    return '"' + torrent.name + '"'
+    return '"' + (torrent.name || torrent.infoHash) + '"'
   }))
 
   var theseTorrents = window.client.torrents.length >= 2

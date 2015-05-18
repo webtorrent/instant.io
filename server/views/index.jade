@@ -1,11 +1,11 @@
 extends layout
 
 block body
-  h1 Instant - Secure, anonymous, streaming file transfer
+  h1 Instant.io - Streaming file transfer over WebTorrent
   p Download/upload files using the <a href="http://webtorrent.io">WebTorrent</a> protocol (BitTorrent over WebRTC). This is a beta.
   h2#logHeading(style='display: none') Log
-  .log
   .speed
+  .log
 
   h2 Start seeding
   p
@@ -20,4 +20,5 @@ block body
     button(type='submit') Download
 
   footer
-    p: small Powered by <a href="http://webtorrent.io">WebTorrent</a>. MIT License. Code available on <a href="https://github.com/feross/instant.io">GitHub</a>. Supports Chrome, Firefox, Opera (desktop and Android). Run <code>localStorage.debug = '*'</code> in the console and refresh to get detailed log output.
+    p: small <a href="http://webtorrent.io">WebTorrent</a> is powered by JavaScript and WebRTC. Works in Chrome, Firefox, and Opera (desktop and Android).
+    p: small Code is available on <a href="https://github.com/feross/instant.io">GitHub</a> under MIT License. Run <code>localStorage.debug = '*'</code> in the console and refresh to enable verbose logs.

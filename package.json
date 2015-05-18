@@ -19,7 +19,7 @@
     "listify": "^1.0.0",
     "parse-torrent": "^5.0.0",
     "posix": "^2.0.0",
-    "prettysize": "0.0.3",
+    "pretty-bytes": "^1.0.4",
     "run-parallel": "^1.0.0",
     "simple-peer": "^5.3.0",
     "thunky": "^0.1.0",

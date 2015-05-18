@@ -32,10 +32,8 @@ html
   height: 100%
 
 body
-  margin: 0
-  padding: 20px
+  margin: 20px
   height: 100%
-  font-size: 18px
   font-family: sans-serif
 
 .drag
@@ -50,6 +48,15 @@ input, button
 input[name=infoHash]
   width: 354px
 
+.log, .speed
+  font-family: monospace
+  font-size: 14px
+
+.speed:not(:empty)
+  padding: 20px
+  margin: 10px 0
+  background: #EEE
+
 .log p
   margin: 0
 
@@ -57,13 +64,13 @@ footer
   font-size: 0.8em
   margin: 30px 0
 
+video, img, audio
+  max-width: 100%
+  margin: 10px 0
+
 video
   min-width: 480px
   min-height: 270px
-  max-width: 100%
-
-img
-  max-width: 100%
 
 audio
   width: 100%
