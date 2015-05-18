@@ -125,6 +125,7 @@ function onTorrent (torrent) {
   torrent.swarm.on('download', updateSpeed)
   torrent.swarm.on('upload', updateSpeed)
   setInterval(updateSpeed, 5000)
+  updateSpeed()
 
   torrent.files.forEach(function (file) {
     var extname = path.extname(file.name).toLowerCase()
