@@ -26,19 +26,27 @@ ellipsis()
 *, *:after, *:before
   box-sizing: border-box
 
-html
+html, body
   margin: 0
   padding: 0
   height: 100%
+  overflow: auto
 
 body
-  margin: 20px
-  height: 100%
   font-family: sans-serif
 
-.drag
+body.drag::before
+  content: ''
+  position fixed
+  top: 0
+  left: 0
+  bottom: 0
+  right: 0
   background: rgba(255, 0, 0, 0.3)
   border: 5px red dashed
+
+main
+  margin: 20px
 
 label
   margin-right: 10px
