@@ -1,17 +1,17 @@
-var log = document.querySelector('.log')
+var logElem = document.querySelector('.log')
 var speed = document.querySelector('.speed')
 var logHeading = document.querySelector('#logHeading')
 
-exports.logAppend = function logAppend (item) {
+exports.log = function log (item) {
   logHeading.style.display = 'block'
   if (typeof item === 'string') {
     var p = document.createElement('p')
     p.innerHTML = item
-    log.appendChild(p)
+    logElem.appendChild(p)
     return p
   } else {
-    log.appendChild(item)
-    log.appendChild(document.createElement('br'))
+    logElem.appendChild(item)
+    logElem.appendChild(document.createElement('br'))
     return item
   }
 }
@@ -23,12 +23,12 @@ exports.updateSpeed = function updateSpeed (str) {
 
 exports.warning = function warning (err) {
   console.error(err.stack || err.message || err)
-  exports.logAppend(err.message || err)
+  exports.log(err.message || err)
 }
 
 exports.error = function error (err) {
   console.error(err.stack || err.message || err)
-  var p = exports.logAppend(err.message || err, 'red')
+  var p = exports.log(err.message || err)
   p.style.color = 'red'
   p.style.fontWeight = 'bold'
 }

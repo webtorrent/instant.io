@@ -78,7 +78,7 @@ if (/^[a-f0-9]+$/i.test(hash)) {
 }
 
 function downloadInfoHash (infoHash) {
-  util.logAppend('Downloading torrent from <strong>infohash</strong> ' + infoHash)
+  util.log('Downloading torrent from <strong>infohash</strong> ' + infoHash)
   getClient(function (err, client) {
     if (err) return util.error(err)
     client.add(infoHash, onTorrent)
@@ -89,7 +89,7 @@ function downloadTorrent (file) {
   debug('downloadTorrent %s', file.name || file)
   getClient(function (err, client) {
     if (err) return util.error(err)
-    util.logAppend('Downloading torrent from <strong>file</strong>' + file.name)
+    util.log('Downloading torrent from <strong>file</strong>' + file.name)
     var parsedTorrent = parseTorrent(file)
     client.add(parsedTorrent, onTorrent)
   })
@@ -97,7 +97,7 @@ function downloadTorrent (file) {
 
 function seed (files) {
   if (files.length === 0) return
-  util.logAppend('Seeding ' + files.length + ' files')
+  util.log('Seeding ' + files.length + ' files')
 
   // Seed from WebTorrent
   getClient(function (err, client) {
@@ -109,7 +109,7 @@ function seed (files) {
 function onTorrent (torrent) {
   upload.value = upload.defaultValue // reset upload element
 
-  util.logAppend('Torrent info hash: ' + torrent.infoHash + ' <a href="/#' + torrent.infoHash + '">(Share link)</a>')
+  util.log('Torrent info hash: ' + torrent.infoHash + ' <a href="/#' + torrent.infoHash + '">(Share link)</a>')
 
   function updateSpeed () {
     var progress = (100 * torrent.downloaded / torrent.parsedTorrent.length).toFixed(1)
@@ -128,23 +128,28 @@ function onTorrent (torrent) {
 
   torrent.files.forEach(function (file) {
     var extname = path.extname(file.name).toLowerCase()
-    if ((extname === '.mp4' || extname === '.m4v' || extname === '.webm') &&
-        window.MediaSource) {
-      var video = document.createElement('video')
-      video.controls = true
-      video.autoplay = true
-      util.logAppend(video)
-      if (extname === '.mp4' || extname === '.m4v') {
-        videostream(file, video)
-      } else {
-        file.createReadStream().pipe(video)
+    if (window.MediaSource) {
+      if (extname === '.mp4' || extname === '.m4v' || extname === '.webm') {
+        var video = document.createElement('video')
+        video.controls = true
+        video.autoplay = true
+        util.log(video)
+        if (extname === '.mp4' || extname === '.m4v') {
+          videostream(file, video)
+        } else {
+          file.createReadStream().pipe(video)
+        }
+      } else if (extname === '.mp3') {
+        var audio = document.createElement('audio')
+        audio.controls = true
+        audio.autoplay = true
+        util.log(audio)
+        file.createReadStream().pipe(audio)
       }
-    } else if (extname === '.mp3' && window.MediaSource) {
-      var audio = document.createElement('audio')
-      audio.controls = true
-      audio.autoplay = true
-      util.logAppend(audio)
-      file.createReadStream().pipe(audio)
+    } else {
+      util.error('Streaming is not supported in this browser. Try a browser that ' +
+        'supports MediaSource, like Chrome. You can still save the file once it\'s ' +
+        'fully downloaded, if you want.')
     }
 
     file.getBlobURL(function (err, url) {
@@ -154,14 +159,14 @@ function onTorrent (torrent) {
         var img = document.createElement('img')
         img.src = url
         img.alt = file.name
-        util.logAppend(img)
+        util.log(img)
       }
 
       var a = document.createElement('a')
       a.download = file.name
       a.href = url
       a.textContent = 'Download ' + file.name
-      util.logAppend(a)
+      util.log(a)
     })
   })
 }
