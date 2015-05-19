@@ -10,7 +10,7 @@ browser without plugins. WebTorrent is powered by JavaScript and WebRTC. Support
 Firefox, Opera (desktop and Android). Run <code>localStorage.debug = '*'</code> in the
 console and refresh to get detailed log output.
 
-## Install
+## Run your own copy of this site
 
 Get the code:
 
@@ -22,7 +22,7 @@ npm install
 
 Modify the configuration options in [`config.js`](https://github.com/feross/instant.io/blob/master/config.js) to set the IP/port you want the server to listen on.
 
-Copy [`secret/index-sample.js`](https://github.com/feross/instant.io/blob/master/secret/index-sample.js) to `secret/index.js` and set the Twilio API key if you want a NAT traversal service (to help peers connect when behind a firewall).
+Copy [`secret/index-sample.js`](https://github.com/feross/instant.io/blob/master/secret/index-sample.js) to `secret/index.js` and set the Twilio API key if you want a [NAT traversal service](https://www.twilio.com/stun-turn) (to help peers connect when behind a firewall).
 
 That should be it!
 
