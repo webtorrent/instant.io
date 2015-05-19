@@ -109,7 +109,7 @@ function seed (files) {
 function onTorrent (torrent) {
   upload.value = upload.defaultValue // reset upload element
 
-  util.log('Torrent info hash: ' + torrent.infoHash + ' <a href="/#' + torrent.infoHash + '">(Share link)</a>')
+  util.log('Torrent info hash: ' + torrent.infoHash + ' <a href="/#' + torrent.infoHash + '" target="_blank">(Share link)</a>')
 
   function updateSpeed () {
     var progress = (100 * torrent.downloaded / torrent.parsedTorrent.length).toFixed(1)
@@ -163,6 +163,7 @@ function onTorrent (torrent) {
       }
 
       var a = document.createElement('a')
+      a.target = '_blank'
       a.download = file.name
       a.href = url
       a.textContent = 'Download ' + file.name
