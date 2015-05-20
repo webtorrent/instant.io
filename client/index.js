@@ -155,7 +155,7 @@ function onTorrent (torrent) {
     file.getBlobURL(function (err, url) {
       if (err) return util.error(err)
 
-      if (extname === '.jpg' || extname === '.png') {
+      if (extname === '.jpg' || extname === '.png' || extname === '.gif') {
         var img = document.createElement('img')
         img.src = url
         img.alt = file.name
