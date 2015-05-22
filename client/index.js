@@ -21,14 +21,17 @@ if (!Peer.WEBRTC_SUPPORT) {
 
 var getClient = thunky(function (cb) {
   xhr('/rtcConfig', function (err, res) {
-    if (err) return cb(err)
     var rtcConfig
-    try {
-      rtcConfig = JSON.parse(res.body)
-    } catch (err) {
-      return cb(new Error('Expected JSON response from /rtcConfig: ' + res.body))
+    if (err || res.statusCode !== 200) {
+      util.error('Could not get WebRTC config from server. Using default (without TURN).')
+    } else {
+      try {
+        rtcConfig = JSON.parse(res.body)
+      } catch (err) {
+        return cb(new Error('Expected JSON response from /rtcConfig: ' + res.body))
+      }
+      debug('got rtc config: %o', rtcConfig)
     }
-    debug('got rtc config: %o', rtcConfig)
     var client = new WebTorrent({ rtcConfig: rtcConfig })
     client.on('warning', util.warning)
     client.on('error', util.error)
