@@ -13,7 +13,9 @@ var xhr = require('xhr')
 
 var util = require('./util')
 
-global.WEBTORRENT_ANNOUNCE = [ 'wss://tracker.webtorrent.io' ]
+var TRACKER_URL = 'wss://tracker.webtorrent.io'
+
+global.WEBTORRENT_ANNOUNCE = [ TRACKER_URL ]
 
 if (!Peer.WEBRTC_SUPPORT) {
   util.error('This browser is unsupported. Please use a browser with WebRTC support.')
@@ -105,7 +107,7 @@ function seed (files) {
   // Seed from WebTorrent
   getClient(function (err, client) {
     if (err) return util.error(err)
-    client.seed(files, { announceList: [[ 'wss://tracker.webtorrent.io' ]] }, onTorrent)
+    client.seed(files, { announce: [ TRACKER_URL ] }, onTorrent)
   })
 }
 
@@ -117,7 +119,9 @@ function onTorrent (torrent) {
   util.log(
     'Torrent info hash: ' + torrent.infoHash + ' ' +
     '<a href="/#' + torrent.infoHash + '" target="_blank">[Share link]</a> ' +
-    '<a href="' + torrent.torrentFileURL + '" target="_blank" download="' + torrentFileName + '">[Download .torrent]</a>')
+    '<a href="' + torrent.magnetURI + '" target="_blank">[Magnet URI]</a> ' +
+    '<a href="' + torrent.torrentFileURL + '" target="_blank" download="' + torrentFileName + '">[Download .torrent]</a>'
+  )
 
   function updateSpeed () {
     var progress = (100 * torrent.downloaded / torrent.parsedTorrent.length).toFixed(1)
