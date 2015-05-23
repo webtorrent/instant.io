@@ -164,6 +164,10 @@ function onTorrent (torrent) {
         'fully downloaded, if you want.')
     }
 
+    var mimetype = {
+      '.pdf': 'application/pdf'
+    }[extname]
+
     file.getBlobURL(function (err, url) {
       if (err) return util.error(err)
 
@@ -172,6 +176,11 @@ function onTorrent (torrent) {
         img.src = url
         img.alt = file.name
         util.log(img)
+
+      } else if (extname === '.pdf') {
+        var iframe = document.createElement('iframe')
+        iframe.src = url
+        util.log(iframe)
       }
 
       var a = document.createElement('a')
@@ -180,7 +189,7 @@ function onTorrent (torrent) {
       a.href = url
       a.textContent = 'Download ' + file.name
       util.log(a)
-    })
+    }, mimetype)
   })
 }
 
