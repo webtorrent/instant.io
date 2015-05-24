@@ -15,6 +15,11 @@ var util = require('./util')
 
 var TRACKER_URL = 'wss://tracker.webtorrent.io'
 
+var MEDIASOURCE_VIDEO_EXTS = [ '.mp4', '.m4v', '.webm' ]
+var MEDIASOURCE_AUDIO_EXTS = [ '.mp3' ]
+var AUDIO_EXTS = [ '.wav', '.m4a', '.aac', '.ogg', '.oga' ]
+var IMAGE_EXTS = [ '.jpg', '.png', '.gif', '.bmp' ]
+
 global.WEBTORRENT_ANNOUNCE = [ TRACKER_URL ]
 
 if (!Peer.WEBRTC_SUPPORT) {
@@ -64,7 +69,7 @@ function onFiles (files) {
 }
 
 function isTorrent (file) {
-  var extname = path.extname(file.name)
+  var extname = path.extname(file.name).toLowerCase()
   return extname === '.torrent'
 }
 
@@ -141,7 +146,7 @@ function onTorrent (torrent) {
   torrent.files.forEach(function (file) {
     var extname = path.extname(file.name).toLowerCase()
     if (window.MediaSource) {
-      if (extname === '.mp4' || extname === '.m4v' || extname === '.webm') {
+      if (MEDIASOURCE_VIDEO_EXTS.indexOf(extname) >= 0) {
         var video = document.createElement('video')
         video.controls = true
         video.autoplay = true
@@ -151,7 +156,7 @@ function onTorrent (torrent) {
         } else {
           file.createReadStream().pipe(video)
         }
-      } else if (extname === '.mp3') {
+      } else if (MEDIASOURCE_AUDIO_EXTS.indexOf(extname) >= 0) {
         var audio = document.createElement('audio')
         audio.controls = true
         audio.autoplay = true
@@ -164,19 +169,20 @@ function onTorrent (torrent) {
         'fully downloaded, if you want.')
     }
 
-    var mimetype = {
-      '.pdf': 'application/pdf'
-    }[extname]
-
     file.getBlobURL(function (err, url) {
       if (err) return util.error(err)
 
-      if (extname === '.jpg' || extname === '.png' || extname === '.gif') {
+      if (AUDIO_EXTS.indexOf(extname) >= 0) {
+        var audio = document.createElement('audio')
+        audio.src = url
+        audio.controls = true
+        audio.autoplay = true
+        util.log(audio)
+      } else if (IMAGE_EXTS.indexOf(extname) >= 0) {
         var img = document.createElement('img')
         img.src = url
         img.alt = file.name
         util.log(img)
-
       } else if (extname === '.pdf') {
         var iframe = document.createElement('iframe')
         iframe.src = url
@@ -189,7 +195,7 @@ function onTorrent (torrent) {
       a.href = url
       a.textContent = 'Download ' + file.name
       util.log(a)
-    }, mimetype)
+    })
   })
 }
 
