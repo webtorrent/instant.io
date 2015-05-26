@@ -61,6 +61,11 @@ uploadElement(upload, function (err, files) {
 dragDrop('body', onFiles)
 
 function onFiles (files) {
+  debug('got files:')
+  files.forEach(function (file) {
+    debug(' - %s (%s bytes)', file.name, file.size)
+  })
+
   // .torrent file = start downloading the torrent
   files.filter(isTorrent).forEach(downloadTorrent)
 
