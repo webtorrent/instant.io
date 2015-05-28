@@ -15,8 +15,8 @@ var util = require('./util')
 
 var TRACKER_URL = 'wss://tracker.webtorrent.io'
 
-var MEDIASOURCE_VIDEO_EXTS = [ '.mp4', '.m4v', '.webm' ]
-var MEDIASOURCE_AUDIO_EXTS = [ '.mp3' ]
+var VIDEO_MEDIASOURCE_EXTS = [ '.mp4', '.m4v', '.webm' ]
+var AUDIO_MEDIASOURCE_EXTS = [ '.mp3' ]
 var AUDIO_EXTS = [ '.wav', '.m4a', '.aac', '.ogg', '.oga' ]
 var IMAGE_EXTS = [ '.jpg', '.png', '.gif', '.bmp' ]
 
@@ -151,7 +151,7 @@ function onTorrent (torrent) {
   torrent.files.forEach(function (file) {
     var extname = path.extname(file.name).toLowerCase()
     if (window.MediaSource) {
-      if (MEDIASOURCE_VIDEO_EXTS.indexOf(extname) >= 0) {
+      if (VIDEO_MEDIASOURCE_EXTS.indexOf(extname) >= 0) {
         var video = document.createElement('video')
         video.controls = true
         video.autoplay = true
@@ -161,7 +161,7 @@ function onTorrent (torrent) {
         } else {
           file.createReadStream().pipe(video)
         }
-      } else if (MEDIASOURCE_AUDIO_EXTS.indexOf(extname) >= 0) {
+      } else if (AUDIO_MEDIASOURCE_EXTS.indexOf(extname) >= 0) {
         var audio = document.createElement('audio')
         audio.controls = true
         audio.autoplay = true
