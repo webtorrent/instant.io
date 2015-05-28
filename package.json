@@ -11,6 +11,7 @@
     "url": "https://github.com/feross/instant.io/issues"
   },
   "dependencies": {
+    "blob-to-buffer": "^1.2.3",
     "compression": "^1.0.9",
     "debug": "^2.0.0",
     "drag-drop": "^2.0.0",
@@ -19,8 +20,8 @@
     "listify": "^1.0.0",
     "parse-torrent": "^5.0.0",
     "posix": "^2.0.0",
-    "run-parallel": "^1.0.0",
     "pretty-bytes": "^2.0.1",
+    "run-parallel": "^1.0.0",
     "simple-peer": "^5.3.0",
     "thunky": "^0.1.0",
     "twilio": "^2.1.0",
