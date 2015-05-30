@@ -20,6 +20,7 @@ var VIDEO_MEDIASOURCE_EXTS = [ '.mp4', '.m4v', '.webm' ]
 var AUDIO_MEDIASOURCE_EXTS = [ '.mp3' ]
 var AUDIO_EXTS = [ '.wav', '.m4a', '.aac', '.ogg', '.oga' ]
 var IMAGE_EXTS = [ '.jpg', '.png', '.gif', '.bmp' ]
+var TEXT_EXTS = [ '.css', '.html', '.js', '.md', '.pdf', '.txt' ]
 
 global.WEBTORRENT_ANNOUNCE = [ TRACKER_URL ]
 
@@ -192,7 +193,7 @@ function onTorrent (torrent) {
         img.src = url
         img.alt = file.name
         util.log(img)
-      } else if (extname === '.pdf') {
+      } else if (TEXT_EXTS.indexOf(extname) >= 0) {
         var iframe = document.createElement('iframe')
         iframe.src = url
         util.log(iframe)
