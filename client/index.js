@@ -14,15 +14,13 @@ var xhr = require('xhr')
 
 var util = require('./util')
 
-var TRACKER_URL = 'wss://tracker.webtorrent.io'
+global.WEBTORRENT_ANNOUNCE = [ 'wss://tracker.webtorrent.io' ]
 
 var VIDEO_MEDIASOURCE_EXTS = [ '.mp4', '.m4v', '.webm' ]
 var AUDIO_MEDIASOURCE_EXTS = [ '.mp3' ]
 var AUDIO_EXTS = [ '.wav', '.m4a', '.aac', '.ogg', '.oga' ]
 var IMAGE_EXTS = [ '.jpg', '.png', '.gif', '.bmp' ]
 var TEXT_EXTS = [ '.css', '.html', '.js', '.md', '.pdf', '.txt' ]
-
-global.WEBTORRENT_ANNOUNCE = [ TRACKER_URL ]
 
 if (!Peer.WEBRTC_SUPPORT) {
   util.error('This browser is unsupported. Please use a browser with WebRTC support.')
@@ -122,7 +120,7 @@ function seed (files) {
   // Seed from WebTorrent
   getClient(function (err, client) {
     if (err) return util.error(err)
-    client.seed(files, { announce: [ TRACKER_URL ] }, onTorrent)
+    client.seed(files, onTorrent)
   })
 }
 
