@@ -53,6 +53,7 @@
     "url": "git://github.com/feross/instant.io.git"
   },
   "scripts": {
+    "prepublish":"npm run build",
     "build": "mkdir -p static && npm run build-css && npm run build-js",
     "build-css": "stylus -u nib css/main.styl -o static/ -c",
     "build-js": "browserify client > static/bundle.js",

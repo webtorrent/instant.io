@@ -11,12 +11,23 @@ var url = require('url')
 var twilio = require('twilio')
 
 var config = require('../config')
-var secret = require('../secret')
+var useTwilio
+var secret
+try {
+  secret = require('../secret')
+  useTwilio=true
+}
+catch(e) {
+  useTwilio=false
+}
 var util = require('./util')
 
 var app = express()
 var httpServer = http.createServer(app)
-var httpsServer = https.createServer({
+
+var useHttps=fs.existsSync(__dirname + '/../secret/instant.io.key') && fs.existsSync(__dirname + '/../secret/instant.io.chained.crt');
+var httpsServer
+if(useHttps) httpsServer = https.createServer({
   key: fs.readFileSync(__dirname + '/../secret/instant.io.key'),
   cert: fs.readFileSync(__dirname + '/../secret/instant.io.chained.crt')
 }, app)
@@ -79,7 +90,9 @@ app.get('/', function (req, res) {
 
 // Fetch new ice_servers from twilio token regularly
 var iceServers
-var twilioClient = twilio(secret.twilio.accountSid, secret.twilio.authToken)
+var twilioClient
+if(useTwilio)
+  twilioClient = twilio(secret.twilio.accountSid, secret.twilio.authToken)
 
 function updateIceServers () {
   twilioClient.tokens.create({}, function (err, token) {
@@ -103,8 +116,10 @@ function updateIceServers () {
   })
 }
 
-setInterval(updateIceServers, 60 * 60 * 4 * 1000).unref()
-updateIceServers()
+if(useTwilio) {
+  setInterval(updateIceServers, 60 * 60 * 4 * 1000).unref()
+  updateIceServers()
+}
 
 app.get('/rtcConfig', function (req, res) {
   if (!iceServers) res.status(404).send({ iceServers: [] })
@@ -121,14 +136,16 @@ app.use(function (err, req, res, next) {
   res.status(500).render('error', { message: err.message || err })
 })
 
-parallel([
+var listenFunctions=[
   function (cb) {
     httpServer.listen(config.ports.http, config.host, cb)
-  },
-  function (cb) {
-    httpsServer.listen(config.ports.https, config.host, cb)
-  }
-], function (err) {
+  }];
+if(useHttps)
+  listenFunctions.push(function (cb) {
+  httpsServer.listen(config.ports.https, config.host, cb)
+});
+
+parallel(listenFunctions, function (err) {
   if (err) throw err
   debug('listening on port %s', JSON.stringify(config.ports))
   util.downgradeUid()
