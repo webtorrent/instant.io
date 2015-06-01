@@ -11,20 +11,26 @@ var url = require('url')
 var twilio = require('twilio')
 
 var config = require('../config')
-var secret = require('../secret')
 var util = require('./util')
+
+var secret, secretKey, secretCert
+try {
+  secret = require('../secret')
+  secretKey = fs.readFileSync(path.join(__dirname, '../secret/instant.io.key'))
+  secretCert = fs.readFileSync(path.join(__dirname, '../secret/instant.io.chained.crt'))
+} catch (err) {}
 
 var app = express()
 var httpServer = http.createServer(app)
-var httpsServer = https.createServer({
-  key: fs.readFileSync(__dirname + '/../secret/instant.io.key'),
-  cert: fs.readFileSync(__dirname + '/../secret/instant.io.chained.crt')
-}, app)
+var httpsServer
+if (secretKey && secretCert) {
+  httpsServer = https.createServer({ key: secretKey, cert: secretCert }, app)
+}
 
 util.upgradeLimits()
 
 // Templating
-app.set('views', __dirname + '/views')
+app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'jade')
 app.set('x-powered-by', false)
 app.engine('jade', jade.renderFile)
@@ -79,7 +85,10 @@ app.get('/', function (req, res) {
 
 // Fetch new ice_servers from twilio token regularly
 var iceServers
-var twilioClient = twilio(secret.twilio.accountSid, secret.twilio.authToken)
+var twilioClient
+try {
+  twilioClient = twilio(secret.twilio.accountSid, secret.twilio.authToken)
+} catch (err) {}
 
 function updateIceServers () {
   twilioClient.tokens.create({}, function (err, token) {
@@ -103,8 +112,10 @@ function updateIceServers () {
   })
 }
 
-setInterval(updateIceServers, 60 * 60 * 4 * 1000).unref()
-updateIceServers()
+if (twilioClient) {
+  setInterval(updateIceServers, 60 * 60 * 4 * 1000).unref()
+  updateIceServers()
+}
 
 app.get('/rtcConfig', function (req, res) {
   if (!iceServers) res.status(404).send({ iceServers: [] })
@@ -121,14 +132,19 @@ app.use(function (err, req, res, next) {
   res.status(500).render('error', { message: err.message || err })
 })
 
-parallel([
+var tasks = [
   function (cb) {
     httpServer.listen(config.ports.http, config.host, cb)
-  },
-  function (cb) {
-    httpsServer.listen(config.ports.https, config.host, cb)
   }
-], function (err) {
+]
+
+if (httpsServer) {
+  tasks.push(function (cb) {
+    httpsServer.listen(config.ports.https, config.host, cb)
+  })
+}
+
+parallel(tasks, function (err) {
   if (err) throw err
   debug('listening on port %s', JSON.stringify(config.ports))
   util.downgradeUid()
