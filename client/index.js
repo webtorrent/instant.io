@@ -35,9 +35,9 @@ var getClient = thunky(function (cb) {
       try {
         rtcConfig = JSON.parse(res.body)
       } catch (err) {
-        return cb(new Error('Expected JSON response from /rtcConfig: ' + res.body))
+        util.error('Got invalid WebRTC config from server: ' + res.body)
       }
-      debug('got rtc config: %o', rtcConfig)
+      if (rtcConfig) debug('got rtc config: %o', rtcConfig)
     }
     var client = new WebTorrent({ rtcConfig: rtcConfig })
     client.on('warning', util.warning)
