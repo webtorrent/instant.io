@@ -13,6 +13,7 @@
   "dependencies": {
     "blob-to-buffer": "^1.2.3",
     "compression": "^1.0.9",
+    "cors": "^2.7.1",
     "debug": "^2.0.0",
     "drag-drop": "^2.0.0",
     "express": "^4.8.5",

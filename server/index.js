@@ -1,4 +1,5 @@
 var compress = require('compression')
+var cors = require('cors')
 var debug = require('debug')('instant')
 var express = require('express')
 var fs = require('fs')
@@ -12,6 +13,8 @@ var twilio = require('twilio')
 
 var config = require('../config')
 var util = require('./util')
+
+var CORS_WHITELIST = [ 'http://whiteboard.webtorrent.io' ]
 
 var secret, secretKey, secretCert
 try {
@@ -117,7 +120,13 @@ if (twilioClient) {
   updateIceServers()
 }
 
-app.get('/rtcConfig', function (req, res) {
+app.get('/rtcConfig', cors({
+  origin: function (origin, cb) {
+    var allowed = CORS_WHITELIST.indexOf(origin) >= 0 ||
+      /https?:\/\/localhost(:|\/)/.test(origin)
+    cb(null, allowed)
+  }
+}), function (req, res) {
   if (!iceServers) res.status(404).send({ iceServers: [] })
   else res.send({ iceServers: iceServers })
 })
