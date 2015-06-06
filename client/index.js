@@ -2,6 +2,7 @@ var blobToBuffer = require('blob-to-buffer')
 var debug = require('debug')('instant.io')
 var dragDrop = require('drag-drop')
 var listify = require('listify')
+var once = require('once')
 var parseTorrent = require('parse-torrent')
 var path = require('path')
 var Peer = require('simple-peer')
@@ -17,7 +18,6 @@ var util = require('./util')
 global.WEBTORRENT_ANNOUNCE = [ 'wss://tracker.webtorrent.io' ]
 
 var VIDEO_MEDIASOURCE_EXTS = [ '.mp4', '.m4v', '.webm' ]
-var AUDIO_MEDIASOURCE_EXTS = [ '.mp3' ]
 var AUDIO_EXTS = [ '.wav', '.m4a', '.aac', '.ogg', '.oga' ]
 var IMAGE_EXTS = [ '.jpg', '.png', '.gif', '.bmp' ]
 var TEXT_EXTS = [ '.css', '.html', '.js', '.md', '.pdf', '.txt' ]
@@ -150,6 +150,7 @@ function onTorrent (torrent) {
   torrent.swarm.on('upload', updateSpeed)
   setInterval(updateSpeed, 5000)
   updateSpeed()
+  var audio
 
   torrent.files.forEach(function (file) {
     var extname = path.extname(file.name).toLowerCase()
@@ -161,15 +162,26 @@ function onTorrent (torrent) {
         util.log(video)
         if (extname === '.mp4' || extname === '.m4v') {
           videostream(file, video)
+          video.addEventListener('error', once(function () {
+            // If videostream generates an error, try using MediaSource without videostream
+            file.createReadStream().pipe(video)
+          }))
         } else {
           file.createReadStream().pipe(video)
         }
-      } else if (AUDIO_MEDIASOURCE_EXTS.indexOf(extname) >= 0) {
-        var audio = document.createElement('audio')
+      } else if (extname === '.m4a') {
+        audio = document.createElement('audio')
         audio.controls = true
         audio.autoplay = true
         util.log(audio)
-        file.createReadStream().pipe(audio)
+        videostream(file, audio)
+        audio.addEventListener('error', once(function () {
+          // If videostream generates an error, try falling all the way back to a single blob
+          file.getBlobURL(function (err, url) {
+            if (err) return util.error(err)
+            audio.src = url
+          })
+        }))
       }
     } else {
       util.error('Streaming is not supported in this browser. Try a browser that ' +
@@ -180,8 +192,8 @@ function onTorrent (torrent) {
     file.getBlobURL(function (err, url) {
       if (err) return util.error(err)
 
-      if (AUDIO_EXTS.indexOf(extname) >= 0) {
-        var audio = document.createElement('audio')
+      if (!audio && AUDIO_EXTS.indexOf(extname) >= 0) {
+        audio = document.createElement('audio')
         audio.src = url
         audio.controls = true
         audio.autoplay = true
