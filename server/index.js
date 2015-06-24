@@ -83,7 +83,9 @@ app.use(function (req, res, next) {
 app.use(express.static(path.join(__dirname, '../static')))
 
 app.get('/', function (req, res) {
-  res.render('index')
+  res.render('index', {
+    title: 'Instant.io - Streaming file transfer over WebTorrent'
+  })
 })
 
 // Fetch new ice_servers from twilio token regularly
@@ -132,13 +134,19 @@ app.get('/rtcConfig', cors({
 })
 
 app.get('*', function (req, res) {
-  res.status(404).render('error', { message: '404 Not Found' })
+  res.status(404).render('error', {
+    title: '404 Page Not Found - Instant.io',
+    message: '404 Not Found'
+  })
 })
 
 // error handling middleware
 app.use(function (err, req, res, next) {
   error(err)
-  res.status(500).render('error', { message: err.message || err })
+  res.status(500).render('error', {
+    title: '500 Server Error - Instant.io',
+    message: err.message || err
+  })
 })
 
 var tasks = [
