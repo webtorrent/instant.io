@@ -206,7 +206,7 @@ function onTorrent (torrent) {
       } else if (TEXT_EXTS.indexOf(extname) >= 0) {
         var iframe = document.createElement('iframe')
         iframe.src = url
-        iframe.sandbox = 'allow-forms allow-scripts'
+        if (extname !== '.pdf') iframe.sandbox = 'allow-forms allow-scripts'
         util.log(iframe)
       }
 
