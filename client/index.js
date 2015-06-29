@@ -18,7 +18,8 @@ var util = require('./util')
 global.WEBTORRENT_ANNOUNCE = [ 'wss://tracker.webtorrent.io' ]
 
 var VIDEO_MEDIASOURCE_EXTS = [ '.mp4', '.m4v', '.webm' ]
-var AUDIO_EXTS = [ '.wav', '.m4a', '.aac', '.ogg', '.oga' ]
+var AUDIO_MEDIASOURCE_EXTS = [ '.mp3', '.m4a' ]
+var AUDIO_EXTS = [ '.wav', '.aac', '.ogg', '.oga' ]
 var IMAGE_EXTS = [ '.jpg', '.png', '.gif', '.bmp' ]
 var TEXT_EXTS = [ '.css', '.html', '.js', '.md', '.pdf', '.txt' ]
 
@@ -150,9 +151,9 @@ function onTorrent (torrent) {
   torrent.swarm.on('upload', updateSpeed)
   setInterval(updateSpeed, 5000)
   updateSpeed()
-  var audio
 
   torrent.files.forEach(function (file) {
+    var audio
     var extname = path.extname(file.name).toLowerCase()
     if (window.MediaSource) {
       if (VIDEO_MEDIASOURCE_EXTS.indexOf(extname) >= 0) {
@@ -163,25 +164,31 @@ function onTorrent (torrent) {
         if (extname === '.mp4' || extname === '.m4v') {
           videostream(file, video)
           video.addEventListener('error', once(function () {
-            // If videostream generates an error, try using MediaSource without videostream
+            debug('videostream error: fallback to using MediaSource directly')
             file.createReadStream().pipe(video)
           }))
         } else {
           file.createReadStream().pipe(video)
         }
-      } else if (extname === '.m4a') {
+      } else if (AUDIO_MEDIASOURCE_EXTS.indexOf(extname) >= 0) {
         audio = document.createElement('audio')
         audio.controls = true
         audio.autoplay = true
         util.log(audio)
-        videostream(file, audio)
-        audio.addEventListener('error', once(function () {
-          // If videostream generates an error, try falling all the way back to a single blob
-          file.getBlobURL(function (err, url) {
-            if (err) return util.error(err)
-            audio.src = url
-          })
-        }))
+        if (extname === '.m4a') {
+          videostream(file, audio)
+          audio.addEventListener('error', once(function () {
+            debug('videostream error: fallback to using blob url')
+            file.getBlobURL(function (err, url) {
+              if (err) return util.error(err)
+              audio.src = url
+            })
+          }))
+        } else {
+          file.createReadStream().pipe(audio)
+          // TODO: need a blob url fallback here, since .mp3 MediaSource only works in
+          // Chrome, not Firefox
+        }
       }
     } else {
       util.error('Streaming is not supported in this browser. Try a browser that ' +
@@ -192,7 +199,7 @@ function onTorrent (torrent) {
     file.getBlobURL(function (err, url) {
       if (err) return util.error(err)
 
-      if (!audio && AUDIO_EXTS.indexOf(extname) >= 0) {
+      if (AUDIO_EXTS.indexOf(extname) >= 0) {
         audio = document.createElement('audio')
         audio.src = url
         audio.controls = true
