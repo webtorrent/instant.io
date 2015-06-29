@@ -155,47 +155,54 @@ function onTorrent (torrent) {
   torrent.files.forEach(function (file) {
     var audio
     var extname = path.extname(file.name).toLowerCase()
-    if (window.MediaSource) {
-      if (VIDEO_MEDIASOURCE_EXTS.indexOf(extname) >= 0) {
-        var video = document.createElement('video')
-        video.controls = true
-        video.autoplay = true
-        util.log(video)
-        if (extname === '.mp4' || extname === '.m4v') {
-          videostream(file, video)
-          video.addEventListener('error', once(function () {
-            debug('videostream error: fallback to using MediaSource directly')
-            file.createReadStream().pipe(video)
-          }))
-        } else {
+
+    if (window.MediaSource && VIDEO_MEDIASOURCE_EXTS.indexOf(extname) >= 0) {
+      var video = document.createElement('video')
+      video.controls = true
+      video.autoplay = true
+      util.log(video)
+      if (extname === '.mp4' || extname === '.m4v') {
+        videostream(file, video)
+        video.addEventListener('error', once(function () {
+          debug('videostream error: fallback to using MediaSource directly')
           file.createReadStream().pipe(video)
-        }
-        video.play()
-      } else if (AUDIO_MEDIASOURCE_EXTS.indexOf(extname) >= 0) {
-        audio = document.createElement('audio')
-        audio.controls = true
-        audio.autoplay = true
-        util.log(audio)
-        if (extname === '.m4a') {
-          videostream(file, audio)
-          audio.addEventListener('error', once(function () {
-            debug('videostream error: fallback to using blob url')
-            file.getBlobURL(function (err, url) {
-              if (err) return util.error(err)
-              audio.src = url
-            })
-          }))
-        } else {
-          file.createReadStream().pipe(audio)
-          // TODO: need a blob url fallback here, since .mp3 MediaSource only works in
-          // Chrome, not Firefox
-        }
-        audio.play()
+        }))
+      } else {
+        file.createReadStream().pipe(video)
       }
-    } else {
-      util.error('Streaming is not supported in this browser. Try a browser that ' +
-        'supports MediaSource, like Chrome. You can still save the file once it\'s ' +
-        'fully downloaded, if you want.')
+      video.play()
+    }
+
+    if (window.MediaSource && AUDIO_MEDIASOURCE_EXTS.indexOf(extname) >= 0) {
+      audio = document.createElement('audio')
+      audio.controls = true
+      audio.autoplay = true
+      util.log(audio)
+      if (extname === '.m4a') {
+        videostream(file, audio)
+        audio.addEventListener('error', once(function () {
+          debug('videostream error: fallback to using blob url')
+          file.getBlobURL(function (err, url) {
+            if (err) return util.error(err)
+            audio.src = url
+          })
+        }))
+      } else {
+        file.createReadStream().pipe(audio)
+        // TODO: need a blob url fallback here, since .mp3 MediaSource only works in
+        // Chrome, not Firefox
+      }
+      audio.play()
+    }
+
+    if (!window.MediaSource &&
+        VIDEO_MEDIASOURCE_EXTS.concat(AUDIO_MEDIASOURCE_EXTS).indexOf(extname) >= 0) {
+
+      util.error(
+        'Video/audio streaming is not supported in your browser. You can still share ' +
+        'or download this file (once it\'s fully downloaded). Use Chrome for ' +
+        'MediaSource support.'
+      )
     }
 
     file.getBlobURL(function (err, url) {
@@ -208,12 +215,16 @@ function onTorrent (torrent) {
         audio.autoplay = true
         util.log(audio)
         audio.play()
-      } else if (IMAGE_EXTS.indexOf(extname) >= 0) {
+      }
+
+      if (IMAGE_EXTS.indexOf(extname) >= 0) {
         var img = document.createElement('img')
         img.src = url
         img.alt = file.name
         util.log(img)
-      } else if (TEXT_EXTS.indexOf(extname) >= 0) {
+      }
+
+      if (TEXT_EXTS.indexOf(extname) >= 0) {
         var iframe = document.createElement('iframe')
         iframe.src = url
         if (extname !== '.pdf') iframe.sandbox = 'allow-forms allow-scripts'
