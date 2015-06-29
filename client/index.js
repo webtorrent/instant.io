@@ -170,6 +170,7 @@ function onTorrent (torrent) {
         } else {
           file.createReadStream().pipe(video)
         }
+        video.play()
       } else if (AUDIO_MEDIASOURCE_EXTS.indexOf(extname) >= 0) {
         audio = document.createElement('audio')
         audio.controls = true
@@ -189,6 +190,7 @@ function onTorrent (torrent) {
           // TODO: need a blob url fallback here, since .mp3 MediaSource only works in
           // Chrome, not Firefox
         }
+        audio.play()
       }
     } else {
       util.error('Streaming is not supported in this browser. Try a browser that ' +
@@ -205,6 +207,7 @@ function onTorrent (torrent) {
         audio.controls = true
         audio.autoplay = true
         util.log(audio)
+        audio.play()
       } else if (IMAGE_EXTS.indexOf(extname) >= 0) {
         var img = document.createElement('img')
         img.src = url
