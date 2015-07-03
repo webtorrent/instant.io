@@ -244,7 +244,6 @@ function mediaSourceStream (file, useVideoStream) {
     elem.addEventListener('error', fallbackToMediaSource)
     videostream(file, elem)
     appendElem()
-    console.log('end useVideostream')
   }
 
   function useMediaSource () {
