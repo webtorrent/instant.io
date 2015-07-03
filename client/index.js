@@ -2,7 +2,6 @@ var blobToBuffer = require('blob-to-buffer')
 var debug = require('debug')('instant.io')
 var dragDrop = require('drag-drop')
 var listify = require('listify')
-var once = require('once')
 var parseTorrent = require('parse-torrent')
 var path = require('path')
 var Peer = require('simple-peer')
@@ -17,8 +16,12 @@ var util = require('./util')
 
 global.WEBTORRENT_ANNOUNCE = [ 'wss://tracker.webtorrent.io' ]
 
-var VIDEO_MEDIASOURCE_EXTS = [ '.mp4', '.m4v', '.webm' ]
-var AUDIO_MEDIASOURCE_EXTS = [ '.mp3', '.m4a' ]
+var VIDEOSTREAM_EXTS = [ '.mp4', '.m4v', '.m4a' ]
+
+var MEDIASOURCE_VIDEO_EXTS = [ '.mp4', '.m4v', '.webm' ]
+var MEDIASOURCE_AUDIO_EXTS = [ '.m4a', '.mp3' ]
+var MEDIASOURCE_EXTS = MEDIASOURCE_VIDEO_EXTS.concat(MEDIASOURCE_AUDIO_EXTS)
+
 var AUDIO_EXTS = [ '.wav', '.aac', '.ogg', '.oga' ]
 var IMAGE_EXTS = [ '.jpg', '.png', '.gif', '.bmp' ]
 var TEXT_EXTS = [ '.css', '.html', '.js', '.md', '.pdf', '.txt' ]
@@ -61,6 +64,18 @@ uploadElement(upload, function (err, files) {
 
 dragDrop('body', onFiles)
 
+document.querySelector('form').addEventListener('submit', function (e) {
+  e.preventDefault()
+  downloadInfoHash(document.querySelector('form input[name=infoHash]').value)
+})
+
+var hash = window.location.hash.replace('#', '')
+if (/^[a-f0-9]+$/i.test(hash)) {
+  downloadInfoHash(hash)
+}
+
+window.addEventListener('beforeunload', onBeforeUnload)
+
 function onFiles (files) {
   debug('got files:')
   files.forEach(function (file) {
@@ -81,16 +96,6 @@ function isTorrent (file) {
 
 function isNotTorrent (file) {
   return !isTorrent(file)
-}
-
-document.querySelector('form').addEventListener('submit', function (e) {
-  e.preventDefault()
-  downloadInfoHash(document.querySelector('form input[name=infoHash]').value)
-})
-
-var hash = window.location.hash.replace('#', '')
-if (/^[a-f0-9]+$/i.test(hash)) {
-  downloadInfoHash(hash)
 }
 
 function downloadInfoHash (infoHash) {
@@ -156,53 +161,16 @@ function onTorrent (torrent) {
     var audio
     var extname = path.extname(file.name).toLowerCase()
 
-    if (window.MediaSource && VIDEO_MEDIASOURCE_EXTS.indexOf(extname) >= 0) {
-      var video = document.createElement('video')
-      video.controls = true
-      video.autoplay = true
-      util.log(video)
-      if (extname === '.mp4' || extname === '.m4v') {
-        videostream(file, video)
-        video.addEventListener('error', once(function () {
-          debug('videostream error: fallback to using MediaSource directly')
-          file.createReadStream().pipe(video)
-        }))
+    if (MEDIASOURCE_EXTS.indexOf(extname) >= 0) {
+      if (window.MediaSource) {
+        mediaSourceStream(file)
       } else {
-        file.createReadStream().pipe(video)
+        util.error(
+          'Video/audio streaming is not supported in your browser. You can still share ' +
+          'or download ' + file.name + ' (once it\'s fully downloaded). Use Chrome for ' +
+          'MediaSource support.'
+        )
       }
-      video.play()
-    }
-
-    if (window.MediaSource && AUDIO_MEDIASOURCE_EXTS.indexOf(extname) >= 0) {
-      audio = document.createElement('audio')
-      audio.controls = true
-      audio.autoplay = true
-      util.log(audio)
-      if (extname === '.m4a') {
-        videostream(file, audio)
-        audio.addEventListener('error', once(function () {
-          debug('videostream error: fallback to using blob url')
-          file.getBlobURL(function (err, url) {
-            if (err) return util.error(err)
-            audio.src = url
-          })
-        }))
-      } else {
-        file.createReadStream().pipe(audio)
-        // TODO: need a blob url fallback here, since .mp3 MediaSource only works in
-        // Chrome, not Firefox
-      }
-      audio.play()
-    }
-
-    if (!window.MediaSource &&
-        VIDEO_MEDIASOURCE_EXTS.concat(AUDIO_MEDIASOURCE_EXTS).indexOf(extname) >= 0) {
-
-      util.error(
-        'Video/audio streaming is not supported in your browser. You can still share ' +
-        'or download this file (once it\'s fully downloaded). Use Chrome for ' +
-        'MediaSource support.'
-      )
     }
 
     file.getBlobURL(function (err, url) {
@@ -241,7 +209,7 @@ function onTorrent (torrent) {
   })
 }
 
-window.onbeforeunload = function (e) {
+function onBeforeUnload (e) {
   e = e || window.event
   if (!window.client || window.client.torrents.length === 0) return
 
@@ -257,4 +225,78 @@ window.onbeforeunload = function (e) {
 
   if (e) e.returnValue = message // IE, Firefox
   return message // Safari, Chrome
+}
+
+function mediaSourceStream (file, useVideoStream) {
+  var elem
+  var extname = path.extname(file.name).toLowerCase()
+  var tagName = MEDIASOURCE_VIDEO_EXTS.indexOf(extname) >= 0 ? 'video' : 'audio'
+
+  if (VIDEOSTREAM_EXTS.indexOf(extname) >= 0) {
+    useVideostream()
+  } else {
+    useMediaSource()
+  }
+
+  function useVideostream () {
+    debug('Use `videostream` package for ' + file.name)
+    createElem()
+    elem.addEventListener('error', fallbackToMediaSource)
+    videostream(file, elem)
+    appendElem()
+    console.log('end useVideostream')
+  }
+
+  function useMediaSource () {
+    debug('Use MediaSource API for ' + file.name)
+    createElem()
+    elem.addEventListener('error', fallbackToBlobURL)
+    file.createReadStream().pipe(elem)
+    appendElem()
+  }
+
+  function useBlobURL () {
+    debug('Use Blob URL for ' + file.name)
+    createElem()
+    elem.addEventListener('error', fatalError)
+    appendElem()
+    file.getBlobURL(function (err, url) {
+      if (err) return fatalError(err)
+      elem.src = url
+      // elem.play()
+    })
+  }
+
+  function fallbackToMediaSource (err) {
+    debug('videostream error: fallback to MediaSource API: ' + err.message)
+    elem.removeEventListener('error', fallbackToMediaSource)
+
+    useMediaSource()
+  }
+
+  function fallbackToBlobURL (err) {
+    debug('MediaSource API error: fallback to Blob URL: ' + err.message)
+    elem.removeEventListener('error', fallbackToBlobURL)
+
+    useBlobURL()
+  }
+
+  function fatalError (err) {
+    debug('videostream error: fallback to blob URL: ' + err.message)
+    if (elem) elem.remove()
+    util.error('Unable to stream ' + file.name)
+  }
+
+  function createElem () {
+    if (elem) elem.remove()
+    elem = document.createElement(tagName)
+    elem.controls = true
+    elem.autoplay = true
+    return elem
+  }
+
+  function appendElem () {
+    util.log(elem)
+    elem.play()
+  }
 }
