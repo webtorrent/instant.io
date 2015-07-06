@@ -210,8 +210,14 @@ function onTorrent (torrent) {
 }
 
 function onBeforeUnload (e) {
-  e = e || window.event
+  if (!e) e = window.event
+
   if (!window.client || window.client.torrents.length === 0) return
+
+  var isLoneSeeder = window.client.torrents.some(function (torrent) {
+    return torrent.swarm && torrent.swarm.numPeers === 0 && torrent.progress === 1
+  })
+  if (!isLoneSeeder) return
 
   var names = listify(window.client.torrents.map(function (torrent) {
     return '"' + (torrent.name || torrent.infoHash) + '"'
@@ -220,8 +226,8 @@ function onBeforeUnload (e) {
   var theseTorrents = window.client.torrents.length >= 2
     ? 'these torrents'
     : 'this torrent'
-  var message = 'If you close this page, you will stop sharing ' + names + '. ' +
-    'Consider leaving this page open to seed ' + theseTorrents + '.'
+  var message = 'You are the only person sharing ' + names + '. ' +
+    'Consider leaving this page open to continue sharing ' + theseTorrents + '.'
 
   if (e) e.returnValue = message // IE, Firefox
   return message // Safari, Chrome
