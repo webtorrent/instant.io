@@ -1,4 +1,4 @@
-var logElem = document.querySelector('.log')
+var logElem = exports.logElem = document.querySelector('.log')
 var speed = document.querySelector('.speed')
 var logHeading = document.querySelector('#logHeading')
 
@@ -11,9 +11,13 @@ exports.log = function log (item) {
     return p
   } else {
     logElem.appendChild(item)
-    logElem.appendChild(document.createElement('br'))
+    exports.lineBreak()
     return item
   }
+}
+
+exports.lineBreak = function lineBreak () {
+  logElem.appendChild(document.createElement('br'))
 }
 
 // replace the last P in the log

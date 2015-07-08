@@ -8,23 +8,12 @@ var Peer = require('simple-peer')
 var prettyBytes = require('pretty-bytes')
 var thunky = require('thunky')
 var uploadElement = require('upload-element')
-var videostream = require('videostream')
 var WebTorrent = require('webtorrent')
 var xhr = require('xhr')
 
 var util = require('./util')
 
 global.WEBTORRENT_ANNOUNCE = [ 'wss://tracker.webtorrent.io' ]
-
-var VIDEOSTREAM_EXTS = [ '.mp4', '.m4v', '.m4a' ]
-
-var MEDIASOURCE_VIDEO_EXTS = [ '.mp4', '.m4v', '.webm' ]
-var MEDIASOURCE_AUDIO_EXTS = [ '.m4a', '.mp3' ]
-var MEDIASOURCE_EXTS = MEDIASOURCE_VIDEO_EXTS.concat(MEDIASOURCE_AUDIO_EXTS)
-
-var AUDIO_EXTS = [ '.wav', '.aac', '.ogg', '.oga' ]
-var IMAGE_EXTS = [ '.jpg', '.png', '.gif', '.bmp' ]
-var TEXT_EXTS = [ '.css', '.html', '.js', '.md', '.pdf', '.txt' ]
 
 if (!Peer.WEBRTC_SUPPORT) {
   util.error('This browser is unsupported. Please use a browser with WebRTC support.')
@@ -158,46 +147,14 @@ function onTorrent (torrent) {
   updateSpeed()
 
   torrent.files.forEach(function (file) {
-    var audio
-    var extname = path.extname(file.name).toLowerCase()
+    // append file
+    file.appendTo(util.logElem, function (err, elem) {
+      if (err) return util.error(err)
+    })
 
-    if (MEDIASOURCE_EXTS.indexOf(extname) >= 0) {
-      if (window.MediaSource) {
-        mediaSourceStream(file)
-      } else {
-        util.error(
-          'Video/audio streaming is not supported in your browser. You can still share ' +
-          'or download ' + file.name + ' (once it\'s fully downloaded). Use Chrome for ' +
-          'MediaSource support.'
-        )
-      }
-    }
-
+    // append download link
     file.getBlobURL(function (err, url) {
       if (err) return util.error(err)
-
-      if (AUDIO_EXTS.indexOf(extname) >= 0) {
-        audio = document.createElement('audio')
-        audio.src = url
-        audio.controls = true
-        audio.autoplay = true
-        util.log(audio)
-        audio.play()
-      }
-
-      if (IMAGE_EXTS.indexOf(extname) >= 0) {
-        var img = document.createElement('img')
-        img.src = url
-        img.alt = file.name
-        util.log(img)
-      }
-
-      if (TEXT_EXTS.indexOf(extname) >= 0) {
-        var iframe = document.createElement('iframe')
-        iframe.src = url
-        if (extname !== '.pdf') iframe.sandbox = 'allow-forms allow-scripts'
-        util.log(iframe)
-      }
 
       var a = document.createElement('a')
       a.target = '_blank'
@@ -231,77 +188,4 @@ function onBeforeUnload (e) {
 
   if (e) e.returnValue = message // IE, Firefox
   return message // Safari, Chrome
-}
-
-function mediaSourceStream (file, useVideoStream) {
-  var elem
-  var extname = path.extname(file.name).toLowerCase()
-  var tagName = MEDIASOURCE_VIDEO_EXTS.indexOf(extname) >= 0 ? 'video' : 'audio'
-
-  if (VIDEOSTREAM_EXTS.indexOf(extname) >= 0) {
-    useVideostream()
-  } else {
-    useMediaSource()
-  }
-
-  function useVideostream () {
-    debug('Use `videostream` package for ' + file.name)
-    createElem()
-    elem.addEventListener('error', fallbackToMediaSource)
-    videostream(file, elem)
-    appendElem()
-  }
-
-  function useMediaSource () {
-    debug('Use MediaSource API for ' + file.name)
-    createElem()
-    elem.addEventListener('error', fallbackToBlobURL)
-    file.createReadStream().pipe(elem)
-    appendElem()
-  }
-
-  function useBlobURL () {
-    debug('Use Blob URL for ' + file.name)
-    createElem()
-    elem.addEventListener('error', fatalError)
-    appendElem()
-    file.getBlobURL(function (err, url) {
-      if (err) return fatalError(err)
-      elem.src = url
-      // elem.play()
-    })
-  }
-
-  function fallbackToMediaSource (err) {
-    debug('videostream error: fallback to MediaSource API: ' + err.message)
-    elem.removeEventListener('error', fallbackToMediaSource)
-
-    useMediaSource()
-  }
-
-  function fallbackToBlobURL (err) {
-    debug('MediaSource API error: fallback to Blob URL: ' + err.message)
-    elem.removeEventListener('error', fallbackToBlobURL)
-
-    useBlobURL()
-  }
-
-  function fatalError (err) {
-    debug('videostream error: fallback to blob URL: ' + err.message)
-    if (elem) elem.remove()
-    util.error('Unable to stream ' + file.name)
-  }
-
-  function createElem () {
-    if (elem) elem.remove()
-    elem = document.createElement(tagName)
-    elem.controls = true
-    elem.autoplay = true
-    return elem
-  }
-
-  function appendElem () {
-    util.log(elem)
-    elem.play()
-  }
 }

@@ -27,7 +27,6 @@
     "thunky": "^0.1.0",
     "twilio": "^2.1.0",
     "upload-element": "^1.0.1",
-    "videostream": "^1.0.0",
     "webtorrent": "0.x",
     "xhr": "^2.0.0"
   },
