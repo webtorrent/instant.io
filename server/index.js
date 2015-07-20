@@ -1,6 +1,7 @@
 var compress = require('compression')
 var cors = require('cors')
 var debug = require('debug')('instant')
+var downgrade = require('downgrade')
 var express = require('express')
 var fs = require('fs')
 var http = require('http')
@@ -8,11 +9,11 @@ var https = require('https')
 var jade = require('jade')
 var parallel = require('run-parallel')
 var path = require('path')
-var url = require('url')
 var twilio = require('twilio')
+var unlimited = require('unlimited')
+var url = require('url')
 
 var config = require('../config')
-var util = require('./util')
 
 var CORS_WHITELIST = [ 'http://whiteboard.webtorrent.io' ]
 
@@ -30,7 +31,7 @@ if (secretKey && secretCert) {
   httpsServer = https.createServer({ key: secretKey, cert: secretCert }, app)
 }
 
-util.upgradeLimits()
+unlimited()
 
 // Templating
 app.set('views', path.join(__dirname, 'views'))
@@ -164,7 +165,7 @@ if (httpsServer) {
 parallel(tasks, function (err) {
   if (err) throw err
   debug('listening on port %s', JSON.stringify(config.ports))
-  util.downgradeUid()
+  downgrade()
 })
 
 function error (err) {
