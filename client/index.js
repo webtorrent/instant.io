@@ -19,24 +19,44 @@ if (!Peer.WEBRTC_SUPPORT) {
   util.error('This browser is unsupported. Please use a browser with WebRTC support.')
 }
 
-var getClient = thunky(function (cb) {
-  xhr('/rtcConfig', function (err, res) {
-    var rtcConfig
+function getRtcConfig (url, cb) {
+  xhr(url, function (err, res) {
     if (err || res.statusCode !== 200) {
-      util.error('Could not get WebRTC config from server. Using default (without TURN).')
+      cb(new Error('Could not get WebRTC config from server. Using default (without TURN).'))
     } else {
+      var rtcConfig
       try {
         rtcConfig = JSON.parse(res.body)
       } catch (err) {
-        util.error('Got invalid WebRTC config from server: ' + res.body)
+        return cb(new Error('Got invalid WebRTC config from server: ' + res.body))
       }
-      if (rtcConfig) debug('got rtc config: %o', rtcConfig)
+      debug('got rtc config: %o', rtcConfig)
+      cb(null, rtcConfig)
     }
+  })
+}
+
+var getClient = thunky(function (cb) {
+  getRtcConfig('/rtcConfig', function (err, rtcConfig) {
+    if (err && window.location.hostname === 'instant.io') {
+      if (err) util.error(err)
+      createClient(rtcConfig)
+    } else if (err) {
+      getRtcConfig('https://instant.io/rtcConfig', function (err, rtcConfig) {
+        if (err) util.error(err)
+        createClient(rtcConfig)
+      })
+    } else {
+      createClient(rtcConfig)
+    }
+  })
+
+  function createClient (rtcConfig) {
     var client = new WebTorrent({ rtcConfig: rtcConfig })
     client.on('warning', util.warning)
     client.on('error', util.error)
     cb(null, client)
-  })
+  }
 })
 
 getClient(function (err, client) {
