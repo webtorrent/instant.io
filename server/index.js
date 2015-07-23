@@ -15,7 +15,12 @@ var url = require('url')
 
 var config = require('../config')
 
-var CORS_WHITELIST = [ 'http://whiteboard.webtorrent.io' ]
+var CORS_WHITELIST = [
+  'http://instant-io.herokuapp.com',
+  'https://instant-io.herokuapp.com',
+  'http://instant.rom1504.fr',
+  'http://whiteboard.webtorrent.io'
+]
 
 var secret, secretKey, secretCert
 try {
