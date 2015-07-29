@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns:moz="http://www.mozilla.org/2006/browser/search/"
+      xmlns="http://a9.com/-/spec/opensearch/1.1/">
+  <ShortName>Instant.io</ShortName>
+  <Description>Download from Instant.io (use magnet link)</Description>
+  <InputEncoding>UTF-8</InputEncoding>
+  <Url method="get" type="text/html"
+      template="https://instant.io/#{searchTerms}"/>
+</OpenSearchDescription>
