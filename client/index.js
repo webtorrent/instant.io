@@ -75,12 +75,12 @@ dragDrop('body', onFiles)
 
 document.querySelector('form').addEventListener('submit', function (e) {
   e.preventDefault()
-  downloadInfoHash(document.querySelector('form input[name=infoHash]').value)
+  downloadTorrent(document.querySelector('form input[name=torrentId]').value)
 })
 
-var hash = window.location.hash.replace('#', '')
-if (/^[a-f0-9]+$/i.test(hash)) {
-  downloadInfoHash(hash)
+var hash = decodeURIComponent(window.location.hash.substring(1))
+if (hash !== '') {
+  downloadTorrent(hash)
 }
 
 window.addEventListener('beforeunload', onBeforeUnload)
@@ -92,7 +92,7 @@ function onFiles (files) {
   })
 
   // .torrent file = start downloading the torrent
-  files.filter(isTorrent).forEach(downloadTorrent)
+  files.filter(isTorrent).forEach(downloadTorrentFile)
 
   // everything else = seed these files
   seed(files.filter(isNotTorrent))
@@ -107,23 +107,21 @@ function isNotTorrent (file) {
   return !isTorrent(file)
 }
 
-function downloadInfoHash (infoHash) {
-  util.log('Downloading torrent from <strong>infohash</strong> ' + infoHash)
+function downloadTorrent (torrentId) {
+  util.log('Downloading torrent from ' + torrentId)
   getClient(function (err, client) {
     if (err) return util.error(err)
-    client.add(infoHash, onTorrent)
+    client.add(torrentId, onTorrent)
   })
 }
 
-function downloadTorrent (file) {
-  debug('downloadTorrent %s', file.name || file)
-  getClient(function (err, client) {
+function downloadTorrentFile (file) {
+  util.log('Downloading torrent from <strong>' + file.name + '</strong>')
+  blobToBuffer(file, function (err, buf) {
     if (err) return util.error(err)
-    util.log('Downloading torrent from <strong>file</strong> ' + file.name)
-    blobToBuffer(file, function (err, buf) {
+    getClient(function (err, client) {
       if (err) return util.error(err)
-      var parsedTorrent = parseTorrent(buf)
-      client.add(parsedTorrent, onTorrent)
+      client.add(buf, onTorrent)
     })
   })
 }
@@ -209,3 +207,5 @@ function onBeforeUnload (e) {
   if (e) e.returnValue = message // IE, Firefox
   return message // Safari, Chrome
 }
+
+navigator.registerProtocolHandler('magnet', window.location.origin + '#%s', 'Instant.io')
