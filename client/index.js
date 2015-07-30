@@ -18,6 +18,63 @@ if (!Peer.WEBRTC_SUPPORT) {
   util.error('This browser is unsupported. Please use a browser with WebRTC support.')
 }
 
+var getClient = thunky(function (cb) {
+  getRtcConfig('/rtcConfig', function (err, rtcConfig) {
+    if (err && window.location.hostname === 'instant.io') {
+      if (err) util.error(err)
+      createClient(rtcConfig)
+    } else if (err) {
+      getRtcConfig('https://instant.io/rtcConfig', function (err, rtcConfig) {
+        if (err) util.error(err)
+        createClient(rtcConfig)
+      })
+    } else {
+      createClient(rtcConfig)
+    }
+  })
+
+  function createClient (rtcConfig) {
+    var client = window.client = new WebTorrent({ rtcConfig: rtcConfig })
+    client.on('warning', util.warning)
+    client.on('error', util.error)
+    cb(null, client)
+  }
+})
+
+// For performance, create the client immediately
+getClient(function () {})
+
+// Seed via upload input element
+var upload = document.querySelector('input[name=upload]')
+uploadElement(upload, function (err, files) {
+  if (err) return util.error(err)
+  files = files.map(function (file) { return file.file })
+  onFiles(files)
+})
+
+// Seed via drag-and-drop
+dragDrop('body', onFiles)
+
+// Download via input element
+document.querySelector('form').addEventListener('submit', function (e) {
+  e.preventDefault()
+  downloadTorrent(document.querySelector('form input[name=torrentId]').value)
+})
+
+// Download by URL hash
+onHashChange()
+window.addEventListener('hashchange', onHashChange)
+function onHashChange () {
+  var hash = decodeURIComponent(window.location.hash.substring(1)).trim()
+  if (hash !== '') downloadTorrent(hash)
+}
+
+// Warn when leaving and there are no other peers
+window.addEventListener('beforeunload', onBeforeUnload)
+
+// Register a protocol handler for "magnet:" (will prompt the user)
+navigator.registerProtocolHandler('magnet', window.location.origin + '#%s', 'Instant.io')
+
 function getRtcConfig (url, cb) {
   xhr(url, function (err, res) {
     if (err || res.statusCode !== 200) {
@@ -35,55 +92,6 @@ function getRtcConfig (url, cb) {
   })
 }
 
-var getClient = thunky(function (cb) {
-  getRtcConfig('/rtcConfig', function (err, rtcConfig) {
-    if (err && window.location.hostname === 'instant.io') {
-      if (err) util.error(err)
-      createClient(rtcConfig)
-    } else if (err) {
-      getRtcConfig('https://instant.io/rtcConfig', function (err, rtcConfig) {
-        if (err) util.error(err)
-        createClient(rtcConfig)
-      })
-    } else {
-      createClient(rtcConfig)
-    }
-  })
-
-  function createClient (rtcConfig) {
-    var client = new WebTorrent({ rtcConfig: rtcConfig })
-    client.on('warning', util.warning)
-    client.on('error', util.error)
-    cb(null, client)
-  }
-})
-
-getClient(function (err, client) {
-  if (err) return util.error(err)
-  window.client = client
-})
-
-var upload = document.querySelector('input[name=upload]')
-uploadElement(upload, function (err, files) {
-  if (err) return util.error(err)
-  files = files.map(function (file) { return file.file })
-  onFiles(files)
-})
-
-dragDrop('body', onFiles)
-
-document.querySelector('form').addEventListener('submit', function (e) {
-  e.preventDefault()
-  downloadTorrent(document.querySelector('form input[name=torrentId]').value)
-})
-
-var hash = decodeURIComponent(window.location.hash.substring(1))
-if (hash !== '') {
-  downloadTorrent(hash)
-}
-
-window.addEventListener('beforeunload', onBeforeUnload)
-
 function onFiles (files) {
   debug('got files:')
   files.forEach(function (file) {
@@ -91,19 +99,19 @@ function onFiles (files) {
   })
 
   // .torrent file = start downloading the torrent
-  files.filter(isTorrent).forEach(downloadTorrentFile)
+  files.filter(isTorrentFile).forEach(downloadTorrentFile)
 
   // everything else = seed these files
-  seed(files.filter(isNotTorrent))
+  seed(files.filter(isNotTorrentFile))
 }
 
-function isTorrent (file) {
+function isTorrentFile (file) {
   var extname = path.extname(file.name).toLowerCase()
   return extname === '.torrent'
 }
 
-function isNotTorrent (file) {
-  return !isTorrent(file)
+function isNotTorrentFile (file) {
+  return !isTorrentFile(file)
 }
 
 function downloadTorrent (torrentId) {
@@ -206,5 +214,3 @@ function onBeforeUnload (e) {
   if (e) e.returnValue = message // IE, Firefox
   return message // Safari, Chrome
 }
-
-navigator.registerProtocolHandler('magnet', window.location.origin + '#%s', 'Instant.io')
