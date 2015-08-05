@@ -151,7 +151,7 @@ function onTorrent (torrent) {
 
   util.log(
     'Torrent info hash: ' + torrent.infoHash + ' ' +
-    '<a href="/#' + torrent.infoHash + '" onclick="prompt(\'Ctrl+c to copy:\', this.href);return false;">[Share link]</a> ' +
+    '<a href="/#' + torrent.infoHash + '" onclick="prompt(\'Share this link with anyone you want to download this torrent:\', this.href);return false;">[Share link]</a> ' +
     '<a href="' + torrent.magnetURI + '" target="_blank">[Magnet URI]</a> ' +
     '<a href="' + torrent.torrentFileURL + '" target="_blank" download="' + torrentFileName + '">[Download .torrent]</a>'
   )
