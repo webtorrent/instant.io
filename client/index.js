@@ -157,7 +157,7 @@ function onTorrent (torrent) {
   )
 
   function updateSpeed () {
-    var progress = (100 * torrent.downloaded / torrent.parsedTorrent.length).toFixed(1)
+    var progress = (100 * torrent.progress).toFixed(1)
     util.updateSpeed(
       '<b>Peers:</b> ' + torrent.swarm.wires.length + ' ' +
       '<b>Progress:</b> ' + progress + '% ' +
