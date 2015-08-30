@@ -1,0 +1,11 @@
+{
+	"name": "instant.io",
+	"description": "Secure, anonymous, streaming file transfer",
+	"keywords": [
+		"p2p",
+		"webrtc",
+		"data channel",
+		"file transfer"
+	],
+	"logo"  : "https://assets-cdn.github.com/images/icons/emoji/unicode/1f680.png"
+}
