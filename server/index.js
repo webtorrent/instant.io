@@ -50,7 +50,7 @@ app.use(compress())
 
 app.use(function (req, res, next) {
   // Force SSL
-  if (config.isProd && req.headers['x-forwarded-proto'] !== 'https') {
+  if (config.isProd && (!config.isHeroku && req.protocol !== 'https' || config.isHeroku && req.headers['x-forwarded-proto'] !== 'https')) {
     return res.redirect('https://' + (req.hostname || 'instant.io') + req.url)
   }
 
