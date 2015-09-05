@@ -7,5 +7,10 @@
 		"data channel",
 		"file transfer"
 	],
-	"logo"  : "https://assets-cdn.github.com/images/icons/emoji/unicode/1f680.png"
+	"logo": "https://assets-cdn.github.com/images/icons/emoji/unicode/1f680.png",
+	"buildpacks": [
+		{
+			"url": "https://github.com/alexlincoln/heroku-buildpack-nodejs-browserify-stylus"
+		}
+	]
 }

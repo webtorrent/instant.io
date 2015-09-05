@@ -34,6 +34,10 @@ Copy [`secret/index-sample.js`](https://github.com/feross/instant.io/blob/master
 
 That should be it!
 
+### Run a copy of this on Heroku
+
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
 ### Mirrors
 
 - http://instant.rom1504.fr/
