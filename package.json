@@ -36,7 +36,7 @@
     "nodemon": "^1.2.1",
     "pre-commit": "^1.0.10",
     "standard": "^5.3.1",
-    "stylus": "^0.51.0",
+    "stylus": "^0.52.4",
     "watchify": "^3.1.0"
   },
   "homepage": "http://feross.org",
