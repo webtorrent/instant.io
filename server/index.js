@@ -61,9 +61,13 @@ app.use(function (req, res, next) {
     return res.redirect('https://instant.io' + req.url)
   }
 
-  // Strict transport security (to prevent MITM attacks on the site)
+  // Use HTTP Strict Transport Security
+  // Lasts 1 year, incl. subdomains, allow browser preload list
   if (config.isProd) {
-    res.header('Strict-Transport-Security', 'max-age=31536000')
+    res.header(
+      'Strict-Transport-Security',
+      'max-age=31536000; includeSubDomains; preload'
+    )
   }
 
   // Add cross-domain header for fonts, required by spec, Firefox, and IE.
