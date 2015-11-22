@@ -21,7 +21,9 @@ var CORS_WHITELIST = [
   'http://instant.rom1504.fr',
   'http://whiteboard.webtorrent.io',
   'http://file.pizza',
-  'https://file.pizza'
+  'https://file.pizza',
+  'http://webtorrent.io',
+  'https://webtorrent.io'
 ]
 
 var secret, secretKey, secretCert
