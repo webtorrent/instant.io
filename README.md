@@ -1,4 +1,7 @@
-# Instant.io
+# Instant.io [![travis][travis-image]][travis-url]
+
+[travis-image]: https://img.shields.io/travis/feross/instant.io.svg
+[travis-url]: https://travis-ci.org/feross/instant.io
 
 ### Streaming file transfer over WebTorrent
 
