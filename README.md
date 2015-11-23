@@ -26,7 +26,7 @@ To get a clone of https://instant.io running on your own server, follow these in
 Get the code:
 
 ```
-git@github.com:feross/instant.io.git
+git clone git@github.com:feross/instant.io.git
 cd instant.io
 npm install
 ```
