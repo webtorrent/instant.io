@@ -12,7 +12,7 @@ var xhr = require('xhr')
 
 var util = require('./util')
 
-global.WEBTORRENT_ANNOUNCE = [ 'wss://tracker.webtorrent.io' ]
+global.WEBTORRENT_ANNOUNCE = [ 'wss://tracker.webtorrent.io', 'wss://tracker.btorrent.xyz' ]
 
 if (!Peer.WEBRTC_SUPPORT) {
   util.error('This browser is unsupported. Please use a browser with WebRTC support.')
