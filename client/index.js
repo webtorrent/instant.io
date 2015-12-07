@@ -1,4 +1,3 @@
-var blobToBuffer = require('blob-to-buffer')
 var debug = require('debug')('instant.io')
 var dragDrop = require('drag-drop')
 var listify = require('listify')
@@ -124,12 +123,9 @@ function downloadTorrent (torrentId) {
 
 function downloadTorrentFile (file) {
   util.log('Downloading torrent from <strong>' + file.name + '</strong>')
-  blobToBuffer(file, function (err, buf) {
+  getClient(function (err, client) {
     if (err) return util.error(err)
-    getClient(function (err, client) {
-      if (err) return util.error(err)
-      client.add(buf, onTorrent)
-    })
+    client.add(file, onTorrent)
   })
 }
 
