@@ -162,10 +162,8 @@ function onTorrent (torrent) {
     )
   }
 
-  torrent.swarm.on('download', updateSpeed)
-  torrent.swarm.on('upload', updateSpeed)
-  setInterval(updateSpeed, 5000)
   updateSpeed()
+  setInterval(updateSpeed, 500)
 
   torrent.files.forEach(function (file) {
     // append file
