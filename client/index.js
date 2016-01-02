@@ -2,7 +2,6 @@ var debug = require('debug')('instant.io')
 var dragDrop = require('drag-drop')
 var listify = require('listify')
 var path = require('path')
-var Peer = require('simple-peer')
 var prettyBytes = require('pretty-bytes')
 var thunky = require('thunky')
 var uploadElement = require('upload-element')
@@ -13,7 +12,7 @@ var util = require('./util')
 
 global.WEBTORRENT_ANNOUNCE = [ 'wss://tracker.webtorrent.io', 'wss://tracker.btorrent.xyz' ]
 
-if (!Peer.WEBRTC_SUPPORT) {
+if (!WebTorrent.WEBRTC_SUPPORT) {
   util.error('This browser is unsupported. Please use a browser with WebRTC support.')
 }
 
