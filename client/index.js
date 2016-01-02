@@ -161,8 +161,8 @@ function onTorrent (torrent) {
     )
   }
 
-  torrent.swarm.on('download', updateSpeed)
-  torrent.swarm.on('upload', updateSpeed)
+  torrent.on('download', updateSpeed)
+  torrent.on('upload', updateSpeed)
   setInterval(updateSpeed, 5000)
   updateSpeed()
 
