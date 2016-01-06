@@ -3,6 +3,7 @@ var dragDrop = require('drag-drop')
 var listify = require('listify')
 var path = require('path')
 var prettyBytes = require('pretty-bytes')
+var throttle = require('throttleit')
 var thunky = require('thunky')
 var uploadElement = require('upload-element')
 var WebTorrent = require('webtorrent')
@@ -161,8 +162,8 @@ function onTorrent (torrent) {
     )
   }
 
-  torrent.on('download', updateSpeed)
-  torrent.on('upload', updateSpeed)
+  torrent.on('download', throttle(updateSpeed, 500))
+  torrent.on('upload', throttle(updateSpeed, 500))
   setInterval(updateSpeed, 5000)
   updateSpeed()
 
