@@ -162,8 +162,8 @@ function onTorrent (torrent) {
     )
   }
 
-  torrent.on('download', throttle(updateSpeed, 500))
-  torrent.on('upload', throttle(updateSpeed, 500))
+  torrent.on('download', throttle(updateSpeed, 250))
+  torrent.on('upload', throttle(updateSpeed, 250))
   setInterval(updateSpeed, 5000)
   updateSpeed()
 
