@@ -19,7 +19,7 @@
     "express": "^4.8.5",
     "jade": "^1.5.0",
     "listify": "^1.0.0",
-    "pretty-bytes": "^2.0.1",
+    "pretty-bytes": "^3.0.0",
     "run-parallel": "^1.0.0",
     "throttleit": "^1.0.0",
     "thunky": "^0.1.0",
