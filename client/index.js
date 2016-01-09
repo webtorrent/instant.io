@@ -57,7 +57,7 @@ dragDrop('body', onFiles)
 // Download via input element
 document.querySelector('form').addEventListener('submit', function (e) {
   e.preventDefault()
-  downloadTorrent(document.querySelector('form input[name=torrentId]').value)
+  downloadTorrent(document.querySelector('form input[name=torrentId]').value.trim())
 })
 
 // Download by URL hash
