@@ -154,7 +154,7 @@ function onTorrent (torrent) {
     'Torrent info hash: ' + torrent.infoHash + ' ' +
     '<a href="/#' + torrent.infoHash + '" onclick="prompt(\'Share this link with anyone you want to download this torrent:\', this.href);return false;">[Share link]</a> ' +
     '<a href="' + torrent.magnetURI + '" target="_blank">[Magnet URI]</a> ' +
-    '<a href="' + torrent.torrentFileURL + '" target="_blank" download="' + torrentFileName + '">[Download .torrent]</a>'
+    '<a href="' + torrent.torrentFileBlobURL + '" target="_blank" download="' + torrentFileName + '">[Download .torrent]</a>'
   )
 
   function updateSpeed () {
@@ -162,8 +162,8 @@ function onTorrent (torrent) {
     util.updateSpeed(
       '<b>Peers:</b> ' + torrent.swarm.wires.length + ' ' +
       '<b>Progress:</b> ' + progress + '% ' +
-      '<b>Download speed:</b> ' + prettyBytes(window.client.downloadSpeed()) + '/s ' +
-      '<b>Upload speed:</b> ' + prettyBytes(window.client.uploadSpeed()) + '/s'
+      '<b>Download speed:</b> ' + prettyBytes(window.client.downloadSpeed) + '/s ' +
+      '<b>Upload speed:</b> ' + prettyBytes(window.client.uploadSpeed) + '/s'
     )
   }
 
