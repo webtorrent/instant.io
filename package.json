@@ -11,6 +11,7 @@
     "url": "https://github.com/feross/instant.io/issues"
   },
   "dependencies": {
+    "browserify": "^13.0.0",
     "compression": "^1.0.9",
     "cors": "^2.7.1",
     "debug": "^2.0.0",
@@ -19,8 +20,10 @@
     "express": "^4.8.5",
     "jade": "^1.5.0",
     "listify": "^1.0.0",
+    "nib": "^1.0.3",
     "pretty-bytes": "^3.0.0",
     "run-parallel": "^1.0.0",
+    "stylus": "^0.53.0",
     "throttleit": "^1.0.0",
     "thunky": "^0.1.0",
     "twilio": "^2.1.0",
@@ -30,20 +33,17 @@
     "xhr": "^2.0.0"
   },
   "devDependencies": {
-    "browserify": "^13.0.0",
-    "nib": "^1.0.3",
     "nodemon": "^1.2.1",
     "pre-commit": "^1.0.10",
     "standard": "^5.3.1",
-    "stylus": "^0.53.0",
     "watchify": "^3.1.0"
   },
   "homepage": "http://feross.org",
   "keywords": [
-    "p2p",
-    "webrtc",
     "data channel",
-    "file transfer"
+    "file transfer",
+    "p2p",
+    "webrtc"
   ],
   "license": "MIT",
   "main": "index.js",
