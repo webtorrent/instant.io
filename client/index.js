@@ -173,11 +173,6 @@ function onTorrent (torrent) {
   updateSpeed()
 
   torrent.files.forEach(function (file) {
-    // append file
-    file.appendTo(util.logElem, function (err, elem) {
-      if (err) return util.error(err)
-    })
-
     // append download link
     file.getBlobURL(function (err, url) {
       if (err) return util.error(err)
@@ -189,6 +184,14 @@ function onTorrent (torrent) {
       a.textContent = 'Download ' + file.name
       util.log(a)
     })
+  })
+
+  // append first file
+  util.log(
+    'Playing file: ' + torrent.files[0].name
+  )
+  torrent.files[0].appendTo(util.logElem, function (err, elem) {
+    if (err) return util.error(err)
   })
 }
 
