@@ -1,3 +1,4 @@
+var createTorrent = require('create-torrent')
 var debug = require('debug')('instant.io')
 var dragDrop = require('drag-drop')
 var listify = require('listify')
@@ -11,7 +12,13 @@ var xhr = require('xhr')
 
 var util = require('./util')
 
-global.WEBTORRENT_ANNOUNCE = [ 'wss://tracker.webtorrent.io', 'wss://tracker.btorrent.xyz' ]
+global.WEBTORRENT_ANNOUNCE = createTorrent.announceList
+  .map(function (arr) {
+    return arr[0]
+  })
+  .filter(function (url) {
+    return url.indexOf('wss://') === 0 || url.indexOf('ws://') === 0
+  })
 
 if (!WebTorrent.WEBRTC_SUPPORT) {
   util.error('This browser is unsupported. Please use a browser with WebRTC support.')
