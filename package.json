@@ -27,7 +27,7 @@
     "stylus": "^0.53.0",
     "throttleit": "^1.0.0",
     "thunky": "^0.1.0",
-    "twilio": "^2.1.0",
+    "twilio": "^3.3.0-edge",
     "unlimited": "^1.1.0",
     "upload-element": "^1.0.1",
     "webtorrent": "0.x",
@@ -36,7 +36,7 @@
   "devDependencies": {
     "nodemon": "^1.2.1",
     "pre-commit": "^1.0.10",
-    "standard": "^5.3.1",
+    "standard": "^6.0.4",
     "watchify": "^3.1.0"
   },
   "homepage": "http://feross.org",
