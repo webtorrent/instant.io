@@ -1,28 +1,5 @@
 @import 'nib'
 
-ellipsis()
-  overflow: hidden
-  text-overflow: ellipsis
-  white-space: nowrap
-
-.clearfix:before, .clearfix:after
-  content: ''
-  display: table
-
-.clearfix:after
-  clear: both
-
-.drag-layer
-  display: none
-  position: fixed
-  top: 0
-  left: 0
-  right: 0
-  bottom: 0
-  background: rgba(0,0,0,0.5)
-  body.drag &
-    display: block
-
 *, *:after, *:before
   box-sizing: border-box
 
@@ -31,8 +8,6 @@ html, body
   padding: 0
   height: 100%
   overflow: auto
-
-body
   font-family: sans-serif
 
 body.drag::before
