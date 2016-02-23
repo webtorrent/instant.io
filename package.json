@@ -35,7 +35,6 @@
   },
   "devDependencies": {
     "nodemon": "^1.2.1",
-    "pre-commit": "^1.0.10",
     "standard": "^6.0.4",
     "watchify": "^3.1.0"
   },
