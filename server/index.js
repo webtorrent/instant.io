@@ -19,6 +19,7 @@ var CORS_WHITELIST = [
   'http://instant-io.herokuapp.com',
   'https://instant-io.herokuapp.com',
   'http://instant.rom1504.fr',
+  'https://instant.rom1504.fr',
   'http://whiteboard.webtorrent.io',
   'http://file.pizza',
   'https://file.pizza',
