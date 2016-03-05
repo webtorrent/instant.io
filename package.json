@@ -24,7 +24,7 @@
     "nib": "^1.0.3",
     "pretty-bytes": "^3.0.0",
     "run-parallel": "^1.0.0",
-    "stylus": "^0.53.0",
+    "stylus": "^0.54.0",
     "throttleit": "^1.0.0",
     "thunky": "^0.1.0",
     "twilio": "^2.1.0",
