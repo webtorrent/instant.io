@@ -22,6 +22,7 @@
     "jade": "^1.5.0",
     "listify": "^1.0.0",
     "nib": "^1.0.3",
+    "node-qr-image": "0.0.1",
     "pretty-bytes": "^3.0.0",
     "run-parallel": "^1.0.0",
     "stylus": "^0.54.0",
