@@ -9,6 +9,7 @@ var thunky = require('thunky')
 var uploadElement = require('upload-element')
 var WebTorrent = require('webtorrent')
 var xhr = require('xhr')
+var qr = require('node-qr-image')
 
 var util = require('./util')
 
@@ -148,13 +149,9 @@ function seed (files) {
 }
 
 function onTorrent (torrent) {
-  torrent.on('warning', util.warning)
-  torrent.on('error', util.error)
-
   upload.value = upload.defaultValue // reset upload element
 
   var torrentFileName = path.basename(torrent.name, path.extname(torrent.name)) + '.torrent'
-
   util.log('"' + torrentFileName + '" contains ' + torrent.files.length + ' files:')
   torrent.files.forEach(function (file) {
     util.log('&nbsp;&nbsp;- ' + file.name + ' (' + prettyBytes(file.length) + ')')
@@ -165,6 +162,10 @@ function onTorrent (torrent) {
     '<a href="/#' + torrent.infoHash + '" onclick="prompt(\'Share this link with anyone you want to download this torrent:\', this.href);return false;">[Share link]</a> ' +
     '<a href="' + torrent.magnetURI + '" target="_blank">[Magnet URI]</a> ' +
     '<a href="' + torrent.torrentFileBlobURL + '" target="_blank" download="' + torrentFileName + '">[Download .torrent]</a>'
+  )
+  
+  util.log(
+    'QR Code: <img class="qr" src="data:image/png;base64,' + qr.imageSync(location.href + '#' + torrent.infoHash, { type: 'png' }).toString('base64') + '">'
   )
 
   function updateSpeed () {
