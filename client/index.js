@@ -149,9 +149,13 @@ function seed (files) {
 }
 
 function onTorrent (torrent) {
+  torrent.on('warning', util.warning)
+  torrent.on('error', util.error)
+  
   upload.value = upload.defaultValue // reset upload element
 
   var torrentFileName = path.basename(torrent.name, path.extname(torrent.name)) + '.torrent'
+  
   util.log('"' + torrentFileName + '" contains ' + torrent.files.length + ' files:')
   torrent.files.forEach(function (file) {
     util.log('&nbsp;&nbsp;- ' + file.name + ' (' + prettyBytes(file.length) + ')')
