@@ -35,7 +35,7 @@ Modify the configuration options in [`config.js`](https://github.com/feross/inst
 
 Copy [`secret/index-sample.js`](https://github.com/feross/instant.io/blob/master/secret/index-sample.js) to `secret/index.js` and set the Twilio API key if you want a [NAT traversal service](https://www.twilio.com/stun-turn) (to help peers connect when behind a firewall).
 
-That should be it!
+To start the server, run `npm start`. That should be it!
 
 ### Mirrors
 
