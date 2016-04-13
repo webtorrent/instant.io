@@ -26,6 +26,9 @@ body.drag::before
   background: rgba(255, 0, 0, 0.3)
   border: 5px red dashed
 
+a
+  text-decoration: none;
+
 a:visited
   color: black
 
@@ -62,6 +65,9 @@ input[name=torrentId]
   width: 400px
   display: inline-block
 
+#download-toggle
+  cursor: pointer
+
 .log, .speed
   font-family: monospace
   font-size: 14px
@@ -73,12 +79,13 @@ input[name=torrentId]
 
 .log p
   margin: 0
+
 .wrap
   max-width: wrap-max-width
   margin: 0 auto
+
 footer
   font-size: 0.8em
-  margin: 30px 0
 
 video, img, audio, iframe
   display: blocks
@@ -100,8 +107,54 @@ iframe
   max-width: 100%
   height: 600px
 
+.btn
+  display: inline-block
+  padding: .7em
+  margin-bottom: 0
+  font-size: .8em
+  font-weight: bold
+  text-align: center
+  white-space: nowrap
+  vertical-align: middle
+  -ms-touch-action: manipulation
+  touch-action: manipulation
+  cursor: pointer
+  -webkit-user-select: none
+  -moz-user-select: none
+  -ms-user-select: none
+  user-select: none
+  background-image: none
+  border: 1px solid transparent
+  border-radius: 5px
+  letter-spacing: .1em
+  text-transform: uppercase
+
+.btn-primary
+  color: secondary-gray
+  background-color: #FFFFFF
+  border-color: primary-gray
+
+.file-upload
+  position: relative
+  overflow: hidden
+  margin: 10px
+  width: 20em
+
+.file-upload input.upload
+  position: absolute
+  top: 0
+  right: 0
+  margin: 0
+  padding: 0
+  font-size: 20px
+  cursor: pointer
+  opacity: 0
+
 .e-glyph
   font: 300 4em/1em 'Poiret One', cursive
+
+.u-display--none
+  display: none
 
 .u-font--thin
   font-weight: 300
@@ -125,6 +178,9 @@ iframe
 .u-clear
   clear: both
 
+.u-white-space--no-wrap
+  white-space: no-wrap
+
 .u-color--primary-blue
   color: primary-blue
 
@@ -135,55 +191,13 @@ iframe
   margin: .5em
 
 .u-margin--lg
-    margin: 4em
+  margin: 4em
 
 .u-margin-top--md
   margin-top: 2em
 
+.u-margin-right--sm
+  margin-right: .5em
+
 .u-margin-bottom--lg
-    margin-bottom: 4em
-
-.btn {
-    display: inline-block
-    padding: .7em
-    margin-bottom: 0
-    font-size: .8em
-    font-weight: bold
-    text-align: center
-    white-space: nowrap
-    vertical-align: middle
-    -ms-touch-action: manipulation
-    touch-action: manipulation
-    cursor: pointer
-    -webkit-user-select: none
-    -moz-user-select: none
-    -ms-user-select: none
-    user-select: none
-    background-image: none
-    border: 1px solid transparent
-    border-radius: 5px
-    letter-spacing: .1em
-    text-transform: uppercase
-}
-
-.btn-primary {
-    color: secondary-gray
-    background-color: #FFFFFF
-    border-color: primary-gray
-}
-
-.file-upload
-    position: relative
-    overflow: hidden
-    margin: 10px
-    width: 20em
-
-.file-upload input.upload
-    position: absolute
-    top: 0
-    right: 0
-    margin: 0
-    padding: 0
-    font-size: 20px
-    cursor: pointer
-    opacity: 0
+  margin-bottom: 4em
