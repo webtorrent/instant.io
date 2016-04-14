@@ -39,16 +39,17 @@ exports.error = function error (err) {
 
 // https://gist.github.com/chrisbuttery/cf34533cbb30c95ff155
 exports.fadeOut = function fadeOut (el) {
-  el.style.opacity = 1;
+  el.style.opacity = 1
 
-  (function fade () {
+  fade()
+  function fade () {
     if ((el.style.opacity -= 0.1) < 0) {
       el.style.display = 'none'
       el.classList.add('u-display--none')
     } else {
       window.requestAnimationFrame(fade)
     }
-  })()
+  }
 }
 
 exports.fadeIn = function fadeIn (el, display) {
@@ -59,11 +60,12 @@ exports.fadeIn = function fadeIn (el, display) {
     el.classList.remove('u-display--none')
   }
 
-  (function fade () {
+  fade()
+  function fade () {
     var val = parseFloat(el.style.opacity)
     if (!((val += 0.1) > 1)) {
       el.style.opacity = val
       window.requestAnimationFrame(fade)
     }
-  })()
+  }
 }
