@@ -19,7 +19,7 @@ block body
         span Or Choose a File
         input.upload(type='file', name='upload')
 
-      div.u-margin--lg
+      div.u-margin-top--lg
         span#download-toggle(style='font-size: 1em')
           i.fa.fa-download.u-margin-right--sm
           span Download files by infohash
@@ -39,4 +39,8 @@ block footer
     p.u-text-align--center
       <a href="https://github.com/feross/webtorrent" target="_blank">WebTorrent</a> is powered by JavaScript and WebRTC.
 
-      [span Works in Chrome, Firefox, and Opera #[i(style='margin-right: .2em').fa.fa-desktop] #[i.fa.fa-mobile].  Code is available on <a href="https://github.com/feross/instant.io" target="_blank">GitHub #[i.fa.fa-github]</a> under the MIT License.]
+
+      span
+        | Works in Chrome, Firefox, and Opera #[i(style='margin-right: .2em').fa.fa-desktop] #[i.fa.fa-mobile].
+        | <span class="u-white-space--no-wrap">Code is available on <a href="https://github.com/feross/instant.io" target="_blank">GitHub #[i.fa.fa-github]</a>
+        | under the MIT License.</span>
