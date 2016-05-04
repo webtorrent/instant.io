@@ -170,7 +170,7 @@ function onTorrent (torrent) {
   function updateSpeed () {
     var progress = (100 * torrent.progress).toFixed(1)
     util.updateSpeed(
-      '<b>Peers:</b> ' + torrent.swarm.wires.length + ' ' +
+      '<b>Peers:</b> ' + torrent.numPeers + ' ' +
       '<b>Progress:</b> ' + progress + '% ' +
       '<b>Download speed:</b> ' + prettyBytes(window.client.downloadSpeed) + '/s ' +
       '<b>Upload speed:</b> ' + prettyBytes(window.client.uploadSpeed) + '/s'
@@ -208,7 +208,7 @@ function onBeforeUnload (e) {
   if (!window.client || window.client.torrents.length === 0) return
 
   var isLoneSeeder = window.client.torrents.some(function (torrent) {
-    return torrent.swarm && torrent.swarm.numPeers === 0 && torrent.progress === 1
+    return torrent.numPeers === 0 && torrent.progress === 1
   })
   if (!isLoneSeeder) return
 
