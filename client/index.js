@@ -40,7 +40,11 @@ var getClient = thunky(function (cb) {
   })
 
   function createClient (rtcConfig) {
-    var client = window.client = new WebTorrent({ rtcConfig: rtcConfig })
+    var client = window.client = new WebTorrent({
+      tracker: {
+        rtcConfig: rtcConfig
+      }
+    })
     client.on('warning', util.warning)
     client.on('error', util.error)
     cb(null, client)
