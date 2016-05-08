@@ -1,25 +1,46 @@
 extends layout
+block nav
+  nav
+    div
+      span.e-glyph #[i.fa.fa-rocket] instant.#[span.u-color--primary-blue io]
+      span.e-glyph.u-float--right <a href="https://github.com/feross/instant.io" target="_blank">#[i.fa.fa-github]</a>
 
 block body
-  main
-    h1 Instant.io - Streaming file transfer over WebTorrent
-    p Download/upload files using the <a href="http://webtorrent.io" target="_blank">WebTorrent</a> protocol (BitTorrent over WebRTC). This is a beta.
-    h2#logHeading(style='display: none') Log
-    .speed
-    .log
+  main.u-font--lato.u-text-align--center.u-clear.u-margin-top--md
+    section
+      h1.u-font--thin.u-margin-bottom--lg Streaming file transfer over the webtorrent protocol#[sup.u-font--poiret.u-color--primary-blue beta]
 
-    h2 Start seeding
-    p
-      | Drag-and-drop a file (or files) to begin sharing. Or choose a file:
-      | #{ ' ' }
-      input(type='file', name='upload', multiple)
+      div.u-color--primary-gray
+        span(style='font-size: 2em').e-glyph
+          i.fa.fa-upload
+        h1.u-font--thin.u-margin--sm Drag and drop files here to start seeding
 
-    h2 Start downloading
-    form
-      label(for='torrentId') Download from a magnet link or info hash
-      input(name='torrentId', placeholder='magnet:' required)
-      button(type='submit') Download
+      div.file-upload.btn.btn-primary
+        span Or Choose a File
+        input.upload(type='file', name='upload')
 
-    footer
-      p: small <a href="http://webtorrent.io" target="_blank">WebTorrent</a> is powered by JavaScript and WebRTC. Works in Chrome, Firefox, and Opera (desktop and Android).
-      p: small Code is available on <a href="https://github.com/feross/instant.io" target="_blank">GitHub</a> under MIT License. Run <code>localStorage.debug = '*'</code> in the console and refresh to enable verbose logs.
+      div.u-margin-top--lg
+        span#download-toggle(style='font-size: 1em')
+          i.fa.fa-download.u-margin-right--sm
+          span Download files by infohash
+
+        form#download-form.u-margin-top--md.u-display--none
+          input.form-control(name='torrentId', placeholder='magnet:' required)
+          button.btn.btn-primary(type='submit') Download
+
+      div
+        h2#logHeading.u-display--none Log
+        .speed
+        .log
+
+block footer
+  hr
+  footer.u-font--lato
+    p.u-text-align--center
+      <a href="https://github.com/feross/webtorrent" target="_blank">WebTorrent</a> is powered by JavaScript and WebRTC.
+
+
+      span
+        | Works in Chrome, Firefox, and Opera #[i(style='margin-right: .2em').fa.fa-desktop] #[i.fa.fa-mobile].
+        | <span class="u-white-space--no-wrap">Code is available on <a href="https://github.com/feross/instant.io" target="_blank">GitHub #[i.fa.fa-github]</a>
+        | under the MIT License.</span>

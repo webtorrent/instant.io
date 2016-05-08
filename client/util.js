@@ -36,3 +36,36 @@ exports.error = function error (err) {
   p.style.color = 'red'
   p.style.fontWeight = 'bold'
 }
+
+// https://gist.github.com/chrisbuttery/cf34533cbb30c95ff155
+exports.fadeOut = function fadeOut (el) {
+  el.style.opacity = 1
+
+  fade()
+  function fade () {
+    if ((el.style.opacity -= 0.1) < 0) {
+      el.style.display = 'none'
+      el.classList.add('u-display--none')
+    } else {
+      window.requestAnimationFrame(fade)
+    }
+  }
+}
+
+exports.fadeIn = function fadeIn (el, display) {
+  el.style.opacity = 0
+  el.style.display = display || 'block'
+
+  if (el.classList.contains('u-display--none')) {
+    el.classList.remove('u-display--none')
+  }
+
+  fade()
+  function fade () {
+    var val = parseFloat(el.style.opacity)
+    if (!((val += 0.1) > 1)) {
+      el.style.opacity = val
+      window.requestAnimationFrame(fade)
+    }
+  }
+}

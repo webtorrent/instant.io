@@ -65,6 +65,16 @@ uploadElement(upload, function (err, files) {
 // Seed via drag-and-drop
 dragDrop('body', onFiles)
 
+document.querySelector('#download-toggle').addEventListener('click', function (e) {
+  var el = document.querySelector('#download-form')
+
+  if (el.classList.contains('u-display--none')) {
+    util.fadeIn(el)
+  } else {
+    util.fadeOut(el)
+  }
+})
+
 // Download via input element
 document.querySelector('form').addEventListener('submit', function (e) {
   e.preventDefault()
