@@ -6,7 +6,7 @@ var express = require('express')
 var fs = require('fs')
 var http = require('http')
 var https = require('https')
-var jade = require('jade')
+var pug = require('pug')
 var parallel = require('run-parallel')
 var path = require('path')
 var twilio = require('twilio')
@@ -45,9 +45,9 @@ unlimited()
 
 // Templating
 app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'jade')
+app.set('view engine', 'pug')
 app.set('x-powered-by', false)
-app.engine('jade', jade.renderFile)
+app.engine('pug', pug.renderFile)
 
 app.use(compress())
 
