@@ -3,9 +3,9 @@
   "description": "Secure, anonymous, streaming file transfer",
   "version": "1.0.0",
   "author": {
-    "name": "Feross Aboukhadijeh",
-    "email": "feross@feross.org",
-    "url": "http://feross.org/"
+    "name": "WebTorrent, LLC",
+    "email": "feross@webtorrent.io",
+    "url": "https://webtorrent.io"
   },
   "bugs": {
     "url": "https://github.com/feross/instant.io/issues"

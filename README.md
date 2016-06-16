@@ -44,5 +44,5 @@ To start the server, run `npm start`. That should be it!
 
 ## License
 
-MIT. Copyright (c) [Feross Aboukhadijeh](http://feross.org).
+MIT. Copyright (c) [WebTorrent, LLC](https://webtorrent.io).
 
