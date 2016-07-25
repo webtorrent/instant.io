@@ -21,6 +21,7 @@
     "express": "^4.8.5",
     "listify": "^1.0.0",
     "nib": "^1.0.3",
+    "node-qr-image": "0.0.1",
     "pretty-bytes": "^3.0.0",
     "pug": "^2.0.0-beta3",
     "run-parallel": "^1.0.0",

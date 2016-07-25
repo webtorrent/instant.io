@@ -9,6 +9,7 @@ var thunky = require('thunky')
 var uploadElement = require('upload-element')
 var WebTorrent = require('webtorrent')
 var xhr = require('xhr')
+var qr = require('node-qr-image')
 
 var util = require('./util')
 
@@ -169,6 +170,10 @@ function onTorrent (torrent) {
     '<a href="/#' + torrent.infoHash + '" onclick="prompt(\'Share this link with anyone you want to download this torrent:\', this.href);return false;">[Share link]</a> ' +
     '<a href="' + torrent.magnetURI + '" target="_blank">[Magnet URI]</a> ' +
     '<a href="' + torrent.torrentFileBlobURL + '" target="_blank" download="' + torrentFileName + '">[Download .torrent]</a>'
+  )
+  
+  util.log(
+    'QR Code: <img class="qr" src="data:image/png;base64,' + qr.imageSync(location.href + '#' + torrent.infoHash, { type: 'png' }).toString('base64') + '">'
   )
 
   function updateSpeed () {
