@@ -1,7 +1,6 @@
 var createTorrent = require('create-torrent')
 var debug = require('debug')('instant.io')
 var dragDrop = require('drag-drop')
-var listify = require('listify')
 var path = require('path')
 var prettyBytes = require('pretty-bytes')
 var throttle = require('throttleit')
@@ -78,9 +77,6 @@ function onHashChange () {
   var hash = decodeURIComponent(window.location.hash.substring(1)).trim()
   if (hash !== '') downloadTorrent(hash)
 }
-
-// Warn when leaving and there are no other peers
-window.addEventListener('beforeunload', onBeforeUnload)
 
 // Register a protocol handler for "magnet:" (will prompt the user)
 navigator.registerProtocolHandler('magnet', window.location.origin + '#%s', 'Instant.io')
@@ -204,28 +200,4 @@ function onTorrent (torrent) {
       util.log(a)
     })
   })
-}
-
-function onBeforeUnload (e) {
-  if (!e) e = window.event
-
-  if (!window.client || window.client.torrents.length === 0) return
-
-  var isLoneSeeder = window.client.torrents.some(function (torrent) {
-    return torrent.numPeers === 0 && torrent.progress === 1
-  })
-  if (!isLoneSeeder) return
-
-  var names = listify(window.client.torrents.map(function (torrent) {
-    return '"' + (torrent.name || torrent.infoHash) + '"'
-  }))
-
-  var theseTorrents = window.client.torrents.length >= 2
-    ? 'these torrents'
-    : 'this torrent'
-  var message = 'You are the only person sharing ' + names + '. ' +
-    'Consider leaving this page open to continue sharing ' + theseTorrents + '.'
-
-  if (e) e.returnValue = message // IE, Firefox
-  return message // Safari, Chrome
 }
