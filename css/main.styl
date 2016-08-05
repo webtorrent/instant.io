@@ -1,3 +1,6 @@
+$color-primary = #F8283B
+$color-secondary = #7D868C
+
 *, *:after, *:before
   box-sizing: border-box
 
@@ -15,11 +18,39 @@ body.drag::before
   left: 0
   bottom: 0
   right: 0
-  background: rgba(255, 0, 0, 0.3)
-  border: 5px red dashed
+  background: rgba($color-primary, 0.3)
+  border: 5px $color-primary dashed
 
 main
-  margin: 20px
+  max-width: 800px
+  margin: 0 auto
+  padding: 20px 20px 0
+
+.logo
+  display: inline-block
+  position: relative
+  margin-bottom: 10px
+
+.logo:after
+  display: inline-block
+  position: absolute
+  top: 0
+  right: -32px
+  font-size: 11px
+  color: #BBB
+  content: 'BETA'
+
+.logo img
+  margin: 0
+  height: 50px
+
+.subtitle
+  margin-top: 0
+  margin-bottom: 20px
+  color: $color-secondary
+
+a
+  color: $color-primary
 
 label
   margin-right: 10px
@@ -42,8 +73,9 @@ input[name=torrentId]
   margin: 0
 
 footer
-  font-size: 0.8em
   margin: 30px 0
+  font-size: 0.8em
+  color: $color-secondary
 
 video, img, audio, iframe
   display: block
