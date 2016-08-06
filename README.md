@@ -1,9 +1,17 @@
-# Instant.io [![travis][travis-image]][travis-url]
+<h1 align="center">
 
-[travis-image]: https://img.shields.io/travis/feross/instant.io/master.svg
-[travis-url]: https://travis-ci.org/feross/instant.io
+  <a href="https://webtorrent.io"><img src="https://instant.io/logo.svg" alt="Instant.io" width="400"></a>
+  <br>
+</h1>
 
-### Streaming file transfer over WebTorrent
+<h4 align="center">Streaming file transfer over WebTorrent (torrents on the web)</h4>
+
+<p align="center">
+  <a href="https://travis-ci.org/feross/instant.io">
+    <img src="https://img.shields.io/travis/feross/instant.io/master.svg"
+         alt="Travis Build">
+  </a>
+</p>
 
 Download/upload files using the [WebTorrent](http://webtorrent.io) protocol (BitTorrent
 over WebRTC). This is a beta.
