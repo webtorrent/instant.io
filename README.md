@@ -45,7 +45,7 @@ Copy [`secret/index-sample.js`](https://github.com/feross/instant.io/blob/master
 
 To start the server, run `npm start`. That should be it!
 
-### Mirrors
+## Mirrors
 
 - http://instant.rom1504.fr/
 - https://instant-io.herokuapp.com/
