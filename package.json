@@ -25,7 +25,7 @@
     "stylus": "^0.54.0",
     "throttleit": "^1.0.0",
     "thunky": "^1.0.0",
-    "twilio": "^2.1.0",
+    "twilio": "^2.9.2",
     "unlimited": "^1.1.0",
     "upload-element": "^1.0.1",
     "webtorrent": "0.x",
