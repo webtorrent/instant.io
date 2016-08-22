@@ -184,7 +184,9 @@ function onTorrent (torrent) {
 
   torrent.files.forEach(function (file) {
     // append file
-    file.appendTo(util.logElem, function (err, elem) {
+    file.appendTo(util.logElem, {
+      maxBlobLength: 2 * 1000 * 1000 * 1000 // 2 GB
+    }, function (err, elem) {
       if (err) return util.error(err)
     })
 
