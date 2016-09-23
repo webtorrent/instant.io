@@ -160,7 +160,7 @@ app.get('*', function (req, res) {
 app.use(function (err, req, res, next) {
   error(err)
   res.status(500).render('error', {
-    title: '500 Server Error - Instant.io',
+    title: '500 Internal Server Error - Instant.io',
     message: err.message || err
   })
 })
