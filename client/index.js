@@ -2,7 +2,7 @@ var createTorrent = require('create-torrent')
 var debug = require('debug')('instant.io')
 var dragDrop = require('drag-drop')
 var path = require('path')
-var prettyBytes = require('pretty-bytes')
+var prettierBytes = require('prettier-bytes')
 var throttle = require('throttleit')
 var thunky = require('thunky')
 var uploadElement = require('upload-element')
@@ -157,7 +157,7 @@ function onTorrent (torrent) {
 
   util.log('"' + torrentFileName + '" contains ' + torrent.files.length + ' files:')
   torrent.files.forEach(function (file) {
-    util.log('&nbsp;&nbsp;- ' + file.name + ' (' + prettyBytes(file.length) + ')')
+    util.log('&nbsp;&nbsp;- ' + file.name + ' (' + prettierBytes(file.length) + ')')
   })
 
   util.log(
@@ -172,8 +172,8 @@ function onTorrent (torrent) {
     util.updateSpeed(
       '<b>Peers:</b> ' + torrent.numPeers + ' ' +
       '<b>Progress:</b> ' + progress + '% ' +
-      '<b>Download speed:</b> ' + prettyBytes(window.client.downloadSpeed) + '/s ' +
-      '<b>Upload speed:</b> ' + prettyBytes(window.client.uploadSpeed) + '/s'
+      '<b>Download speed:</b> ' + prettierBytes(window.client.downloadSpeed) + '/s ' +
+      '<b>Upload speed:</b> ' + prettierBytes(window.client.uploadSpeed) + '/s'
     )
   }
 
