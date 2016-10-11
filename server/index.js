@@ -24,7 +24,9 @@ var CORS_WHITELIST = [
   'http://file.pizza',
   'https://file.pizza',
   'http://webtorrent.io',
-  'https://webtorrent.io'
+  'https://webtorrent.io',
+  'http://rollcall.audio',
+  'https://rollcall.audio'
 ]
 
 var secret, secretKey, secretCert
