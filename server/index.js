@@ -16,19 +16,29 @@ var url = require('url')
 var config = require('../config')
 
 var CORS_WHITELIST = [
+  // Instant.io mirrors
   'http://instant-io.herokuapp.com',
   'https://instant-io.herokuapp.com',
   'http://instant.rom1504.fr',
   'https://instant.rom1504.fr',
-  'http://whiteboard.webtorrent.io',
-  'http://file.pizza',
-  'https://file.pizza',
+
+  // Official WebTorrent site
   'http://webtorrent.io',
   'https://webtorrent.io',
+
+  // Favor to friends :)
+  'http://file.pizza',
+  'https://file.pizza',
+
+  // @mikeal's experiments
   'http://rollcall.audio',
   'https://rollcall.audio',
   'http://bongbong.chat',
-  'https://bongbong.chat'
+  'https://bongbong.chat',
+  'http://droppub.com',
+  'https://droppub.com',
+  'http://dropub.com',
+  'https://dropub.com'
 ]
 
 var secret, secretKey, secretCert
