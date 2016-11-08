@@ -26,7 +26,9 @@ var CORS_WHITELIST = [
   'http://webtorrent.io',
   'https://webtorrent.io',
   'http://rollcall.audio',
-  'https://rollcall.audio'
+  'https://rollcall.audio',
+  'http://bongbong.chat',
+  'https://bongbong.chat'
 ]
 
 var secret, secretKey, secretCert
