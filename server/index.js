@@ -29,16 +29,8 @@ var CORS_WHITELIST = [
   // Favor to friends :)
   'http://file.pizza',
   'https://file.pizza',
-
-  // @mikeal's experiments
   'http://rollcall.audio',
-  'https://rollcall.audio',
-  'http://bongbong.chat',
-  'https://bongbong.chat',
-  'http://droppub.com',
-  'https://droppub.com',
-  'http://dropub.com',
-  'https://dropub.com'
+  'https://rollcall.audio'
 ]
 
 var secret, secretKey, secretCert
