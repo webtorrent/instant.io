@@ -1,6 +1,7 @@
 var createTorrent = require('create-torrent')
 var debug = require('debug')('instant.io')
 var dragDrop = require('drag-drop')
+var moment = require('moment')
 var path = require('path')
 var prettierBytes = require('prettier-bytes')
 var throttle = require('throttleit')
@@ -169,11 +170,21 @@ function onTorrent (torrent) {
 
   function updateSpeed () {
     var progress = (100 * torrent.progress).toFixed(1)
+
+    var remaining
+    if (torrent.done) {
+      remaining = 'Done.'
+    } else {
+      remaining = moment.duration(torrent.timeRemaining / 1000, 'seconds').humanize()
+      remaining = remaining[0].toUpperCase() + remaining.substring(1) + ' remaining.'
+    }
+
     util.updateSpeed(
       '<b>Peers:</b> ' + torrent.numPeers + ' ' +
       '<b>Progress:</b> ' + progress + '% ' +
       '<b>Download speed:</b> ' + prettierBytes(window.client.downloadSpeed) + '/s ' +
-      '<b>Upload speed:</b> ' + prettierBytes(window.client.uploadSpeed) + '/s'
+      '<b>Upload speed:</b> ' + prettierBytes(window.client.uploadSpeed) + '/s ' +
+      '<b>ETA:</b> ' + remaining
     )
   }
 
