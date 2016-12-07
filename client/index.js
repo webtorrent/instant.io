@@ -20,70 +20,68 @@ global.WEBTORRENT_ANNOUNCE = createTorrent.announceList
     return url.indexOf('wss://') === 0 || url.indexOf('ws://') === 0
   })
 
-if (!WebTorrent.WEBRTC_SUPPORT) {
-  util.error('This browser is unsupported. Please use a browser with WebRTC support.')
-}
-
 var getClient = thunky(function (cb) {
-  getRtcConfig('/rtcConfig', function (err, rtcConfig) {
-    if (err && window.location.hostname === 'instant.io') {
-      if (err) util.error(err)
-      createClient(rtcConfig)
-    } else if (err) {
-      getRtcConfig('https://instant.io/rtcConfig', function (err, rtcConfig) {
-        if (err) util.error(err)
-        createClient(rtcConfig)
-      })
-    } else {
-      createClient(rtcConfig)
-    }
-  })
-
-  function createClient (rtcConfig) {
-    var client = window.client = new WebTorrent({
+  getRtcConfig(function (err, rtcConfig) {
+    if (err) util.error(err)
+    var client = new WebTorrent({
       tracker: {
         rtcConfig: rtcConfig
       }
     })
+    window.client = client // for easier debugging
     client.on('warning', util.warning)
     client.on('error', util.error)
     cb(null, client)
+  })
+})
+
+init()
+
+function init () {
+  if (!WebTorrent.WEBRTC_SUPPORT) {
+    util.error('This browser is unsupported. Please use a browser with WebRTC support.')
   }
-})
 
-// For performance, create the client immediately
-getClient(function () {})
+  // For performance, create the client immediately
+  getClient(function () {})
 
-// Seed via upload input element
-var upload = document.querySelector('input[name=upload]')
-uploadElement(upload, function (err, files) {
-  if (err) return util.error(err)
-  files = files.map(function (file) { return file.file })
-  onFiles(files)
-})
+  // Seed via upload input element
+  var upload = document.querySelector('input[name=upload]')
+  if (upload) {
+    uploadElement(upload, function (err, files) {
+      if (err) return util.error(err)
+      files = files.map(function (file) { return file.file })
+      onFiles(files)
+    })
+  }
 
-// Seed via drag-and-drop
-dragDrop('body', onFiles)
+  // Seed via drag-and-drop
+  dragDrop('body', onFiles)
 
-// Download via input element
-document.querySelector('form').addEventListener('submit', function (e) {
-  e.preventDefault()
-  downloadTorrent(document.querySelector('form input[name=torrentId]').value.trim())
-})
+  // Download via input element
+  var form = document.querySelector('form')
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault()
+      downloadTorrent(document.querySelector('form input[name=torrentId]').value.trim())
+    })
+  }
 
-// Download by URL hash
-onHashChange()
-window.addEventListener('hashchange', onHashChange)
-function onHashChange () {
-  var hash = decodeURIComponent(window.location.hash.substring(1)).trim()
-  if (hash !== '') downloadTorrent(hash)
+  // Download by URL hash
+  onHashChange()
+  window.addEventListener('hashchange', onHashChange)
+  function onHashChange () {
+    var hash = decodeURIComponent(window.location.hash.substring(1)).trim()
+    if (hash !== '') downloadTorrent(hash)
+  }
+
+  // Register a protocol handler for "magnet:" (will prompt the user)
+  navigator.registerProtocolHandler('magnet', window.location.origin + '#%s', 'Instant.io')
 }
 
-// Register a protocol handler for "magnet:" (will prompt the user)
-navigator.registerProtocolHandler('magnet', window.location.origin + '#%s', 'Instant.io')
-
-function getRtcConfig (url, cb) {
-  xhr(url, function (err, res) {
+function getRtcConfig (cb) {
+  // WARNING: This is *NOT* a public endpoint. Do not depend on it in your app.
+  xhr('/_rtcConfig', function (err, res) {
     if (err || res.statusCode !== 200) {
       cb(new Error('Could not get WebRTC config from server. Using default (without TURN).'))
     } else {
@@ -152,6 +150,7 @@ function onTorrent (torrent) {
   torrent.on('warning', util.warning)
   torrent.on('error', util.error)
 
+  var upload = document.querySelector('input[name=upload]')
   upload.value = upload.defaultValue // reset upload element
 
   var torrentFileName = path.basename(torrent.name, path.extname(torrent.name)) + '.torrent'
