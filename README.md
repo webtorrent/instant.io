@@ -50,6 +50,13 @@ To start the server, run `npm start`. That should be it!
 - http://instant.rom1504.fr/
 - https://instant-io.herokuapp.com/
 
+## Tips
+
+1. Create a shareable link by adding a torrent infohash or magnet link to the end
+of the URL. For example: `https://instant.io#INFO_HASH` or `https://instant.io/#MAGNET_LINK`.
+
+2. You can add multiple torrents in the same browser window.
+
 ## License
 
 MIT. Copyright (c) [WebTorrent, LLC](https://webtorrent.io).
