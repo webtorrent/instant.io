@@ -18,7 +18,11 @@ var config = require('../config')
 var CORS_WHITELIST = [
   // Official WebTorrent site
   'http://webtorrent.io',
-  'https://webtorrent.io'
+  'https://webtorrent.io',
+
+  // Favor to friends :)
+  'http://rollcall.audio',
+  'https://rollcall.audio'
 ]
 
 var secret, secretKey, secretCert
