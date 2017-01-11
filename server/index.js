@@ -116,12 +116,14 @@ function updateIceServers () {
         var urls = server.urls || server.url
         return urls && !/^stun:/.test(urls)
       })
-    iceServers.unshift({ url: 'stun:23.21.150.121' })
+    iceServers.unshift({ urls: 'stun:23.21.150.121' })
 
     // Support new spec (`RTCIceServer.url` was renamed to `RTCIceServer.urls`)
-    iceServers = iceServers.map(function (server) {
-      if (server.urls === undefined) server.urls = server.url
-      return server
+    iceServers.forEach(function (server) {
+      if (server.url != null) {
+        server.urls = server.url
+        delete server.url
+      }
     })
   })
 }
