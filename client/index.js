@@ -84,15 +84,15 @@ function getRtcConfig (cb) {
   get.concat({
     url: '/_rtcConfig',
     timeout: 5000
-  }, function (err, res) {
+  }, function (err, res, data) {
     if (err || res.statusCode !== 200) {
       cb(new Error('Could not get WebRTC config from server. Using default (without TURN).'))
     } else {
       var rtcConfig
       try {
-        rtcConfig = JSON.parse(res.body)
+        rtcConfig = JSON.parse(data)
       } catch (err) {
-        return cb(new Error('Got invalid WebRTC config from server: ' + res.body))
+        return cb(new Error('Got invalid WebRTC config from server: ' + data))
       }
       debug('got rtc config: %o', rtcConfig)
       cb(null, rtcConfig)
