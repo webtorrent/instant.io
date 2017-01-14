@@ -39,6 +39,9 @@ app.set('view engine', 'pug')
 app.set('x-powered-by', false)
 app.engine('pug', pug.renderFile)
 
+// Pretty print JSON
+app.set('json spaces', 2)
+
 app.use(compress())
 
 app.use(function (req, res, next) {
