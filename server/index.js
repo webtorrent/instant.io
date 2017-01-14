@@ -31,17 +31,21 @@ var server = http.createServer(app)
 
 unlimited()
 
-// Templating
 // Trust "X-Forwarded-For" and "X-Forwarded-Proto" nginx headers
 app.enable('trust proxy')
+
+// Disable "powered by express" header
+app.set('x-powered-by', false)
+
+// Use pug for templates
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
-app.set('x-powered-by', false)
 app.engine('pug', pug.renderFile)
 
 // Pretty print JSON
 app.set('json spaces', 2)
 
+// Use GZIP
 app.use(compress())
 
 app.use(function (req, res, next) {
