@@ -22,7 +22,6 @@
     "moment": "^2.15.1",
     "prettier-bytes": "^1.0.3",
     "pug": "^2.0.0-beta3",
-    "run-parallel": "^1.0.0",
     "simple-get": "^2.4.0",
     "stylus": "^0.54.0",
     "throttleit": "^1.0.0",

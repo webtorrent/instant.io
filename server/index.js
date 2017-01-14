@@ -1,13 +1,9 @@
 var compress = require('compression')
 var cors = require('cors')
-var debug = require('debug')('instant')
 var downgrade = require('downgrade')
 var express = require('express')
-var fs = require('fs')
 var http = require('http')
-var https = require('https')
 var pug = require('pug')
-var parallel = require('run-parallel')
 var path = require('path')
 var twilio = require('twilio')
 var unlimited = require('unlimited')
@@ -25,19 +21,13 @@ var CORS_WHITELIST = [
   'https://rollcall.audio'
 ]
 
-var secret, secretKey, secretCert
+var secret
 try {
   secret = require('../secret')
-  secretKey = fs.readFileSync(path.join(__dirname, '../secret/instant.io.key'))
-  secretCert = fs.readFileSync(path.join(__dirname, '../secret/instant.io.chained.crt'))
 } catch (err) {}
 
 var app = express()
-var httpServer = http.createServer(app)
-var httpsServer
-if (secretKey && secretCert) {
-  httpsServer = https.createServer({ key: secretKey, cert: secretCert }, app)
-}
+var server = http.createServer(app)
 
 unlimited()
 
@@ -166,21 +156,8 @@ app.use(function (err, req, res, next) {
   })
 })
 
-var tasks = [
-  function (cb) {
-    httpServer.listen(config.ports.http, config.host, cb)
-  }
-]
-
-if (httpsServer) {
-  tasks.push(function (cb) {
-    httpsServer.listen(config.ports.https, config.host, cb)
-  })
-}
-
-parallel(tasks, function (err) {
-  if (err) throw err
-  debug('listening on port %s', JSON.stringify(config.ports))
+server.listen(config.port, function () {
+  console.log('listening on port %s', config.port)
   downgrade()
 })
 
