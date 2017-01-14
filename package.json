@@ -23,14 +23,14 @@
     "prettier-bytes": "^1.0.3",
     "pug": "^2.0.0-beta3",
     "run-parallel": "^1.0.0",
+    "simple-get": "^2.4.0",
     "stylus": "^0.54.0",
     "throttleit": "^1.0.0",
     "thunky": "^1.0.0",
     "twilio": "^2.9.2",
     "unlimited": "^1.1.0",
     "upload-element": "^1.0.1",
-    "webtorrent": "0.x",
-    "xhr": "^2.0.0"
+    "webtorrent": "0.x"
   },
   "devDependencies": {
     "nodemon": "^1.2.1",

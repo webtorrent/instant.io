@@ -1,6 +1,7 @@
 var createTorrent = require('create-torrent')
 var debug = require('debug')('instant.io')
 var dragDrop = require('drag-drop')
+var get = require('simple-get')
 var moment = require('moment')
 var path = require('path')
 var prettierBytes = require('prettier-bytes')
@@ -8,7 +9,6 @@ var throttle = require('throttleit')
 var thunky = require('thunky')
 var uploadElement = require('upload-element')
 var WebTorrent = require('webtorrent')
-var xhr = require('xhr')
 
 var util = require('./util')
 
@@ -81,7 +81,10 @@ function init () {
 
 function getRtcConfig (cb) {
   // WARNING: This is *NOT* a public endpoint. Do not depend on it in your app.
-  xhr('/_rtcConfig', function (err, res) {
+  get({
+    url: '/_rtcConfig',
+    timeout: 5000
+  }, function (err, res) {
     if (err || res.statusCode !== 200) {
       cb(new Error('Could not get WebRTC config from server. Using default (without TURN).'))
     } else {
