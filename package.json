@@ -11,7 +11,7 @@
     "url": "https://github.com/feross/instant.io/issues"
   },
   "dependencies": {
-    "browserify": "^13.0.0",
+    "browserify": "^14.0.0",
     "compression": "^1.0.9",
     "cors": "^2.7.1",
     "create-torrent": "^3.22.0",
