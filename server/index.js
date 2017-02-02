@@ -114,19 +114,13 @@ function updateIceServers () {
       return error(new Error('twilio response ' + token + ' missing ice_servers'))
     }
 
-    iceServers = token.ice_servers
-      .filter(function (server) {
-        var urls = server.urls || server.url
-        return urls && !/^stun:/.test(urls)
-      })
-    iceServers.unshift({ urls: 'stun:stun.l.google.com:19305' })
-
     // Support new spec (`RTCIceServer.url` was renamed to `RTCIceServer.urls`)
-    iceServers.forEach(function (server) {
+    iceServers = token.ice_servers.map(function (server) {
       if (server.url != null) {
         server.urls = server.url
         delete server.url
       }
+      return server
     })
   })
 }
