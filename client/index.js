@@ -20,6 +20,10 @@ global.WEBTORRENT_ANNOUNCE = createTorrent.announceList
     return url.indexOf('wss://') === 0 || url.indexOf('ws://') === 0
   })
 
+var DISALLOWED = [
+  '6feb54706f41f459f819c0ae5b560a21ebfead8f'
+]
+
 var getClient = thunky(function (cb) {
   getRtcConfig(function (err, rtcConfig) {
     if (err) util.error(err)
@@ -123,11 +127,19 @@ function isNotTorrentFile (file) {
 }
 
 function downloadTorrent (torrentId) {
-  util.log('Downloading torrent from ' + torrentId)
-  getClient(function (err, client) {
-    if (err) return util.error(err)
-    client.add(torrentId, onTorrent)
+  var disallowed = DISALLOWED.some(function (infoHash) {
+    return torrentId.indexOf(infoHash) >= 0
   })
+
+  if (disallowed) {
+    util.log('File not found ' + torrentId)
+  } else {
+    util.log('Downloading torrent from ' + torrentId)
+    getClient(function (err, client) {
+      if (err) return util.error(err)
+      client.add(torrentId, onTorrent)
+    })
+  }
 }
 
 function downloadTorrentFile (file) {
