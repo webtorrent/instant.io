@@ -7,10 +7,8 @@
 <h4 align="center">Streaming file transfer over WebTorrent (torrents on the web)</h4>
 
 <p align="center">
-  <a href="https://travis-ci.org/feross/instant.io">
-    <img src="https://img.shields.io/travis/feross/instant.io/master.svg"
-         alt="Travis Build">
-  </a>
+  <a href="https://travis-ci.org/feross/instant.io"><img src="https://img.shields.io/travis/feross/instant.io/master.svg" alt="travis"></a>
+  <a href="https://standardjs.com"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg" alt="javascript style guide"></a>
 </p>
 
 Download/upload files using the [WebTorrent](http://webtorrent.io) protocol (BitTorrent
