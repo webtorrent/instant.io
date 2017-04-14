@@ -8,7 +8,7 @@
     "url": "https://webtorrent.io"
   },
   "bugs": {
-    "url": "https://github.com/feross/instant.io/issues"
+    "url": "https://github.com/webtorrent/instant.io/issues"
   },
   "dependencies": {
     "browserify": "^14.0.0",
@@ -36,7 +36,7 @@
     "standard": "*",
     "watchify": "^3.1.0"
   },
-  "homepage": "http://feross.org",
+  "homepage": "https://instant.io",
   "keywords": [
     "data channel",
     "file transfer",
@@ -48,7 +48,7 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git://github.com/feross/instant.io.git"
+    "url": "git://github.com/webtorrent/instant.io.git"
   },
   "scripts": {
     "build": "npm run build-css && npm run build-js",
