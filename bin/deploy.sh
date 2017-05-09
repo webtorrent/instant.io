@@ -1,6 +1,6 @@
 #!/bin/bash
 # Update code and restart server (run from app server)
-trap 'exit' ERR
+set -e
 
 if [ -d "/home/feross/www/instant.io-build" ]; then
   echo "ERROR: Build folder already exists. Is another build in progress?"
