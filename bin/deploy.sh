@@ -11,8 +11,9 @@ cp -R /home/feross/www/instant.io /home/feross/www/instant.io-build
 
 cd /home/feross/www/instant.io-build && git pull
 cd /home/feross/www/instant.io-build && rm -rf node_modules
-cd /home/feross/www/instant.io-build && npm install --production --quiet
+cd /home/feross/www/instant.io-build && npm install
 cd /home/feross/www/instant.io-build && npm run build
+cd /home/feross/www/instant.io-build && npm prune --production
 
 sudo supervisorctl stop instant
 

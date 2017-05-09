@@ -11,7 +11,6 @@
     "url": "https://github.com/webtorrent/instant.io/issues"
   },
   "dependencies": {
-    "browserify": "^14.0.0",
     "compression": "^1.0.9",
     "cors": "^2.7.1",
     "create-torrent": "^3.22.0",
@@ -23,7 +22,6 @@
     "prettier-bytes": "^1.0.3",
     "pug": "^2.0.0-beta11",
     "simple-get": "^2.4.0",
-    "stylus": "^0.54.0",
     "throttleit": "^1.0.0",
     "thunky": "^1.0.0",
     "twilio": "^2.9.2",
@@ -32,8 +30,10 @@
     "webtorrent": "0.x"
   },
   "devDependencies": {
+    "browserify": "^14.0.0",
     "nodemon": "^1.2.1",
     "standard": "*",
+    "stylus": "^0.54.0",
     "watchify": "^3.1.0"
   },
   "homepage": "https://instant.io",
