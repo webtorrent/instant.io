@@ -10,13 +10,3 @@ html(lang='en')
   body(class=locals.cls || '')
     block body
     script(src='/bundle.js')
-
-    //- Google Analytics
-    script.
-      window.ga = window.ga || function () {
-        (ga.q = ga.q || []).push(arguments)
-      }
-      ga.l = +new Date
-      ga('create', 'UA-3898076-18', 'auto')
-      ga('send', 'pageview')
-    script(async, src='//www.google-analytics.com/analytics.js')
