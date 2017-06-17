@@ -109,9 +109,9 @@ try {
 
 function updateIceServers () {
   twilioClient.tokens.create({}, function (err, token) {
-    if (err) return error(err)
+    if (err) return console.error(err.message || err)
     if (!token.ice_servers) {
-      return error(new Error('twilio response ' + token + ' missing ice_servers'))
+      return console.error('twilio response ' + token + ' missing ice_servers')
     }
 
     // Support new spec (`RTCIceServer.url` was renamed to `RTCIceServer.urls`)
@@ -143,6 +143,10 @@ app.get('/_rtcConfig', cors({
   else res.send({ iceServers: iceServers })
 })
 
+app.get('/500', (req, res, next) => {
+  next(new Error('Manually visited /500'))
+})
+
 app.get('*', function (req, res) {
   res.status(404).render('error', {
     title: '404 Page Not Found - Instant.io',
@@ -152,8 +156,9 @@ app.get('*', function (req, res) {
 
 // error handling middleware
 app.use(function (err, req, res, next) {
-  error(err)
-  res.status(500).render('error', {
+  console.error(err.stack)
+  const code = typeof err.code === 'number' ? err.code : 500
+  res.status(code).render('error', {
     title: '500 Internal Server Error - Instant.io',
     message: err.message || err
   })
@@ -163,7 +168,3 @@ server.listen(config.port, function () {
   console.log('listening on port %s', config.port)
   downgrade()
 })
-
-function error (err) {
-  console.error(err.stack || err.message || err)
-}
