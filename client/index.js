@@ -80,7 +80,9 @@ function init () {
   }
 
   // Register a protocol handler for "magnet:" (will prompt the user)
-  navigator.registerProtocolHandler('magnet', window.location.origin + '#%s', 'Instant.io')
+  if ('registerProtocolHandler' in navigator) {
+    navigator.registerProtocolHandler('magnet', window.location.origin + '#%s', 'Instant.io')
+  }
 }
 
 function getRtcConfig (cb) {
