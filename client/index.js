@@ -186,7 +186,7 @@ function onTorrent (torrent) {
     '<a id="show-qr" href="#">[Show QR Code]</a>'
   )
 
-  document.getElementById('show-qr').onclick = function(e){
+  document.getElementById('show-qr').onclick = function (e) {
     e.preventDefault()
     this.outerHTML = '<br />' + kjua({
       text: window.location.href + '#' + torrent.magnetURI
