@@ -9,6 +9,7 @@ var throttle = require('throttleit')
 var thunky = require('thunky')
 var uploadElement = require('upload-element')
 var WebTorrent = require('webtorrent')
+var kjua = require('kjua')
 
 var util = require('./util')
 
@@ -181,8 +182,16 @@ function onTorrent (torrent) {
     'Torrent info hash: ' + torrent.infoHash + ' ' +
     '<a href="/#' + torrent.infoHash + '" onclick="prompt(\'Share this link with anyone you want to download this torrent:\', this.href);return false;">[Share link]</a> ' +
     '<a href="' + torrent.magnetURI + '" target="_blank">[Magnet URI]</a> ' +
-    '<a href="' + torrent.torrentFileBlobURL + '" target="_blank" download="' + torrentFileName + '">[Download .torrent]</a>'
+    '<a href="' + torrent.torrentFileBlobURL + '" target="_blank" download="' + torrentFileName + '">[Download .torrent]</a>' +
+    '<a id="show-qr" href="#">[Show QR Code]</a>'
   )
+
+  document.getElementById('show-qr').onclick = function(e){
+    e.preventDefault()
+    this.outerHTML = '<br />' + kjua({
+      text: window.location.href + '#' + torrent.magnetURI
+    }).outerHTML
+  }
 
   function updateSpeed () {
     var progress = (100 * torrent.progress).toFixed(1)

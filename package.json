@@ -18,6 +18,7 @@
     "downgrade": "^1.0.0",
     "drag-drop": "^2.0.0",
     "express": "^4.8.5",
+    "kjua": "0.1.2",
     "moment": "^2.15.1",
     "prettier-bytes": "^1.0.3",
     "pug": "^2.0.0-beta11",
