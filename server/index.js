@@ -18,7 +18,11 @@ var CORS_WHITELIST = [
 
   // Favor to friends :)
   'http://rollcall.audio',
-  'https://rollcall.audio'
+  'https://rollcall.audio',
+
+  // Conference talk
+  'http://nordicjs.fun',
+  'https://nordicjs.fun'
 ]
 
 var secret
