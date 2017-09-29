@@ -21,6 +21,8 @@ console and refresh to get detailed log output.
 
 ## Install
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/webtorrent/instant.io.svg)](https://greenkeeper.io/)
+
 If you just want to do file transfer on your site, or fetch/seed files over WebTorrent, then there's no need to run a copy of instant.io on your own server. Just use the WebTorrent script directly. You can learn more at https://webtorrent.io.
 
 The client-side code that instant.io uses is [here](https://github.com/webtorrent/instant.io/blob/master/client/index.js).
