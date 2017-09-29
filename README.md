@@ -9,6 +9,7 @@
 <p align="center">
   <a href="https://travis-ci.org/webtorrent/instant.io"><img src="https://img.shields.io/travis/webtorrent/instant.io/master.svg" alt="travis"></a>
   <a href="https://standardjs.com"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg" alt="javascript style guide"></a>
+  <a href="https://greenkeeper.io/"><img src="https://badges.greenkeeper.io/webtorrent/instant.io.svg" alt="Greenkeeper badge"></a>
 </p>
 
 Download/upload files using the [WebTorrent](http://webtorrent.io) protocol (BitTorrent
@@ -20,8 +21,6 @@ Firefox, Opera (desktop and Android). Run <code>localStorage.debug = '*'</code> 
 console and refresh to get detailed log output.
 
 ## Install
-
-[![Greenkeeper badge](https://badges.greenkeeper.io/webtorrent/instant.io.svg)](https://greenkeeper.io/)
 
 If you just want to do file transfer on your site, or fetch/seed files over WebTorrent, then there's no need to run a copy of instant.io on your own server. Just use the WebTorrent script directly. You can learn more at https://webtorrent.io.
 
