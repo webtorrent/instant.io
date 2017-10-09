@@ -105,7 +105,7 @@ app.get('/', function (req, res) {
   })
 })
 
-// Fetch new ice_servers from twilio token regularly
+// Fetch new iceServers from twilio token regularly
 var iceServers
 var twilioClient
 try {
@@ -115,12 +115,12 @@ try {
 function updateIceServers () {
   twilioClient.tokens.create({}, function (err, token) {
     if (err) return console.error(err.message || err)
-    if (!token.ice_servers) {
-      return console.error('twilio response ' + util.inspect(token) + ' missing ice_servers')
+    if (!token.iceServers) {
+      return console.error('twilio response ' + util.inspect(token) + ' missing iceServers')
     }
 
     // Support new spec (`RTCIceServer.url` was renamed to `RTCIceServer.urls`)
-    iceServers = token.ice_servers.map(function (server) {
+    iceServers = token.iceServers.map(function (server) {
       if (server.url != null) {
         server.urls = server.url
         delete server.url
