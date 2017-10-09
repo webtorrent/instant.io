@@ -144,8 +144,11 @@ app.get('/_rtcConfig', cors({
     cb(null, allowed)
   }
 }), function (req, res) {
-  if (!iceServers) res.status(404).send({ iceServers: [] })
-  else res.send({ iceServers: iceServers })
+  if (!iceServers) return res.status(404).send({ iceServers: [] })
+  res.send({
+    comment: 'WARNING: This is *NOT* a public endpoint. Do not depend on it in your app',
+    iceServers: iceServers
+  })
 })
 
 app.get('/500', (req, res, next) => {

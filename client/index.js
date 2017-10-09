@@ -100,6 +100,7 @@ function getRtcConfig (cb) {
       } catch (err) {
         return cb(new Error('Got invalid WebRTC config from server: ' + data))
       }
+      delete rtcConfig.comment
       debug('got rtc config: %o', rtcConfig)
       cb(null, rtcConfig)
     }
