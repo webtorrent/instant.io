@@ -115,7 +115,7 @@ function updateIceServers () {
   twilioClient.tokens.create({}, function (err, token) {
     if (err) return console.error(err.message || err)
     if (!token.ice_servers) {
-      return console.error('twilio response ' + token + ' missing ice_servers')
+      return console.error('twilio response ' + Object.stringify(token) + ' missing ice_servers')
     }
 
     // Support new spec (`RTCIceServer.url` was renamed to `RTCIceServer.urls`)
