@@ -8,6 +8,7 @@ var path = require('path')
 var twilio = require('twilio')
 var unlimited = require('unlimited')
 var url = require('url')
+var util = require('util')
 
 var config = require('../config')
 
@@ -115,7 +116,7 @@ function updateIceServers () {
   twilioClient.tokens.create({}, function (err, token) {
     if (err) return console.error(err.message || err)
     if (!token.ice_servers) {
-      return console.error('twilio response ' + JSON.stringify(token) + ' missing ice_servers')
+      return console.error('twilio response ' + util.inspect(token) + ' missing ice_servers')
     }
 
     // Support new spec (`RTCIceServer.url` was renamed to `RTCIceServer.urls`)
