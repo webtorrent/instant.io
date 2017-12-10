@@ -47,7 +47,6 @@ To start the server, run `npm start`. That should be it!
 ## Mirrors
 
 - http://instant.rom1504.fr/
-- https://instant-io.herokuapp.com/
 - https://torrent.partidopirata.org/
 
 ## Tips
