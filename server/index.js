@@ -1,3 +1,5 @@
+require('./opbeat')
+
 var compress = require('compression')
 var cors = require('cors')
 var express = require('express')
@@ -155,6 +157,9 @@ app.get('*', function (req, res) {
     message: '404 Not Found'
   })
 })
+
+// Log errors to Opbeat
+if (global.opbeat) app.use(global.opbeat.middleware.express())
 
 // error handling middleware
 app.use(function (err, req, res, next) {
