@@ -15,7 +15,6 @@
     "cors": "^2.7.1",
     "create-torrent": "^3.22.0",
     "debug": "^3.1.0",
-    "downgrade": "^1.0.0",
     "drag-drop": "^2.0.0",
     "express": "^4.8.5",
     "moment": "^2.15.1",
@@ -25,7 +24,6 @@
     "throttleit": "^1.0.0",
     "thunky": "^1.0.0",
     "twilio": "^3.7.0",
-    "unlimited": "^1.1.0",
     "upload-element": "^1.0.1",
     "webtorrent": "0.x"
   },

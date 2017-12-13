@@ -1,12 +1,10 @@
 var compress = require('compression')
 var cors = require('cors')
-var downgrade = require('downgrade')
 var express = require('express')
 var http = require('http')
 var pug = require('pug')
 var path = require('path')
 var twilio = require('twilio')
-var unlimited = require('unlimited')
 var url = require('url')
 var util = require('util')
 
@@ -33,8 +31,6 @@ try {
 
 var app = express()
 var server = http.createServer(app)
-
-unlimited()
 
 // Trust "X-Forwarded-For" and "X-Forwarded-Proto" nginx headers
 app.enable('trust proxy')
@@ -174,5 +170,4 @@ app.use(function (err, req, res, next) {
 
 server.listen(config.port, function () {
   console.log('listening on port %s', config.port)
-  downgrade()
 })
