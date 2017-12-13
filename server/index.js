@@ -10,6 +10,8 @@ var util = require('util')
 
 var config = require('../config')
 
+var PORT = Number(process.argv[2]) || 4000
+
 var CORS_WHITELIST = [
   // Official WebTorrent site
   'http://webtorrent.io',
@@ -168,6 +170,6 @@ app.use(function (err, req, res, next) {
   })
 })
 
-server.listen(config.port, function () {
-  console.log('listening on port %s', config.port)
+server.listen(PORT, function () {
+  console.log('listening on port %s', server.address().port)
 })
