@@ -9,6 +9,8 @@ var throttle = require('throttleit')
 var thunky = require('thunky')
 var uploadElement = require('upload-element')
 var WebTorrent = require('webtorrent')
+var JSZip = require('jszip')
+var toBlobURL = require('stream-to-blob-url')
 
 var util = require('./util')
 
@@ -230,4 +232,45 @@ function onTorrent (torrent) {
       util.log(a)
     })
   })
+
+  var downloadZip = document.createElement('a')
+  downloadZip.href = ''
+  downloadZip.textContent = 'Download all files as zip'
+  downloadZip.addEventListener('click', function (event) {
+    var addedFiles = 0
+    var zipFilename = path.basename(torrent.name, path.extname(torrent.name)) + '.zip'
+    var zip = new JSZip()
+    event.preventDefault()
+
+    torrent.files.forEach(function (file) {
+      file.getBlob(function (err, blob) {
+        addedFiles++
+        if (err) return util.error(err)
+
+        // add file to zip
+        zip.file(file.path, blob)
+
+        // start the download when all files have been added
+        if (addedFiles === torrent.files.length) {
+          if (torrent.files.length > 1) {
+            zip = zip.folder(torrent.name) // generate the zip relative to the torrent folder
+          }
+          toBlobURL(zip.generateNodeStream({streamFiles: true}), function (err, url) {
+            if (err) return util.error(err)
+
+            var a = document.createElement('a')
+            a.download = zipFilename
+            a.href = url
+            a.hidden = true
+            document.body.appendChild(a)
+            a.click()
+            setTimeout(function () {
+              a.remove()
+            }, 2000)
+          })
+        }
+      })
+    })
+  })
+  util.log(downloadZip)
 }
