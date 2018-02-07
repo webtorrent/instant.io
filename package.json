@@ -29,7 +29,7 @@
     "webtorrent": "0.x"
   },
   "devDependencies": {
-    "browserify": "^15.0.0",
+    "browserify": "^16.0.0",
     "nodemon": "^1.2.1",
     "standard": "*",
     "stylus": "^0.54.0",
