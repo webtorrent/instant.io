@@ -136,7 +136,7 @@ app.get('/_rtcConfig', cors({
   origin: function (origin, cb) {
     var allowed = CORS_WHITELIST.indexOf(origin) >= 0 ||
       /https?:\/\/localhost(:|$)/.test(origin) ||
-      /https?:\/\/[^./]+\.localtunnel\.me$/.test(origin)
+      /https?:\/\/airtap\.local(:|$)/.test(origin)
     cb(null, allowed)
   }
 }), function (req, res) {
