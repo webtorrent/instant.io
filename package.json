@@ -21,7 +21,7 @@
     "opbeat": "^4.16.0",
     "prettier-bytes": "^1.0.3",
     "pug": "^2.0.0-beta11",
-    "simple-get": "^2.4.0",
+    "simple-get": "^3.0.0",
     "throttleit": "^1.0.0",
     "thunky": "^1.0.0",
     "twilio": "^3.7.0",
