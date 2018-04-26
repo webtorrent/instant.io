@@ -140,7 +140,9 @@ function downloadTorrent (torrentId) {
     util.log('Downloading torrent from ' + torrentId)
     getClient(function (err, client) {
       if (err) return util.error(err)
-      client.add(torrentId, onTorrent)
+      client
+        .add(torrentId, onTorrent)
+        .on('noPeers', onNoPeers)
     })
   }
 }
@@ -230,4 +232,8 @@ function onTorrent (torrent) {
       util.log(a)
     })
   })
+}
+
+function onNoPeers (type) {
+  util.log('<b>No peers found from:</b> ' + type)
 }
