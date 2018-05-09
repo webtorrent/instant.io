@@ -10,7 +10,6 @@ var thunky = require('thunky')
 var uploadElement = require('upload-element')
 var WebTorrent = require('webtorrent')
 var JSZip = require('jszip')
-var toBlobURL = require('stream-to-blob-url')
 
 var util = require('./util')
 
@@ -234,7 +233,8 @@ function onTorrent (torrent) {
   })
 
   var downloadZip = document.createElement('a')
-  downloadZip.href = ''
+  downloadZip.href = '#'
+  downloadZip.target = '_blank'
   downloadZip.textContent = 'Download all files as zip'
   downloadZip.addEventListener('click', function (event) {
     var addedFiles = 0
@@ -244,7 +244,7 @@ function onTorrent (torrent) {
 
     torrent.files.forEach(function (file) {
       file.getBlob(function (err, blob) {
-        addedFiles++
+        addedFiles += 1
         if (err) return util.error(err)
 
         // add file to zip
@@ -253,21 +253,20 @@ function onTorrent (torrent) {
         // start the download when all files have been added
         if (addedFiles === torrent.files.length) {
           if (torrent.files.length > 1) {
-            zip = zip.folder(torrent.name) // generate the zip relative to the torrent folder
+            // generate the zip relative to the torrent folder
+            zip = zip.folder(torrent.name)
           }
-          toBlobURL(zip.generateNodeStream({streamFiles: true}), function (err, url) {
-            if (err) return util.error(err)
-
-            var a = document.createElement('a')
-            a.download = zipFilename
-            a.href = url
-            a.hidden = true
-            document.body.appendChild(a)
-            a.click()
-            setTimeout(function () {
-              a.remove()
-            }, 2000)
-          })
+          zip.generateAsync({ type: 'blob' })
+            .then(function (blob) {
+              var url = URL.createObjectURL(blob)
+              var a = document.createElement('a')
+              a.download = zipFilename
+              a.href = url
+              a.click()
+              setTimeout(function () {
+                URL.revokeObjectURL(url)
+              }, 30 * 1000)
+            }, util.error)
         }
       })
     })
