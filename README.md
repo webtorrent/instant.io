@@ -9,7 +9,6 @@
 <p align="center">
   <a href="https://travis-ci.org/webtorrent/instant.io"><img src="https://img.shields.io/travis/webtorrent/instant.io/master.svg" alt="travis"></a>
   <a href="https://standardjs.com"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg" alt="javascript style guide"></a>
-  <a href="https://greenkeeper.io/"><img src="https://badges.greenkeeper.io/webtorrent/instant.io.svg" alt="Greenkeeper badge"></a>
 </p>
 
 Download/upload files using the [WebTorrent](http://webtorrent.io) protocol (BitTorrent
