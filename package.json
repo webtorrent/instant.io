@@ -30,7 +30,7 @@
     "webtorrent": "0.x"
   },
   "devDependencies": {
-    "babel-minify": "^0.3.0",
+    "babel-minify": "^0.4.2",
     "browserify": "^16.0.0",
     "nodemon": "^1.2.1",
     "standard": "*",
