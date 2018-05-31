@@ -60,7 +60,7 @@
     "size": "npm run build-js && cat static/bundle.js | gzip | wc -c",
     "start": "npm run build && node server",
     "test": "standard",
-    "update-authors": "./bin/update-authors.sh",
+    "update-authors": "./tools/update-authors.sh",
     "watch": "npm run watch-css & npm run watch-js & DEBUG=instant* nodemon server",
     "watch-css": "stylus css/main.styl -o static/ -w",
     "watch-js": "watchify client -o static/bundle.js -dv"
