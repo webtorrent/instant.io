@@ -18,6 +18,7 @@
     "drag-drop": "^4.0.0",
     "express": "^4.8.5",
     "jszip": "^3.1.5",
+    "kjua": "^0.1.2",
     "moment": "^2.15.1",
     "opbeat": "^4.16.0",
     "prettier-bytes": "^1.0.3",

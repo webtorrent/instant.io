@@ -10,6 +10,7 @@ var thunky = require('thunky')
 var uploadElement = require('upload-element')
 var WebTorrent = require('webtorrent')
 var JSZip = require('jszip')
+var kjua = require('kjua');
 
 var util = require('./util')
 
@@ -185,6 +186,10 @@ function onTorrent (torrent) {
     '<a href="' + torrent.magnetURI + '" target="_blank">[Magnet URI]</a> ' +
     '<a href="' + torrent.torrentFileBlobURL + '" target="_blank" download="' + torrentFileName + '">[Download .torrent]</a>'
   )
+
+  util.log('<div id="qr-code"></div>')
+
+  util.log(document.getElementById('qr-code').appendChild(kjua({text: location.origin + '/#' + torrent.infoHash, crisp: true})))
 
   function updateSpeed () {
     var progress = (100 * torrent.progress).toFixed(1)
