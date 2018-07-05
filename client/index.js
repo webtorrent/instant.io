@@ -10,7 +10,7 @@ var thunky = require('thunky')
 var uploadElement = require('upload-element')
 var WebTorrent = require('webtorrent')
 var JSZip = require('jszip')
-var kjua = require('kjua');
+var kjua = require('kjua')
 
 var util = require('./util')
 
