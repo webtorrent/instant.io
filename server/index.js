@@ -132,7 +132,7 @@ if (twilioClient) {
 }
 
 // WARNING: This is *NOT* a public endpoint. Do not depend on it in your app.
-app.get('/_rtcConfig', cors({
+app.get('/__rtcConfig__', cors({
   origin: function (origin, cb) {
     var allowed = CORS_WHITELIST.indexOf(origin) >= 0 ||
       /https?:\/\/localhost(:|$)/.test(origin) ||
