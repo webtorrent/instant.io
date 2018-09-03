@@ -1,4 +1,4 @@
-require('./opbeat')
+require('./rollbar')
 
 var compress = require('compression')
 var cors = require('cors')
@@ -158,8 +158,7 @@ app.get('*', function (req, res) {
   })
 })
 
-// Log errors to Opbeat
-if (global.opbeat) app.use(global.opbeat.middleware.express())
+if (global.rollbar) app.use(global.rollbar.errorHandler())
 
 // error handling middleware
 app.use(function (err, req, res, next) {

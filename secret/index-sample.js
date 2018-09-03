@@ -3,8 +3,6 @@ exports.twilio = {
   authToken: ''
 }
 
-exports.opbeat = {
-  appId: 'TODO',
-  organizationId: 'TODO',
-  secretToken: 'TODO'
+exports.rollbar = {
+  accessToken: 'TODO'
 }
