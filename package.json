@@ -32,7 +32,7 @@
   "devDependencies": {
     "babel-minify": "^0.5.0",
     "browserify": "^16.0.0",
-    "nodemon": "^1.2.1",
+    "nodemon": "^1.19.1",
     "standard": "*",
     "stylus": "^0.54.0",
     "watchify": "^3.1.0"
