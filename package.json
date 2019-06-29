@@ -55,6 +55,7 @@
     "build": "npm run build-css && npm run build-js",
     "build-css": "stylus css/main.styl -o static/ -c",
     "build-js": "browserify client | minify > static/bundle.js",
+    "deploy": "git push",
     "secret-download": "rsync -a -O -v --delete -e \"ssh -p 44444\" feross@webtorrent:\"/home/feross/www/instant.io/secret/\" secret/",
     "secret-upload": "rsync -a -O -v --delete -e \"ssh -p 44444\" secret/ feross@webtorrent:/home/feross/www/instant.io/secret/",
     "size": "npm run build-js && cat static/bundle.js | gzip | wc -c",
