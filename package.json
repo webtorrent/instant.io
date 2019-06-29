@@ -13,7 +13,7 @@
   "dependencies": {
     "compression": "^1.0.9",
     "cors": "^2.7.1",
-    "create-torrent": "^3.22.0",
+    "create-torrent": "^4.0.0",
     "debug": "^4.1.1",
     "drag-drop": "^4.0.0",
     "express": "^4.8.5",
