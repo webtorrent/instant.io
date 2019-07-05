@@ -7,7 +7,6 @@ var http = require('http')
 var pug = require('pug')
 var path = require('path')
 var twilio = require('twilio')
-var url = require('url')
 var util = require('util')
 
 var config = require('../config')
