@@ -39,17 +39,17 @@
     "watchify": "^3.1.0"
   },
   "homepage": "https://instant.io",
+  "husky": {
+    "hooks": {
+      "pre-push": "npm test"
+    }
+  },
   "keywords": [
     "data channel",
     "file transfer",
     "p2p",
     "webrtc"
   ],
-  "husky": {
-    "hooks": {
-      "pre-push": "npm test"
-    }
-  },
   "license": "MIT",
   "main": "index.js",
   "private": true,
