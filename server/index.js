@@ -70,7 +70,7 @@ app.use(function (req, res, next) {
   }
 
   // Add cross-domain header for fonts, required by spec, Firefox, and IE.
-  var extname = path.extname(url.parse(req.url).pathname)
+  var extname = path.extname(req.url)
   if (['.eot', '.ttf', '.otf', '.woff', '.woff2'].indexOf(extname) >= 0) {
     res.header('Access-Control-Allow-Origin', '*')
   }

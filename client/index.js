@@ -1,5 +1,3 @@
-/* global URL */
-
 var createTorrent = require('create-torrent')
 var debug = require('debug')('instant.io')
 var dragDrop = require('drag-drop')
