@@ -13,7 +13,7 @@
   "dependencies": {
     "compression": "^1.0.9",
     "cors": "^2.7.1",
-    "create-torrent": "^3.22.0",
+    "create-torrent": "^4.0.0",
     "debug": "^4.1.1",
     "drag-drop": "^4.0.0",
     "express": "^4.8.5",
@@ -33,11 +33,17 @@
     "babel-minify": "^0.5.0",
     "browserify": "^16.0.0",
     "nodemon": "^1.19.1",
+    "husky": "^3.0.0",
     "standard": "*",
     "stylus": "^0.54.0",
     "watchify": "^3.1.0"
   },
   "homepage": "https://instant.io",
+  "husky": {
+    "hooks": {
+      "pre-push": "npm test"
+    }
+  },
   "keywords": [
     "data channel",
     "file transfer",
@@ -55,6 +61,7 @@
     "build": "npm run build-css && npm run build-js",
     "build-css": "stylus css/main.styl -o static/ -c",
     "build-js": "browserify client | minify > static/bundle.js",
+    "deploy": "git push",
     "secret-download": "rsync -a -O -v --delete -e \"ssh -p 44444\" feross@webtorrent:\"/home/feross/www/instant.io/secret/\" secret/",
     "secret-upload": "rsync -a -O -v --delete -e \"ssh -p 44444\" secret/ feross@webtorrent:/home/feross/www/instant.io/secret/",
     "size": "npm run build-js && cat static/bundle.js | gzip | wc -c",

@@ -7,7 +7,6 @@ var http = require('http')
 var pug = require('pug')
 var path = require('path')
 var twilio = require('twilio')
-var url = require('url')
 var util = require('util')
 
 var config = require('../config')
@@ -70,7 +69,7 @@ app.use(function (req, res, next) {
   }
 
   // Add cross-domain header for fonts, required by spec, Firefox, and IE.
-  var extname = path.extname(url.parse(req.url).pathname)
+  var extname = path.extname(req.url)
   if (['.eot', '.ttf', '.otf', '.woff', '.woff2'].indexOf(extname) >= 0) {
     res.header('Access-Control-Allow-Origin', '*')
   }
