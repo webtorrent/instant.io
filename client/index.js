@@ -193,7 +193,9 @@ function onTorrent (torrent) {
     if (torrent.done) {
       remaining = 'Done.'
     } else {
-      remaining = distanceInWords(0, torrent.timeRemaining, { includeSeconds: true })
+      remaining = torrent.timeRemaining !== Infinity
+        ? distanceInWords(0, torrent.timeRemaining, { includeSeconds: true })
+        : 'Infinity years'
       remaining = remaining[0].toUpperCase() + remaining.substring(1) + ' remaining.'
     }
 
