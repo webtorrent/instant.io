@@ -193,7 +193,7 @@ function onTorrent (torrent) {
     if (torrent.done) {
       remaining = 'Done.'
     } else {
-      remaining = distanceInWords(0, torrent.timeRemaining * 1000, { includeSeconds: true })
+      remaining = distanceInWords(0, torrent.timeRemaining, { includeSeconds: true })
       remaining = remaining[0].toUpperCase() + remaining.substring(1) + ' remaining.'
     }
 
