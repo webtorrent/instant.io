@@ -2,7 +2,7 @@ var createTorrent = require('create-torrent')
 var debug = require('debug')('instant.io')
 var dragDrop = require('drag-drop')
 var get = require('simple-get')
-var moment = require('moment')
+var distanceInWords = require('date-fns/distance_in_words')
 var path = require('path')
 var prettierBytes = require('prettier-bytes')
 var throttle = require('throttleit')
@@ -193,7 +193,7 @@ function onTorrent (torrent) {
     if (torrent.done) {
       remaining = 'Done.'
     } else {
-      remaining = moment.duration(torrent.timeRemaining / 1000, 'seconds').humanize()
+      remaining = distanceInWords(0, torrent.timeRemaining, { includeSeconds: true })
       remaining = remaining[0].toUpperCase() + remaining.substring(1) + ' remaining.'
     }
 
