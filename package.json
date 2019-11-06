@@ -30,12 +30,12 @@
     "webtorrent": "^0.107.6"
   },
   "devDependencies": {
-    "babel-minify": "^0.5.1",
     "browserify": "^16.5.0",
-    "nodemon": "^1.19.4",
     "husky": "^3.0.9",
+    "nodemon": "^1.19.4",
     "standard": "*",
     "stylus": "^0.54.7",
+    "tinyify": "^2.5.2",
     "watchify": "^3.11.1"
   },
   "homepage": "https://instant.io",
@@ -60,11 +60,13 @@
   "scripts": {
     "build": "npm run build-css && npm run build-js",
     "build-css": "stylus css/main.styl -o static/ -c",
-    "build-js": "browserify client | minify > static/bundle.js",
+    "build-js": "browserify --plugin tinyify client > static/bundle.js",
     "deploy": "./tools/trigger-deploy.sh",
     "secret-download": "rsync -a -O -v --delete -e \"ssh -p 44444\" feross@webtorrent:\"/home/feross/www/instant.io/secret/\" secret/",
     "secret-upload": "rsync -a -O -v --delete -e \"ssh -p 44444\" secret/ feross@webtorrent:/home/feross/www/instant.io/secret/",
-    "size": "npm run build-js && cat static/bundle.js | gzip | wc -c",
+    "size": "npm run size-js && npm run size-css",
+    "size-css": "npm run build-css && cat static/main.css | gzip | wc -c",
+    "size-js": "npm run build-js && cat static/bundle.js | gzip | wc -c",
     "start": "npm run build && node server",
     "test": "standard",
     "update-authors": "./tools/update-authors.sh",
