@@ -139,6 +139,7 @@ app.get('/__rtcConfig__', cors({
     cb(null, allowed)
   }
 }), function (req, res) {
+  console.log('referer:', req.headers.referer)
   if (!iceServers) return res.status(404).send({ iceServers: [] })
   res.send({
     comment: 'WARNING: This is *NOT* a public endpoint. Do not depend on it in your app',
