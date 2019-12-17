@@ -6,8 +6,8 @@ var express = require('express')
 var http = require('http')
 var pug = require('pug')
 var path = require('path')
-var twilio = require('twilio')
-var util = require('util')
+// var twilio = require('twilio')
+// var util = require('util')
 
 var config = require('../config')
 
@@ -101,34 +101,34 @@ app.get('/', function (req, res) {
 })
 
 // Fetch new iceServers from twilio token regularly
-var iceServers
-var twilioClient
-try {
-  twilioClient = twilio(secret.twilio.accountSid, secret.twilio.authToken)
-} catch (err) {}
+// var iceServers
+// var twilioClient
+// try {
+//   twilioClient = twilio(secret.twilio.accountSid, secret.twilio.authToken)
+// } catch (err) {}
 
-function updateIceServers () {
-  twilioClient.tokens.create({}, function (err, token) {
-    if (err) return console.error(err.message || err)
-    if (!token.iceServers) {
-      return console.error('twilio response ' + util.inspect(token) + ' missing iceServers')
-    }
+// function updateIceServers () {
+//   twilioClient.tokens.create({}, function (err, token) {
+//     if (err) return console.error(err.message || err)
+//     if (!token.iceServers) {
+//       return console.error('twilio response ' + util.inspect(token) + ' missing iceServers')
+//     }
 
-    // Support new spec (`RTCIceServer.url` was renamed to `RTCIceServer.urls`)
-    iceServers = token.iceServers.map(function (server) {
-      if (server.url != null) {
-        server.urls = server.url
-        delete server.url
-      }
-      return server
-    })
-  })
-}
+//     // Support new spec (`RTCIceServer.url` was renamed to `RTCIceServer.urls`)
+//     iceServers = token.iceServers.map(function (server) {
+//       if (server.url != null) {
+//         server.urls = server.url
+//         delete server.url
+//       }
+//       return server
+//     })
+//   })
+// }
 
-if (twilioClient) {
-  setInterval(updateIceServers, 60 * 60 * 4 * 1000).unref()
-  updateIceServers()
-}
+// if (twilioClient) {
+//   setInterval(updateIceServers, 60 * 60 * 4 * 1000).unref()
+//   updateIceServers()
+// }
 
 // WARNING: This is *NOT* a public endpoint. Do not depend on it in your app.
 app.get('/__rtcConfig__', cors({
@@ -139,7 +139,9 @@ app.get('/__rtcConfig__', cors({
     cb(null, allowed)
   }
 }), function (req, res) {
-  console.log('referer:', req.headers.referer, 'user-agent:', req.headers['user-agent'])
+  // console.log('referer:', req.headers.referer, 'user-agent:', req.headers['user-agent'])
+  var iceServers = secret.iceServers
+
   if (!iceServers) return res.status(404).send({ iceServers: [] })
   res.send({
     comment: 'WARNING: This is *NOT* a public endpoint. Do not depend on it in your app',
