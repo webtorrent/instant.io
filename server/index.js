@@ -14,10 +14,6 @@ var config = require('../config')
 var PORT = Number(process.argv[2]) || 4000
 
 var CORS_WHITELIST = [
-  // Official WebTorrent site
-  'http://webtorrent.io',
-  'https://webtorrent.io',
-
   // Favor to friends :)
   'http://rollcall.audio',
   'https://rollcall.audio'
