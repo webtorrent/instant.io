@@ -168,6 +168,6 @@ app.use(function (err, req, res, next) {
   })
 })
 
-server.listen(PORT, function () {
+server.listen(PORT, '127.0.0.1', function () {
   console.log('listening on port %s', server.address().port)
 })
