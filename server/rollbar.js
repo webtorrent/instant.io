@@ -8,9 +8,27 @@ if (isProd) {
     captureUncaught: true,
     captureUnhandledRejections: true,
     checkIgnore: (isUncaught, args) => {
-      // Ignore 404 errors
       const err = args[0]
-      return !isUncaught && err && err.status === 404
+
+      // Never ignore uncaught errors
+      if (isUncaught) return false
+
+      // Ignore 'Bad Request' errors
+      if (err.status === 400) return true
+
+      // Ignore 'Forbidden' errors
+      if (err.status === 403) return true
+
+      // Ignore 'Not Found' errors
+      if (err.status === 404) return true
+
+      // Ignore 'Precondition Failed' errors
+      if (err.status === 412) return true
+
+      // Ignore 'Range Not Satisfiable' errors
+      if (err.status === 416) return true
+
+      return false
     }
   })
 }
