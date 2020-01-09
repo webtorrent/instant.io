@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "browserify": "^16.5.0",
-    "husky": "^3.0.9",
+    "husky": "^4.0.2",
     "nodemon": "^1.19.4",
     "standard": "*",
     "stylus": "^0.54.7",
