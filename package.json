@@ -17,6 +17,7 @@
     "date-fns": "^2.6.0",
     "debug": "^4.1.1",
     "drag-drop": "^6.0.0",
+    "escape-html": "^1.0.3",
     "express": "^4.17.1",
     "jszip": "^3.2.2",
     "prettier-bytes": "^1.0.4",

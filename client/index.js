@@ -1,6 +1,7 @@
 var createTorrent = require('create-torrent')
 var debug = require('debug')('instant.io')
 var dragDrop = require('drag-drop')
+var escapeHtml = require('escape-html')
 var get = require('simple-get')
 var formatDistance = require('date-fns/formatDistance')
 var path = require('path')
@@ -136,9 +137,9 @@ function downloadTorrent (torrentId) {
   })
 
   if (disallowed) {
-    util.log('File not found ' + torrentId)
+    util.log('File not found ' + escapeHtml(torrentId))
   } else {
-    util.log('Downloading torrent from ' + torrentId)
+    util.log('Downloading torrent from ' + escapeHtml(torrentId))
     getClient(function (err, client) {
       if (err) return util.error(err)
       client.add(torrentId, onTorrent)
@@ -147,7 +148,7 @@ function downloadTorrent (torrentId) {
 }
 
 function downloadTorrentFile (file) {
-  util.log('Downloading torrent from <strong>' + file.name + '</strong>')
+  util.log('Downloading torrent from <strong>' + escapeHtml(file.name) + '</strong>')
   getClient(function (err, client) {
     if (err) return util.error(err)
     client.add(file, onTorrent)
@@ -156,7 +157,7 @@ function downloadTorrentFile (file) {
 
 function seed (files) {
   if (files.length === 0) return
-  util.log('Seeding ' + files.length + ' files')
+  util.log('Seeding ' + escapeHtml(files.length) + ' files')
 
   // Seed from WebTorrent
   getClient(function (err, client) {
@@ -174,16 +175,16 @@ function onTorrent (torrent) {
 
   var torrentFileName = path.basename(torrent.name, path.extname(torrent.name)) + '.torrent'
 
-  util.log('"' + torrentFileName + '" contains ' + torrent.files.length + ' files:')
+  util.log('"' + escapeHtml(torrentFileName) + '" contains ' + escapeHtml(torrent.files.length) + ' files:')
   torrent.files.forEach(function (file) {
-    util.log('&nbsp;&nbsp;- ' + file.name + ' (' + prettierBytes(file.length) + ')')
+    util.log('&nbsp;&nbsp;- ' + escapeHtml(file.name) + ' (' + escapeHtml(prettierBytes(file.length)) + ')')
   })
 
   util.log(
-    'Torrent info hash: ' + torrent.infoHash + ' ' +
-    '<a href="/#' + torrent.infoHash + '" onclick="prompt(\'Share this link with anyone you want to download this torrent:\', this.href);return false;">[Share link]</a> ' +
-    '<a href="' + torrent.magnetURI + '" target="_blank">[Magnet URI]</a> ' +
-    '<a href="' + torrent.torrentFileBlobURL + '" target="_blank" download="' + torrentFileName + '">[Download .torrent]</a>'
+    'Torrent info hash: ' + escapeHtml(torrent.infoHash) + ' ' +
+    '<a href="/#' + escapeHtml(torrent.infoHash) + '" onclick="prompt(\'Share this link with anyone you want to download this torrent:\', this.href);return false;">[Share link]</a> ' +
+    '<a href="' + escapeHtml(torrent.magnetURI) + '" target="_blank">[Magnet URI]</a> ' +
+    '<a href="' + escapeHtml(torrent.torrentFileBlobURL) + '" target="_blank" download="' + escapeHtml(torrentFileName) + '">[Download .torrent]</a>'
   )
 
   function updateSpeed () {
