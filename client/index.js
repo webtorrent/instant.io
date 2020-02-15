@@ -137,9 +137,9 @@ function downloadTorrent (torrentId) {
   })
 
   if (disallowed) {
-    util.log('File not found ' + escapeHtml(torrentId))
+    util.log('File not found ' + torrentId)
   } else {
-    util.log('Downloading torrent from ' + escapeHtml(torrentId))
+    util.log('Downloading torrent from ' + torrentId)
     getClient(function (err, client) {
       if (err) return util.error(err)
       client.add(torrentId, onTorrent)
@@ -148,7 +148,7 @@ function downloadTorrent (torrentId) {
 }
 
 function downloadTorrentFile (file) {
-  util.log('Downloading torrent from <strong>' + escapeHtml(file.name) + '</strong>')
+  util.unsafeLog('Downloading torrent from <strong>' + escapeHtml(file.name) + '</strong>')
   getClient(function (err, client) {
     if (err) return util.error(err)
     client.add(file, onTorrent)
@@ -157,7 +157,7 @@ function downloadTorrentFile (file) {
 
 function seed (files) {
   if (files.length === 0) return
-  util.log('Seeding ' + escapeHtml(files.length) + ' files')
+  util.log('Seeding ' + files.length + ' files')
 
   // Seed from WebTorrent
   getClient(function (err, client) {
@@ -175,9 +175,10 @@ function onTorrent (torrent) {
 
   var torrentFileName = path.basename(torrent.name, path.extname(torrent.name)) + '.torrent'
 
-  util.log('"' + escapeHtml(torrentFileName) + '" contains ' + escapeHtml(torrent.files.length) + ' files:')
+  util.log('"' + torrentFileName + '" contains ' + torrent.files.length + ' files:')
+
   torrent.files.forEach(function (file) {
-    util.log('&nbsp;&nbsp;- ' + escapeHtml(file.name) + ' (' + escapeHtml(prettierBytes(file.length)) + ')')
+    util.unsafeLog('&nbsp;&nbsp;- ' + escapeHtml(file.name) + ' (' + escapeHtml(prettierBytes(file.length)) + ')')
   })
 
   util.log(
@@ -231,7 +232,7 @@ function onTorrent (torrent) {
       a.download = file.name
       a.href = url
       a.textContent = 'Download ' + file.name
-      util.log(a)
+      util.appendElemToLog(a)
     })
   })
 
@@ -274,5 +275,5 @@ function onTorrent (torrent) {
       })
     })
   })
-  util.log(downloadZip)
+  util.appendElemToLog(downloadZip)
 }
