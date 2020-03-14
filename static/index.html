@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Instant.io - Streaming file transfer over WebTorrent</title>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="search" href="/opensearch.xml" title="Instant.io" type="application/opensearchdescription+xml">
+        <link rel="stylesheet" href="/main.css" charset="utf-8">
+    </head>
+    <body>
+        <main>
+            <picture class="logo">
+                <source srcset="/logo.svg" />
+                <img src="/logo.png" alt="Instant.io" />
+            </picture>
+            <p class="subtitle">Streaming file transfer over <a href="http://webtorrent.io" target="_blank">WebTorrent</a> (torrents on the web)</p>
+            <h1 id="logHeading" style="display: none">Log</h1>
+            <div class="speed"></div>
+            <div class="log"></div>
+            <section>
+                <h1>Start sharing</h1>
+                <p>
+                    Drag-and-drop files to begin seeding. Or choose a file:
+                    <input type="file" name="upload" multiple>
+                </p>
+            </section>
+            <section>
+                <h1>Start downloading</h1>
+                <form>
+                    <label for="torrentId">Download from a magnet link or info hash</label>
+                    <input name="torrentId" placeholder="magnet:" required>
+                    <button type="submit">Download</button>
+                </form>
+            </section>
+            <footer>
+                <p>
+                    <small>Powered by <a href="http://webtorrent.io" target="_blank">WebTorrent</a>. 100% open source &amp; free software. Works in Chrome, Firefox, and Opera. Source code available on <a href="https://github.com/webtorrent/instant.io" target="_blank">GitHub</a>. © 2019 WebTorrent, LLC.</small>
+                </p>
+            </footer>
+        </main>
+        <script src="/bundle.js"></script>
+        <script>window.ga = window.ga || function () {(ga.q = ga.q || []).push(arguments)}ga.l = +new Date
+        ga('create', 'UA-3898076-18', 'auto')
+        ga('send', 'pageview')</script>
+        <script async src="//www.google-analytics.com/analytics.js"></script>
+    </body>
+</html>
