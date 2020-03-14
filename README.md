@@ -21,15 +21,13 @@ console and refresh to get detailed log output.
 
 ## Install
 
-If you just want to do file transfer on your site, or fetch/seed files over WebTorrent, then there's no need to run a copy of instant.io on your own server. Just use the WebTorrent script directly. You can learn more at https://webtorrent.io.
+instant.io is a completely static site, and is a demonstration of how little code is required to use WebTorrent.
 
-The client-side code that instant.io uses is [here](https://github.com/webtorrent/instant.io/blob/master/client/index.js).
+Almost all the client-side code that instant.io uses is [here](./client/index.js).
 
-### Run a copy of this site on your own server
+### Build
 
-To get a clone of https://instant.io running on your own server, follow these instructions.
-
-Get the code:
+To build a copy of the https://instant.io front-end, follow these instructions.
 
 ```
 git clone https://github.com/webtorrent/instant.io
@@ -37,11 +35,17 @@ cd instant.io
 npm install
 ```
 
-Modify the configuration options in [`config.js`](https://github.com/webtorrent/instant.io/blob/master/config.js) to set the IP/port you want the server to listen on.
+### Serve
 
-Copy [`secret/index-sample.js`](https://github.com/webtorrent/instant.io/blob/master/secret/index-sample.js) to `secret/index.js` and set the Twilio API key if you want a [NAT traversal service](https://www.twilio.com/stun-turn) (to help peers connect when behind a firewall).
+All instant.io requires to run is a static file server, and some [NAT Traversal](https://www.html5rocks.com/en/tutorials/webrtc/infrastructure/#after-signaling-using-ice-to-cope-with-nats-and-firewalls) services.
 
-To start the server, run `npm start`. That should be it!
+There are example nginx and Caddy configs in this repo, but any static file server can be used to serve instant.io
+
+1. Build the client (as explained above)
+2. Serve the `static` directory using a static file server
+3. Redirect `/__rtConfig__` to a JSON file with a single `iceServers` key conforming to the [WebRTC Spec](https://w3c.github.io/webrtc-pc/#dom-rtcconfiguration)
+
+That's it!
 
 ## Mirrors
 
@@ -51,7 +55,7 @@ To start the server, run `npm start`. That should be it!
 ## Tips
 
 1. Create a shareable link by adding a torrent infohash or magnet link to the end
-of the URL. For example: `https://instant.io#INFO_HASH` or `https://instant.io/#MAGNET_LINK`.
+of the URL. For example: `https://instant.io/#INFO_HASH` or `https://instant.io/#MAGNET_LINK`.
 
 2. You can add multiple torrents in the same browser window.
 
