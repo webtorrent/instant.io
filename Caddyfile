@@ -1,0 +1,6 @@
+localhost
+gzip
+rewrite /__rtcConfig__ /__rtcConfig__.json # Backwards compatability
+file_server {
+    root static
+}
