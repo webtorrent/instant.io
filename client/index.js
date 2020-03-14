@@ -181,8 +181,8 @@ function onTorrent (torrent) {
     util.unsafeLog('&nbsp;&nbsp;- ' + escapeHtml(file.name) + ' (' + escapeHtml(prettierBytes(file.length)) + ')')
   })
 
-  util.log(
-    'Torrent info hash: ' + escapeHtml(torrent.infoHash) + ' ' +
+  util.log('Torrent info hash: ' + torrent.infoHash)
+  util.unsafeLog(
     '<a href="/#' + escapeHtml(torrent.infoHash) + '" onclick="prompt(\'Share this link with anyone you want to download this torrent:\', this.href);return false;">[Share link]</a> ' +
     '<a href="' + escapeHtml(torrent.magnetURI) + '" target="_blank">[Magnet URI]</a> ' +
     '<a href="' + escapeHtml(torrent.torrentFileBlobURL) + '" target="_blank" download="' + escapeHtml(torrentFileName) + '">[Download .torrent]</a>'
