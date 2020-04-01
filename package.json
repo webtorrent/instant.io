@@ -28,7 +28,7 @@
     "thunky": "^1.1.0",
     "twilio": "^3.36.0",
     "upload-element": "^1.0.1",
-    "webtorrent": "^0.107.6"
+    "webtorrent": "^0.108.0"
   },
   "devDependencies": {
     "browserify": "^16.5.0",
