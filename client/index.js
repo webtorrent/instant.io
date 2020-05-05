@@ -11,6 +11,7 @@ var thunky = require('thunky')
 var uploadElement = require('upload-element')
 var WebTorrent = require('webtorrent')
 var JSZip = require('jszip')
+var SimplePeer = require('simple-peer')
 
 var util = require('./util')
 
@@ -31,7 +32,10 @@ var getClient = thunky(function (cb) {
     if (err) util.error(err)
     var client = new WebTorrent({
       tracker: {
-        rtcConfig: rtcConfig
+        rtcConfig: {
+          ...SimplePeer.config,
+          ...rtcConfig
+        }
       }
     })
     window.client = client // for easier debugging
