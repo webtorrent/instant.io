@@ -16,7 +16,7 @@ cp -R /home/feross/www/instant.io /home/feross/www/build-instant.io
 
 cd /home/feross/www/build-instant.io && git pull
 cd /home/feross/www/build-instant.io && rm -rf node_modules
-cd /home/feross/www/build-instant.io && npm install --no-progress
+cd /home/feross/www/build-instant.io && npm ci --no-progress
 cd /home/feross/www/build-instant.io && npm run build
 cd /home/feross/www/build-instant.io && npm prune --production --no-progress
 
