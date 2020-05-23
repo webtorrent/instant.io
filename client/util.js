@@ -41,7 +41,7 @@ exports.warning = function warning (err) {
 
 exports.error = function error (err) {
   console.error(err.stack || err.message || err)
-  var p = exports.log(escapeHtml(err.message || err))
+  var p = exports.unsafeLog(escapeHtml(err.message || err))
   p.style.color = 'red'
   p.style.fontWeight = 'bold'
   return p
