@@ -145,9 +145,9 @@ app.get('/__rtcConfig__', cors({
   })
 })
 
-app.get('/500', (req, res, next) => {
-  next(new Error('Manually visited /500'))
-})
+// app.get('/500', (req, res, next) => {
+//   next(new Error('Manually visited /500'))
+// })
 
 app.get('*', function (req, res) {
   res.status(404).render('error', {
