@@ -1,4 +1,3 @@
-var escapeHtml = require('escape-html')
 var logElem = exports.logElem = document.querySelector('.log')
 var logHeading = document.querySelector('#logHeading')
 var speed = document.querySelector('.speed')
@@ -36,12 +35,12 @@ exports.updateSpeed = function updateSpeed (str) {
 
 exports.warning = function warning (err) {
   console.error(err.stack || err.message || err)
-  return exports.log(escapeHtml(err.message || err))
+  return exports.log(err.message || err)
 }
 
 exports.error = function error (err) {
   console.error(err.stack || err.message || err)
-  var p = exports.unsafeLog(escapeHtml(err.message || err))
+  var p = exports.log(err.message || err)
   p.style.color = 'red'
   p.style.fontWeight = 'bold'
   return p
