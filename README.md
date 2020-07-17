@@ -39,7 +39,7 @@ npm install
 
 Modify the configuration options in [`config.js`](https://github.com/webtorrent/instant.io/blob/master/config.js) to set the IP/port you want the server to listen on.
 
-Copy [`secret/index-sample.js`](https://github.com/webtorrent/instant.io/blob/master/secret/index-sample.js) to `secret/index.js` and set the Twilio API key if you want a [NAT traversal service](https://www.twilio.com/stun-turn) (to help peers connect when behind a firewall).
+Copy [`secret/index-sample.js`](https://github.com/webtorrent/instant.io/blob/master/secret/index-sample.js) to `secret/index.js` and update the options in there to a valid TURN server if you want a NAT traversal service (to help peers connect when behind a firewall).
 
 To start the server, run `npm start`. That should be it!
 
