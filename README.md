@@ -43,11 +43,6 @@ Copy [`secret/index-sample.js`](https://github.com/webtorrent/instant.io/blob/ma
 
 To start the server, run `npm start`. That should be it!
 
-## Mirrors
-
-- https://torrent.partidopirata.org/
-- https://instant-io.glitch.me/
-
 ## Tips
 
 1. Create a shareable link by adding a torrent infohash or magnet link to the end
