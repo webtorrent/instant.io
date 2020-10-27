@@ -36,7 +36,7 @@
     "nodemon": "^2.0.6",
     "standard": "*",
     "stylus": "^0.54.8",
-    "tinyify": "^2.5.2",
+    "tinyify": "^3.0.0",
     "watchify": "^3.11.1"
   },
   "homepage": "https://instant.io",
