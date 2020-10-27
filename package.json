@@ -31,7 +31,7 @@
     "webtorrent": "^0.109.2"
   },
   "devDependencies": {
-    "browserify": "^16.5.1",
+    "browserify": "^17.0.0",
     "husky": "^4.3.0",
     "nodemon": "^2.0.6",
     "standard": "*",
