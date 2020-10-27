@@ -16,7 +16,7 @@
     "create-torrent": "^4.4.2",
     "date-fns": "^2.16.1",
     "debug": "^4.2.0",
-    "drag-drop": "^6.0.2",
+    "drag-drop": "^6.1.0",
     "escape-html": "^1.0.3",
     "express": "^4.17.1",
     "jszip": "^3.5.0",
