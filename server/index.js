@@ -1,29 +1,29 @@
 require('./rollbar')
 
-var compress = require('compression')
-var cors = require('cors')
-var express = require('express')
-var http = require('http')
-var pug = require('pug')
-var path = require('path')
+const compress = require('compression')
+const cors = require('cors')
+const express = require('express')
+const http = require('http')
+const pug = require('pug')
+const path = require('path')
 
-var config = require('../config')
+const config = require('../config')
 
-var PORT = Number(process.argv[2]) || 4000
+const PORT = Number(process.argv[2]) || 4000
 
-var CORS_WHITELIST = [
+const CORS_WHITELIST = [
   // Favor to friends :)
   'http://rollcall.audio',
   'https://rollcall.audio'
 ]
 
-var secret
+let secret
 try {
   secret = require('../secret')
 } catch (err) {}
 
-var app = express()
-var server = http.createServer(app)
+const app = express()
+const server = http.createServer(app)
 
 // Trust "X-Forwarded-For" and "X-Forwarded-Proto" nginx headers
 app.enable('trust proxy')
@@ -63,7 +63,7 @@ app.use(function (req, res, next) {
   }
 
   // Add cross-domain header for fonts, required by spec, Firefox, and IE.
-  var extname = path.extname(req.url)
+  const extname = path.extname(req.url)
   if (['.eot', '.ttf', '.otf', '.woff', '.woff2'].indexOf(extname) >= 0) {
     res.header('Access-Control-Allow-Origin', '*')
   }
@@ -97,14 +97,14 @@ app.get('/', function (req, res) {
 // WARNING: This is *NOT* a public endpoint. Do not depend on it in your app.
 app.get('/__rtcConfig__', cors({
   origin: function (origin, cb) {
-    var allowed = CORS_WHITELIST.indexOf(origin) >= 0 ||
+    const allowed = CORS_WHITELIST.indexOf(origin) >= 0 ||
       /https?:\/\/localhost(:|$)/.test(origin) ||
       /https?:\/\/airtap\.local(:|$)/.test(origin)
     cb(null, allowed)
   }
 }), function (req, res) {
   // console.log('referer:', req.headers.referer, 'user-agent:', req.headers['user-agent'])
-  var iceServers = secret.iceServers
+  const iceServers = secret.iceServers
 
   if (!iceServers) return res.status(404).send({ iceServers: [] })
   res.send({

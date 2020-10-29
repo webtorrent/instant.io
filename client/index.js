@@ -1,19 +1,19 @@
-var createTorrent = require('create-torrent')
-var debug = require('debug')('instant.io')
-var dragDrop = require('drag-drop')
-var escapeHtml = require('escape-html')
-var get = require('simple-get')
-var formatDistance = require('date-fns/formatDistance')
-var path = require('path')
-var prettierBytes = require('prettier-bytes')
-var throttle = require('throttleit')
-var thunky = require('thunky')
-var uploadElement = require('upload-element')
-var WebTorrent = require('webtorrent')
-var JSZip = require('jszip')
-var SimplePeer = require('simple-peer')
+const createTorrent = require('create-torrent')
+const debug = require('debug')('instant.io')
+const dragDrop = require('drag-drop')
+const escapeHtml = require('escape-html')
+const get = require('simple-get')
+const formatDistance = require('date-fns/formatDistance')
+const path = require('path')
+const prettierBytes = require('prettier-bytes')
+const throttle = require('throttleit')
+const thunky = require('thunky')
+const uploadElement = require('upload-element')
+const WebTorrent = require('webtorrent')
+const JSZip = require('jszip')
+const SimplePeer = require('simple-peer')
 
-var util = require('./util')
+const util = require('./util')
 
 global.WEBTORRENT_ANNOUNCE = createTorrent.announceList
   .map(function (arr) {
@@ -23,14 +23,14 @@ global.WEBTORRENT_ANNOUNCE = createTorrent.announceList
     return url.indexOf('wss://') === 0 || url.indexOf('ws://') === 0
   })
 
-var DISALLOWED = [
+const DISALLOWED = [
   '6feb54706f41f459f819c0ae5b560a21ebfead8f'
 ]
 
-var getClient = thunky(function (cb) {
+const getClient = thunky(function (cb) {
   getRtcConfig(function (err, rtcConfig) {
     if (err) util.error(err)
-    var client = new WebTorrent({
+    const client = new WebTorrent({
       tracker: {
         rtcConfig: {
           ...SimplePeer.config,
@@ -56,7 +56,7 @@ function init () {
   getClient(function () {})
 
   // Seed via upload input element
-  var upload = document.querySelector('input[name=upload]')
+  const upload = document.querySelector('input[name=upload]')
   if (upload) {
     uploadElement(upload, function (err, files) {
       if (err) return util.error(err)
@@ -69,7 +69,7 @@ function init () {
   dragDrop('body', onFiles)
 
   // Download via input element
-  var form = document.querySelector('form')
+  const form = document.querySelector('form')
   if (form) {
     form.addEventListener('submit', function (e) {
       e.preventDefault()
@@ -81,7 +81,7 @@ function init () {
   onHashChange()
   window.addEventListener('hashchange', onHashChange)
   function onHashChange () {
-    var hash = decodeURIComponent(window.location.hash.substring(1)).trim()
+    const hash = decodeURIComponent(window.location.hash.substring(1)).trim()
     if (hash !== '') downloadTorrent(hash)
   }
 
@@ -100,7 +100,7 @@ function getRtcConfig (cb) {
     if (err || res.statusCode !== 200) {
       cb(new Error('Could not get WebRTC config from server. Using default (without TURN).'))
     } else {
-      var rtcConfig
+      let rtcConfig
       try {
         rtcConfig = JSON.parse(data)
       } catch (err) {
@@ -127,7 +127,7 @@ function onFiles (files) {
 }
 
 function isTorrentFile (file) {
-  var extname = path.extname(file.name).toLowerCase()
+  const extname = path.extname(file.name).toLowerCase()
   return extname === '.torrent'
 }
 
@@ -136,7 +136,7 @@ function isNotTorrentFile (file) {
 }
 
 function downloadTorrent (torrentId) {
-  var disallowed = DISALLOWED.some(function (infoHash) {
+  const disallowed = DISALLOWED.some(function (infoHash) {
     return torrentId.indexOf(infoHash) >= 0
   })
 
@@ -174,10 +174,10 @@ function onTorrent (torrent) {
   torrent.on('warning', util.warning)
   torrent.on('error', util.error)
 
-  var upload = document.querySelector('input[name=upload]')
+  const upload = document.querySelector('input[name=upload]')
   upload.value = upload.defaultValue // reset upload element
 
-  var torrentFileName = path.basename(torrent.name, path.extname(torrent.name)) + '.torrent'
+  const torrentFileName = path.basename(torrent.name, path.extname(torrent.name)) + '.torrent'
 
   util.log('"' + torrentFileName + '" contains ' + torrent.files.length + ' files:')
 
@@ -193,9 +193,9 @@ function onTorrent (torrent) {
   )
 
   function updateSpeed () {
-    var progress = (100 * torrent.progress).toFixed(1)
+    const progress = (100 * torrent.progress).toFixed(1)
 
-    var remaining
+    let remaining
     if (torrent.done) {
       remaining = 'Done.'
     } else {
@@ -231,7 +231,7 @@ function onTorrent (torrent) {
     file.getBlobURL(function (err, url) {
       if (err) return util.error(err)
 
-      var a = document.createElement('a')
+      const a = document.createElement('a')
       a.target = '_blank'
       a.download = file.name
       a.href = url
@@ -240,14 +240,14 @@ function onTorrent (torrent) {
     })
   })
 
-  var downloadZip = document.createElement('a')
+  const downloadZip = document.createElement('a')
   downloadZip.href = '#'
   downloadZip.target = '_blank'
   downloadZip.textContent = 'Download all files as zip'
   downloadZip.addEventListener('click', function (event) {
-    var addedFiles = 0
-    var zipFilename = path.basename(torrent.name, path.extname(torrent.name)) + '.zip'
-    var zip = new JSZip()
+    let addedFiles = 0
+    const zipFilename = path.basename(torrent.name, path.extname(torrent.name)) + '.zip'
+    let zip = new JSZip()
     event.preventDefault()
 
     torrent.files.forEach(function (file) {
@@ -266,8 +266,8 @@ function onTorrent (torrent) {
           }
           zip.generateAsync({ type: 'blob' })
             .then(function (blob) {
-              var url = URL.createObjectURL(blob)
-              var a = document.createElement('a')
+              const url = URL.createObjectURL(blob)
+              const a = document.createElement('a')
               a.download = zipFilename
               a.href = url
               a.click()
