@@ -13,7 +13,7 @@
   "dependencies": {
     "compression": "^1.7.4",
     "cors": "^2.8.5",
-    "create-torrent": "^4.4.2",
+    "create-torrent": "^4.4.3",
     "date-fns": "^2.16.1",
     "debug": "^4.3.1",
     "drag-drop": "^6.1.0",
@@ -28,7 +28,7 @@
     "throttleit": "^1.0.0",
     "thunky": "^1.1.0",
     "upload-element": "^1.0.1",
-    "webtorrent": "^0.112.0"
+    "webtorrent": "^0.112.3"
   },
   "devDependencies": {
     "browserify": "^17.0.0",
