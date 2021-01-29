@@ -37,7 +37,7 @@
     "standard": "*",
     "stylus": "^0.54.8",
     "tinyify": "^3.0.0",
-    "watchify": "^3.11.1"
+    "watchify": "^4.0.0"
   },
   "homepage": "https://instant.io",
   "husky": {
