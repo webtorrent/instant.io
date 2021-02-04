@@ -22,13 +22,13 @@
     "jszip": "^3.5.0",
     "prettier-bytes": "^1.0.4",
     "pug": "^3.0.0",
-    "rollbar": "^2.19.4",
+    "rollbar": "^2.20.0",
     "simple-get": "^4.0.0",
     "simple-peer": "^9.9.3",
     "throttleit": "^1.0.0",
     "thunky": "^1.1.0",
     "upload-element": "^1.0.1",
-    "webtorrent": "^0.112.3"
+    "webtorrent": "^0.112.4"
   },
   "devDependencies": {
     "browserify": "^17.0.0",
