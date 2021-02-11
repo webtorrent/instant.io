@@ -68,7 +68,7 @@
     "size": "npm run size-js && npm run size-css",
     "size-css": "npm run build-css && cat static/main.css | gzip | wc -c",
     "size-js": "npm run build-js && cat static/bundle.js | gzip | wc -c",
-    "start": "npm run build && node server",
+    "start": "node server",
     "test": "standard",
     "update-authors": "./tools/update-authors.sh",
     "watch": "npm run watch-css & npm run watch-js & DEBUG=instant* nodemon server",
