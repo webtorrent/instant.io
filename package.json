@@ -13,13 +13,13 @@
   "dependencies": {
     "compression": "^1.7.4",
     "cors": "^2.8.5",
-    "create-torrent": "^4.4.5",
-    "date-fns": "^2.17.0",
+    "create-torrent": "^4.4.3",
+    "date-fns": "^2.16.1",
     "debug": "^4.3.1",
     "drag-drop": "^6.1.0",
     "escape-html": "^1.0.3",
     "express": "^4.17.1",
-    "jszip": "^3.6.0",
+    "jszip": "^3.5.0",
     "prettier-bytes": "^1.0.4",
     "pug": "^3.0.0",
     "rollbar": "^2.20.0",
@@ -28,7 +28,7 @@
     "throttleit": "^1.0.0",
     "thunky": "^1.1.0",
     "upload-element": "^1.0.1",
-    "webtorrent": "^0.114.0"
+    "webtorrent": "^0.112.4"
   },
   "devDependencies": {
     "browserify": "^17.0.0",
