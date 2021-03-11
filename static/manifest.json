@@ -1,0 +1,17 @@
+{
+  "name": "Instant.io",
+  "short_name": "Instant.io",
+  "start_url": "/",
+  "display": "standalone",
+  "lang": "en-US",
+  "background_color": "#eee",
+  "theme_color": "#eee",
+  "description": "Streaming file transfer over WebTorrent (torrents on the web)",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    }
+  ]
+}
