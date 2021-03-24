@@ -100,15 +100,13 @@ function getRtcConfig (cb) {
     if (err || res.statusCode !== 200) {
       cb(new Error('Could not get WebRTC config from server. Using default (without TURN).'))
     } else {
-      let rtcConfig
       try {
-        rtcConfig = JSON.parse(data)
+        data = JSON.parse(data)
       } catch (err) {
         return cb(new Error('Got invalid WebRTC config from server: ' + data))
       }
-      delete rtcConfig.comment
-      debug('got rtc config: %o', rtcConfig)
-      cb(null, rtcConfig)
+      debug('got rtc config: %o', data.rtcConfig)
+      cb(null, data.rtcConfig)
     }
   })
 }

@@ -104,12 +104,12 @@ app.get('/__rtcConfig__', cors({
   }
 }), function (req, res) {
   // console.log('referer:', req.headers.referer, 'user-agent:', req.headers['user-agent'])
-  const iceServers = secret.iceServers
+  const rtcConfig = secret.rtcConfig
 
-  if (!iceServers) return res.status(404).send({ iceServers: [] })
+  if (!rtcConfig) return res.status(404).send({ rtcConfig: {} })
   res.send({
     comment: 'WARNING: This is *NOT* a public endpoint. Do not depend on it in your app',
-    iceServers: iceServers
+    rtcConfig: rtcConfig
   })
 })
 
