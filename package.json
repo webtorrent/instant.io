@@ -36,7 +36,6 @@
     "nodemon": "^2.0.7",
     "standard": "*",
     "stylus": "^0.54.8",
-    "tinyify": "^3.0.0",
     "watchify": "^4.0.0"
   },
   "homepage": "https://instant.io",
@@ -56,7 +55,7 @@
   "scripts": {
     "build": "npm run build-css && npm run build-js",
     "build-css": "stylus css/main.styl -o static/ -c",
-    "build-js": "browserify --plugin tinyify client > static/bundle.js",
+    "build-js": "browserify client > static/bundle.js",
     "deploy": "./tools/trigger-deploy.sh",
     "prepare": "husky install",
     "secret-download": "rsync -a -O -v --delete feross@webtorrent:\"/home/feross/www/instant.io/secret/\" secret/",
