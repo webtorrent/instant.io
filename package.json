@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "browserify": "^17.0.0",
-    "husky": "^4.3.8",
+    "husky": "^6.0.0",
     "nodemon": "^2.0.7",
     "standard": "*",
     "stylus": "^0.54.8",
@@ -40,11 +40,6 @@
     "watchify": "^4.0.0"
   },
   "homepage": "https://instant.io",
-  "husky": {
-    "hooks": {
-      "pre-push": "npm test"
-    }
-  },
   "keywords": [
     "data channel",
     "file transfer",
@@ -63,6 +58,7 @@
     "build-css": "stylus css/main.styl -o static/ -c",
     "build-js": "browserify --plugin tinyify client > static/bundle.js",
     "deploy": "./tools/trigger-deploy.sh",
+    "prepare": "husky install",
     "secret-download": "rsync -a -O -v --delete feross@webtorrent:\"/home/feross/www/instant.io/secret/\" secret/",
     "secret-upload": "rsync -a -O -v --delete secret/ feross@webtorrent:/home/feross/www/instant.io/secret/",
     "size": "npm run size-js && npm run size-css",
