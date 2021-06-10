@@ -25,5 +25,14 @@ block body
         input(name='torrentId', placeholder='magnet:', required)
         button(type='submit') Download
 
+    section.wormhole
+      | If you like Instant.io, try
+      |
+      a(href='https://wormhole.app', target='_blank') Wormhole
+      |
+      | from the creator of WebTorrent and Instant.io. It's like Instant.io, but adds end-to-end encryption and links that keep working even after you close your browser.
+      a(href='https://wormhole.app', target='_blank')
+        img(src='/wormhole.jpg', alt='Wormhole')
+
     footer
-      p: small Powered by <a href="http://webtorrent.io" target="_blank">WebTorrent</a>. 100% open source &amp; free software. Works in Chrome, Firefox, and Opera. Source code available on <a href="https://github.com/webtorrent/instant.io" target="_blank">GitHub</a>. © 2020 WebTorrent, LLC.
+      p Powered by <a href="https://webtorrent.io" target="_blank">WebTorrent</a>. 100% open source &amp; free software. Source code available on <a href="https://github.com/webtorrent/instant.io" target="_blank">GitHub</a>. © 2021 WebTorrent, LLC.
