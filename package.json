@@ -3,7 +3,7 @@
   "description": "Secure, anonymous, streaming file transfer",
   "version": "1.0.0",
   "author": {
-    "name": "WebTorrent, LLC",
+    "name": "WebTorrent LLC",
     "email": "feross@webtorrent.io",
     "url": "https://webtorrent.io"
   },
@@ -69,5 +69,19 @@
     "watch": "npm run watch-css & npm run watch-js & DEBUG=instant* nodemon server",
     "watch-css": "stylus css/main.styl -o static/ -w",
     "watch-js": "watchify client -o static/bundle.js -dv"
-  }
+  },
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/feross"
+    },
+    {
+      "type": "patreon",
+      "url": "https://www.patreon.com/feross"
+    },
+    {
+      "type": "consulting",
+      "url": "https://feross.org/support"
+    }
+  ]
 }
