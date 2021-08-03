@@ -1,7 +1,5 @@
 name: ci
-'on':
-  - push
-  - pull_request
+on: [push,pull_request]
 jobs:
   test:
     name: Node ${{ matrix.node }} / ${{ matrix.os }}
