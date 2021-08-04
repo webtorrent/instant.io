@@ -15,7 +15,7 @@
     "cors": "2.8.5",
     "create-torrent": "4.7.1",
     "date-fns": "2.21.3",
-    "debug": "4.3.1",
+    "debug": "4.3.2",
     "drag-drop": "7.0.1",
     "escape-html": "1.0.3",
     "express": "4.17.1",
