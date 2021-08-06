@@ -15,7 +15,7 @@ const SimplePeer = require('simple-peer')
 
 const util = require('./util')
 
-global.WEBTORRENT_ANNOUNCE = createTorrent.announceList
+globalThis.WEBTORRENT_ANNOUNCE = createTorrent.announceList
   .map(function (arr) {
     return arr[0]
   })
