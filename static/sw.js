@@ -1,1 +1,3 @@
-self.addEventListener('fetch',e=>{});
+/* global self */
+
+self.addEventListener('fetch', e => {})
