@@ -24,11 +24,11 @@
     "pug": "3.0.2",
     "rollbar": "2.24.0",
     "simple-get": "4.0.1",
-    "simple-peer": "9.11.0",
+    "simple-peer": "9.11.1",
     "throttleit": "1.0.0",
     "thunky": "1.1.0",
     "upload-element": "1.0.1",
-    "webtorrent": "1.8.1"
+    "webtorrent": "1.8.2"
   },
   "devDependencies": {
     "browserify": "17.0.0",
