@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "browserify": "17.0.0",
-    "husky": "7.0.4",
+    "husky": "8.0.1",
     "nodemon": "2.0.19",
     "standard": "*",
     "stylus": "0.58.1",
