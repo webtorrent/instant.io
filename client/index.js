@@ -1,20 +1,22 @@
-var createTorrent = require('create-torrent')
-var debug = require('debug')('instant.io')
-var dragDrop = require('drag-drop')
-var get = require('simple-get')
-var moment = require('moment')
-var path = require('path')
-var prettierBytes = require('prettier-bytes')
-var throttle = require('throttleit')
-var thunky = require('thunky')
-var uploadElement = require('upload-element')
-var WebTorrent = require('webtorrent')
-var JSZip = require('jszip')
-var kjua = require('kjua')
+const createTorrent = require('create-torrent')
+const debug = require('debug')('instant.io')
+const dragDrop = require('drag-drop')
+const escapeHtml = require('escape-html')
+const get = require('simple-get')
+const formatDistance = require('date-fns/formatDistance')
+const path = require('path')
+const prettierBytes = require('prettier-bytes')
+const throttle = require('throttleit')
+const thunky = require('thunky')
+const uploadElement = require('upload-element')
+const WebTorrent = require('webtorrent')
+const JSZip = require('jszip')
+const SimplePeer = require('simple-peer')
+const kjua = require('kjua')
 
-var util = require('./util')
+const util = require('./util')
 
-global.WEBTORRENT_ANNOUNCE = createTorrent.announceList
+globalThis.WEBTORRENT_ANNOUNCE = createTorrent.announceList
   .map(function (arr) {
     return arr[0]
   })
@@ -22,16 +24,19 @@ global.WEBTORRENT_ANNOUNCE = createTorrent.announceList
     return url.indexOf('wss://') === 0 || url.indexOf('ws://') === 0
   })
 
-var DISALLOWED = [
+const DISALLOWED = [
   '6feb54706f41f459f819c0ae5b560a21ebfead8f'
 ]
 
-var getClient = thunky(function (cb) {
+const getClient = thunky(function (cb) {
   getRtcConfig(function (err, rtcConfig) {
     if (err) util.error(err)
-    var client = new WebTorrent({
+    const client = new WebTorrent({
       tracker: {
-        rtcConfig: rtcConfig
+        rtcConfig: {
+          ...SimplePeer.config,
+          ...rtcConfig
+        }
       }
     })
     window.client = client // for easier debugging
@@ -52,7 +57,7 @@ function init () {
   getClient(function () {})
 
   // Seed via upload input element
-  var upload = document.querySelector('input[name=upload]')
+  const upload = document.querySelector('input[name=upload]')
   if (upload) {
     uploadElement(upload, function (err, files) {
       if (err) return util.error(err)
@@ -65,7 +70,7 @@ function init () {
   dragDrop('body', onFiles)
 
   // Download via input element
-  var form = document.querySelector('form')
+  const form = document.querySelector('form')
   if (form) {
     form.addEventListener('submit', function (e) {
       e.preventDefault()
@@ -77,7 +82,7 @@ function init () {
   onHashChange()
   window.addEventListener('hashchange', onHashChange)
   function onHashChange () {
-    var hash = decodeURIComponent(window.location.hash.substring(1)).trim()
+    const hash = decodeURIComponent(window.location.hash.substring(1)).trim()
     if (hash !== '') downloadTorrent(hash)
   }
 
@@ -85,26 +90,29 @@ function init () {
   if ('registerProtocolHandler' in navigator) {
     navigator.registerProtocolHandler('magnet', window.location.origin + '#%s', 'Instant.io')
   }
+
+  // Register a service worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js')
+  }
 }
 
 function getRtcConfig (cb) {
   // WARNING: This is *NOT* a public endpoint. Do not depend on it in your app.
   get.concat({
-    url: '/_rtcConfig',
+    url: '/__rtcConfig__',
     timeout: 5000
   }, function (err, res, data) {
     if (err || res.statusCode !== 200) {
       cb(new Error('Could not get WebRTC config from server. Using default (without TURN).'))
     } else {
-      var rtcConfig
       try {
-        rtcConfig = JSON.parse(data)
+        data = JSON.parse(data)
       } catch (err) {
         return cb(new Error('Got invalid WebRTC config from server: ' + data))
       }
-      delete rtcConfig.comment
-      debug('got rtc config: %o', rtcConfig)
-      cb(null, rtcConfig)
+      debug('got rtc config: %o', data.rtcConfig)
+      cb(null, data.rtcConfig)
     }
   })
 }
@@ -123,7 +131,7 @@ function onFiles (files) {
 }
 
 function isTorrentFile (file) {
-  var extname = path.extname(file.name).toLowerCase()
+  const extname = path.extname(file.name).toLowerCase()
   return extname === '.torrent'
 }
 
@@ -132,7 +140,7 @@ function isNotTorrentFile (file) {
 }
 
 function downloadTorrent (torrentId) {
-  var disallowed = DISALLOWED.some(function (infoHash) {
+  const disallowed = DISALLOWED.some(function (infoHash) {
     return torrentId.indexOf(infoHash) >= 0
   })
 
@@ -148,7 +156,7 @@ function downloadTorrent (torrentId) {
 }
 
 function downloadTorrentFile (file) {
-  util.log('Downloading torrent from <strong>' + file.name + '</strong>')
+  util.unsafeLog('Downloading torrent from <strong>' + escapeHtml(file.name) + '</strong>')
   getClient(function (err, client) {
     if (err) return util.error(err)
     client.add(file, onTorrent)
@@ -170,21 +178,22 @@ function onTorrent (torrent) {
   torrent.on('warning', util.warning)
   torrent.on('error', util.error)
 
-  var upload = document.querySelector('input[name=upload]')
+  const upload = document.querySelector('input[name=upload]')
   upload.value = upload.defaultValue // reset upload element
 
-  var torrentFileName = path.basename(torrent.name, path.extname(torrent.name)) + '.torrent'
+  const torrentFileName = path.basename(torrent.name, path.extname(torrent.name)) + '.torrent'
 
   util.log('"' + torrentFileName + '" contains ' + torrent.files.length + ' files:')
+
   torrent.files.forEach(function (file) {
-    util.log('&nbsp;&nbsp;- ' + file.name + ' (' + prettierBytes(file.length) + ')')
+    util.unsafeLog('&nbsp;&nbsp;- ' + escapeHtml(file.name) + ' (' + escapeHtml(prettierBytes(file.length)) + ')')
   })
 
-  util.log(
-    'Torrent info hash: ' + torrent.infoHash + ' ' +
-    '<a href="/#' + torrent.infoHash + '" onclick="prompt(\'Share this link with anyone you want to download this torrent:\', this.href);return false;">[Share link]</a> ' +
-    '<a href="' + torrent.magnetURI + '" target="_blank">[Magnet URI]</a> ' +
-    '<a href="' + torrent.torrentFileBlobURL + '" target="_blank" download="' + torrentFileName + '">[Download .torrent]</a>'
+  util.log('Torrent info hash: ' + torrent.infoHash)
+  util.unsafeLog(
+    '<a href="/#' + escapeHtml(torrent.infoHash) + '" onclick="prompt(\'Share this link with anyone you want to download this torrent:\', this.href);return false;">[Share link]</a> ' +
+    '<a href="' + escapeHtml(torrent.magnetURI) + '" target="_blank">[Magnet URI]</a> ' +
+    '<a href="' + escapeHtml(torrent.torrentFileBlobURL) + '" target="_blank" download="' + escapeHtml(torrentFileName) + '">[Download .torrent]</a>'
   )
 
   util.log('<div id="qr-code"></div>')
@@ -192,13 +201,15 @@ function onTorrent (torrent) {
   util.log(document.getElementById('qr-code').appendChild(kjua({text: location.origin + '/#' + torrent.infoHash, crisp: true})))
 
   function updateSpeed () {
-    var progress = (100 * torrent.progress).toFixed(1)
+    const progress = (100 * torrent.progress).toFixed(1)
 
-    var remaining
+    let remaining
     if (torrent.done) {
       remaining = 'Done.'
     } else {
-      remaining = moment.duration(torrent.timeRemaining / 1000, 'seconds').humanize()
+      remaining = torrent.timeRemaining !== Infinity
+        ? formatDistance(torrent.timeRemaining, 0, { includeSeconds: true })
+        : 'Infinity years'
       remaining = remaining[0].toUpperCase() + remaining.substring(1) + ' remaining.'
     }
 
@@ -228,23 +239,23 @@ function onTorrent (torrent) {
     file.getBlobURL(function (err, url) {
       if (err) return util.error(err)
 
-      var a = document.createElement('a')
+      const a = document.createElement('a')
       a.target = '_blank'
       a.download = file.name
       a.href = url
       a.textContent = 'Download ' + file.name
-      util.log(a)
+      util.appendElemToLog(a)
     })
   })
 
-  var downloadZip = document.createElement('a')
+  const downloadZip = document.createElement('a')
   downloadZip.href = '#'
   downloadZip.target = '_blank'
   downloadZip.textContent = 'Download all files as zip'
   downloadZip.addEventListener('click', function (event) {
-    var addedFiles = 0
-    var zipFilename = path.basename(torrent.name, path.extname(torrent.name)) + '.zip'
-    var zip = new JSZip()
+    let addedFiles = 0
+    const zipFilename = path.basename(torrent.name, path.extname(torrent.name)) + '.zip'
+    let zip = new JSZip()
     event.preventDefault()
 
     torrent.files.forEach(function (file) {
@@ -263,8 +274,8 @@ function onTorrent (torrent) {
           }
           zip.generateAsync({ type: 'blob' })
             .then(function (blob) {
-              var url = URL.createObjectURL(blob)
-              var a = document.createElement('a')
+              const url = URL.createObjectURL(blob)
+              const a = document.createElement('a')
               a.download = zipFilename
               a.href = url
               a.click()
@@ -276,5 +287,5 @@ function onTorrent (torrent) {
       })
     })
   })
-  util.log(downloadZip)
+  util.appendElemToLog(downloadZip)
 }

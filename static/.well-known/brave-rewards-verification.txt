@@ -1,0 +1,4 @@
+This is a Brave Rewards publisher verification file.
+
+Domain: instant.io
+Token: d723b97c2a3b0929143f84a4c3fb197410d9f426db5e3cd7319206c99e8b48b8
