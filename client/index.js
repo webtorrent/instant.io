@@ -198,7 +198,10 @@ function onTorrent (torrent) {
 
   util.log('<div id="qr-code"></div>')
 
-  util.log(document.getElementById('qr-code').appendChild(kjua({text: location.origin + '/#' + torrent.infoHash, crisp: true})))
+  util.log(document.getElementById('qr-code').appendChild(kjua({
+    text: window.location.origin + '/#' + torrent.infoHash,
+    crisp: true
+  })))
 
   function updateSpeed () {
     const progress = (100 * torrent.progress).toFixed(1)
