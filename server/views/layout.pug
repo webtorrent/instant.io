@@ -5,8 +5,12 @@ html(lang='en')
     meta(charset='utf-8')
     meta(http-equiv='Content-Security-Policy', content='upgrade-insecure-requests')
     meta(name='viewport', content='width=device-width, initial-scale=1')
+    meta(name='theme-color' content='#eee')
+    meta(name='apple-mobile-web-app-capable' content='yes')
     link(rel='search', href='/opensearch.xml', title='Instant.io', type='application/opensearchdescription+xml')
     link(rel='stylesheet', href='/main.css', charset='utf-8')
+    link(rel='manifest', href='/manifest.json')
+    link(rel='apple-touch-icon' href='/favicon.ico')
 
   body(class=locals.cls || '')
     block body

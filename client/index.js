@@ -89,6 +89,11 @@ function init () {
   if ('registerProtocolHandler' in navigator) {
     navigator.registerProtocolHandler('magnet', window.location.origin + '#%s', 'Instant.io')
   }
+
+  // Register a service worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js')
+  }
 }
 
 function getRtcConfig (cb) {
