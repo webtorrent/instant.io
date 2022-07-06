@@ -12,16 +12,17 @@ const uploadElement = require('upload-element')
 const WebTorrent = require('webtorrent')
 const JSZip = require('jszip')
 const SimplePeer = require('simple-peer')
-
 const util = require('./util')
 
-globalThis.WEBTORRENT_ANNOUNCE = createTorrent.announceList
-  .map(function (arr) {
-    return arr[0]
-  })
-  .filter(function (url) {
-    return url.indexOf('wss://') === 0 || url.indexOf('ws://') === 0
-  })
+// Define this to list of your tracker's announce urls.
+// const DEFAULT_TRACKERS = ['ws://localhost:8000/']
+const DEFAULT_TRACKERS = createTorrent.announceList.map(function (arr) {
+  return arr[0]
+}).filter(function (url) {
+  return url.indexOf('wss://') === 0 || url.indexOf('ws://') === 0
+})
+
+document.getElementById('trackers').value = DEFAULT_TRACKERS.join(',')
 
 const DISALLOWED = [
   '6feb54706f41f459f819c0ae5b560a21ebfead8f'
@@ -162,6 +163,17 @@ function downloadTorrentFile (file) {
   })
 }
 
+function getTrackerList () {
+  const dom = document.getElementById('trackers')
+  const val = dom.value
+  const out = []
+  val.split(',').forEach(tracker => { if (tracker.trim()) out.push(tracker.trim()) })
+  if (out.length === 0) {
+    return DEFAULT_TRACKERS
+  }
+  return out
+}
+
 function seed (files) {
   if (files.length === 0) return
   util.log('Seeding ' + files.length + ' files')
@@ -169,7 +181,7 @@ function seed (files) {
   // Seed from WebTorrent
   getClient(function (err, client) {
     if (err) return util.error(err)
-    client.seed(files, onTorrent)
+    client.seed(files, { announce: getTrackerList() }, onTorrent)
   })
 }
 
@@ -190,6 +202,7 @@ function onTorrent (torrent) {
 
   util.log('Torrent info hash: ' + torrent.infoHash)
   util.unsafeLog(
+    '<p>Torrent Trackers: ' + escapeHtml(getTrackerList()) + '</p>' +
     '<a href="/#' + escapeHtml(torrent.infoHash) + '" onclick="prompt(\'Share this link with anyone you want to download this torrent:\', this.href);return false;">[Share link]</a> ' +
     '<a href="' + escapeHtml(torrent.magnetURI) + '" target="_blank">[Magnet URI]</a> ' +
     '<a href="' + escapeHtml(torrent.torrentFileBlobURL) + '" target="_blank" download="' + escapeHtml(torrentFileName) + '">[Download .torrent]</a>'

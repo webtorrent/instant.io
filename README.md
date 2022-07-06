@@ -43,6 +43,11 @@ Copy [`secret/index-sample.js`](https://github.com/webtorrent/instant.io/blob/ma
 
 To start the server, run `npm run build && npm start`. That should be it!
 
+#### Testing a bittorrent-tracker
+
+The `bittorrent-tracker` can be set to localhost if needed. When using the `bittorrent-tracker` make sure the websocket server is
+enabled. Note that Instant.io filters out the http servers in the default trackers list.
+
 ## Tips
 
 1. Create a shareable link by adding a torrent infohash or magnet link to the end

@@ -14,6 +14,10 @@ block body
     section
       h1 Start sharing
       p
+        | Torrent Trackers:
+        | #{ ' ' }
+        input(type='text', id='trackers' style='width: 100%;')
+      p
         | Drag-and-drop files to begin seeding. Or choose a file:
         | #{ ' ' }
         input(type='file', name='upload', multiple)
