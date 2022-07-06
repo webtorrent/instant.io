@@ -19,10 +19,10 @@
     "drag-drop": "7.2.0",
     "escape-html": "1.0.3",
     "express": "4.18.1",
-    "jszip": "3.7.1",
+    "jszip": "3.10.0",
     "prettier-bytes": "1.0.4",
     "pug": "3.0.2",
-    "rollbar": "2.24.0",
+    "rollbar": "2.25.0",
     "simple-get": "4.0.1",
     "simple-peer": "9.11.1",
     "throttleit": "1.0.0",
@@ -32,8 +32,8 @@
   },
   "devDependencies": {
     "browserify": "17.0.0",
-    "husky": "7.0.4",
-    "nodemon": "2.0.18",
+    "husky": "8.0.1",
+    "nodemon": "2.0.19",
     "standard": "*",
     "stylus": "0.58.1",
     "watchify": "4.0.0"
