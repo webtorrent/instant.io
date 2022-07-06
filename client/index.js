@@ -12,16 +12,22 @@ const uploadElement = require('upload-element')
 const WebTorrent = require('webtorrent')
 const JSZip = require('jszip')
 const SimplePeer = require('simple-peer')
-
 const util = require('./util')
 
-globalThis.WEBTORRENT_ANNOUNCE = createTorrent.announceList
-  .map(function (arr) {
-    return arr[0]
-  })
-  .filter(function (url) {
-    return url.indexOf('wss://') === 0 || url.indexOf('ws://') === 0
-  })
+// Define this to list of your tracker's announce urls.
+// const TRACKERS = ['ws://localhost:8000/']
+const TRACKERS = undefined
+
+if (!TRACKERS) {
+  // Generate the default trackers.
+  globalThis.WEBTORRENT_ANNOUNCE = createTorrent.announceList
+    .map(function (arr) {
+      return arr[0]
+    })
+    .filter(function (url) {
+      return url.indexOf('wss://') === 0 || url.indexOf('ws://') === 0
+    })
+}
 
 const DISALLOWED = [
   '6feb54706f41f459f819c0ae5b560a21ebfead8f'
@@ -160,11 +166,11 @@ function downloadTorrentFile (file) {
 function seed (files) {
   if (files.length === 0) return
   util.log('Seeding ' + files.length + ' files')
-
   // Seed from WebTorrent
   getClient(function (err, client) {
     if (err) return util.error(err)
-    client.seed(files, onTorrent)
+    const options = TRACKERS ? { announce: TRACKERS } : {}
+    client.seed(files, options, onTorrent)
   })
 }
 
