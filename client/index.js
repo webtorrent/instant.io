@@ -16,13 +16,24 @@ const util = require('./util')
 
 // Define this to list of your tracker's announce urls.
 // const DEFAULT_TRACKERS = ['ws://localhost:8000/']
-const DEFAULT_TRACKERS = createTorrent.announceList.map(function (arr) {
-  return arr[0]
-}).filter(function (url) {
-  return url.indexOf('wss://') === 0 || url.indexOf('ws://') === 0
-})
+function getTrackerList () {
+  const dom = document.getElementById('trackers')
+  if (dom.value.trim() === '') {
+    const announceList = createTorrent.announceList.map(function (arr) {
+      return arr[0]
+    }).concat(createTorrent.announceList).filter(function (url) {
+      return url.indexOf('wss://') === 0 || url.indexOf('ws://') === 0
+    })
+    return announceList
+  }
+  const val = dom.value
+  const out = []
+  val.split(',').forEach(tracker => { if (tracker.trim()) out.push(tracker.trim()) })
+  return out
+}
 
-document.getElementById('trackers').value = DEFAULT_TRACKERS.join(',')
+// Dom element will be the source of truth.
+document.getElementById('trackers').value = getTrackerList().join(',')
 
 const DISALLOWED = [
   '6feb54706f41f459f819c0ae5b560a21ebfead8f'
@@ -150,7 +161,7 @@ function downloadTorrent (torrentId) {
     util.log('Downloading torrent from ' + torrentId)
     getClient(function (err, client) {
       if (err) return util.error(err)
-      client.add(torrentId, onTorrent)
+      client.add(torrentId, { announce: getTrackerList() }, onTorrent)
     })
   }
 }
@@ -159,7 +170,7 @@ function downloadTorrentFile (file) {
   util.unsafeLog('Downloading torrent from <strong>' + escapeHtml(file.name) + '</strong>')
   getClient(function (err, client) {
     if (err) return util.error(err)
-    client.add(file, onTorrent)
+    client.add(file, { announce: getTrackerList() }, onTorrent)
   })
 }
 
@@ -177,7 +188,6 @@ function getTrackerList () {
 function seed (files) {
   if (files.length === 0) return
   util.log('Seeding ' + files.length + ' files')
-
   // Seed from WebTorrent
   getClient(function (err, client) {
     if (err) return util.error(err)
