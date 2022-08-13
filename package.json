@@ -35,7 +35,7 @@
     "husky": "8.0.1",
     "nodemon": "2.0.19",
     "standard": "*",
-    "stylus": "0.58.1",
+    "stylus": "0.59.0",
     "watchify": "4.0.0"
   },
   "homepage": "https://instant.io",
