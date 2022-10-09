@@ -19,7 +19,7 @@
     "drag-drop": "7.2.0",
     "escape-html": "1.0.3",
     "express": "4.18.2",
-    "jszip": "3.10.0",
+    "jszip": "3.10.1",
     "prettier-bytes": "1.0.4",
     "pug": "3.0.2",
     "rollbar": "2.25.2",
