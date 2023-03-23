@@ -33,7 +33,7 @@
   "devDependencies": {
     "browserify": "17.0.0",
     "husky": "8.0.3",
-    "nodemon": "2.0.21",
+    "nodemon": "2.0.22",
     "standard": "*",
     "stylus": "0.59.0",
     "watchify": "4.0.0"
