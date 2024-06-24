@@ -25,7 +25,7 @@
     "rollbar": "2.26.4",
     "simple-get": "4.0.1",
     "simple-peer": "9.11.1",
-    "throttleit": "2.0.0",
+    "throttleit": "2.1.0",
     "thunky": "1.1.0",
     "upload-element": "1.0.1",
     "webtorrent": "2.4.1"
