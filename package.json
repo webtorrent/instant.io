@@ -8,7 +8,7 @@
     "url": "https://webtorrent.io"
   },
   "bugs": {
-    "url": "https://github.com/webtorrent/instant.io/issues"
+    "url": "https://github.com/Voornaamenachternaam/instant.io/issues"
   },
   "dependencies": {
     "compression": "1.7.4",
@@ -50,7 +50,7 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git://github.com/webtorrent/instant.io.git"
+    "url": "git://github.com/Voornaamenachternaam/instant.io.git"
   },
   "scripts": {
     "build": "npm run build-css && npm run build-js",
@@ -73,11 +73,11 @@
   "funding": [
     {
       "type": "github",
-      "url": "https://github.com/sponsors/feross"
+      "url": "https://github.com/sponsors/Voornaamenachternaam"
     },
     {
       "type": "patreon",
-      "url": "https://www.patreon.com/feross"
+      "url": "https://www.patreon.com/Voornaamenachternaam"
     },
     {
       "type": "consulting",
