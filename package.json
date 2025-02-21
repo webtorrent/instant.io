@@ -4,18 +4,18 @@
   "version": "1.0.0",
   "author": {
     "name": "WebTorrent LLC",
-    "email": "feross@webtorrent.io",
+    "email": "",
     "url": "https://webtorrent.io"
   },
   "bugs": {
     "url": "https://github.com/Voornaamenachternaam/instant.io/issues"
   },
   "dependencies": {
-    "compression": "1.7.4",
+    "compression": "1.8.0",
     "cors": "2.8.5",
-    "create-torrent": "6.0.18",
-    "date-fns": "3.6.0",
-    "debug": "4.3.7",
+    "create-torrent": "6.1.0",
+    "date-fns": "4.1.0",
+    "debug": "4.4.0",
     "drag-drop": "7.2.0",
     "escape-html": "1.0.3",
     "express": "4.21.2",
@@ -28,14 +28,14 @@
     "throttleit": "2.1.0",
     "thunky": "1.1.0",
     "upload-element": "1.0.1",
-    "webtorrent": "2.5.1"
+    "webtorrent": "2.5.19"
   },
   "devDependencies": {
-    "browserify": "17.0.0",
-    "husky": "9.1.6",
-    "nodemon": "3.1.4",
+    "browserify": "17.0.1",
+    "husky": "9.1.7",
+    "nodemon": "3.1.9",
     "standard": "*",
-    "stylus": "0.63.0",
+    "stylus": "0.64.0",
     "watchify": "4.0.0"
   },
   "homepage": "https://instant.io",
