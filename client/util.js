@@ -2,19 +2,17 @@ const logElem = exports.logElem = document.querySelector('.log')
 const logHeading = document.querySelector('#logHeading')
 const speed = document.querySelector('.speed')
 
-exports.log = function log (item, unsafe) {
+exports.log = function log (item) {
   logHeading.style.display = 'block'
 
   const p = document.createElement('p')
-  if (unsafe) p.innerHTML = item
-  else p.textContent = item
+  p.textContent = item
+
   logElem.appendChild(p)
   return p
 }
 
-exports.unsafeLog = function unsafeLog (item) {
-  return exports.log(item, true)
-}
+// The unsafeLog function is redundant and removed to prevent unsafe usage.
 
 exports.appendElemToLog = function append (item) {
   logHeading.style.display = 'block'
