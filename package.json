@@ -21,7 +21,7 @@
     "express": "4.18.2",
     "jszip": "3.10.1",
     "prettier-bytes": "1.0.4",
-    "pug": "3.0.2",
+    "pug": "3.0.3",
     "rollbar": "2.26.2",
     "simple-get": "4.0.1",
     "simple-peer": "9.11.1",
