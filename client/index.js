@@ -12,6 +12,7 @@ const uploadElement = require('upload-element')
 const WebTorrent = require('webtorrent')
 const JSZip = require('jszip')
 const SimplePeer = require('simple-peer')
+const kjua = require('kjua')
 
 const util = require('./util')
 
@@ -194,6 +195,13 @@ function onTorrent (torrent) {
     '<a href="' + escapeHtml(torrent.magnetURI) + '" target="_blank">[Magnet URI]</a> ' +
     '<a href="' + escapeHtml(torrent.torrentFileBlobURL) + '" target="_blank" download="' + escapeHtml(torrentFileName) + '">[Download .torrent]</a>'
   )
+
+  util.log('<div id="qr-code"></div>')
+
+  util.log(document.getElementById('qr-code').appendChild(kjua({
+    text: window.location.origin + '/#' + torrent.infoHash,
+    crisp: true
+  })))
 
   function updateSpeed () {
     const progress = (100 * torrent.progress).toFixed(1)

@@ -20,6 +20,7 @@
     "escape-html": "1.0.3",
     "express": "4.20.0",
     "jszip": "3.10.1",
+    "kjua": "0.1.2",
     "prettier-bytes": "1.0.4",
     "pug": "3.0.4",
     "rollbar": "2.26.5",
