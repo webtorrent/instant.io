@@ -28,7 +28,7 @@
     "throttleit": "2.1.0",
     "thunky": "1.1.0",
     "upload-element": "1.0.1",
-    "webtorrent": "1.9.7"
+    "webtorrent": "3.0.21"
   },
   "devDependencies": {
     "browserify": "17.0.1",
